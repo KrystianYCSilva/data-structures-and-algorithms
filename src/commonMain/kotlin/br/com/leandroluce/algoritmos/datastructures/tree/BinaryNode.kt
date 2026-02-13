@@ -1,6 +1,6 @@
 package br.com.leandroluce.algoritmos.datastructures.tree
 
-class BinaryNode<T>(val value: T) {
+class BinaryNode<T>(var value: T) {
     var leftChild: BinaryNode<T>? = null
     var rightChild: BinaryNode<T>? = null
 
