@@ -1,6 +1,6 @@
 package br.com.leandroluce.algoritmos.datastructures.queue
 
-import br.com.leandroluce.algoritmos.heap.ComparatorHeapImpl
+import br.com.leandroluce.algoritmos.datastructures.heap.ComparatorHeapImpl
 
 class PriorityQueue<T>(private val comparator: Comparator<T>) : Queue<T> {
 

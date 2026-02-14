@@ -1,4 +1,4 @@
-package br.com.leandroluce.algoritmos.heap
+package br.com.leandroluce.algoritmos.datastructures.heap
 
 import br.com.leandroluce.algoritmos.datastructures.queue.Queue
 

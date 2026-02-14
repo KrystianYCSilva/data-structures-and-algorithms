@@ -1,10 +1,10 @@
-package br.com.leandroluce.algoritmos.heap
+package br.com.leandroluce.algoritmos.datastructures.heap
 
 import br.com.leandroluce.algoritmos.extensions.swap
-import br.com.leandroluce.algoritmos.heap.AbstractHeap
 
 
-class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
+
+class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
@@ -39,16 +39,16 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
         }
     }
 
-    override fun siftDown(index: Int) {
+    override protected fun siftDown(index: Int) {
         var parent = index
         while (true) {
             val left = leftChildIndex(parent)
             val right = rightChildIndex(parent)
             var candidate = parent
-            if (left < count && storage[left] < storage[candidate]) {
+            if (left < count && comparator.compare(storage[left], storage[candidate]) < 0) {
                 candidate = left
             }
-            if (right < count && storage[right] < storage[candidate]) {
+            if (right < count && comparator.compare(storage[right], storage[candidate]) < 0) {
                 candidate = right
             }
             if (candidate == parent) {
@@ -62,7 +62,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
     override protected fun siftUp(index: Int) {
         var child = index
         var parent = parentIndex(child)
-        while (child > 0 && storage[child] < storage[parent]) {
+        while (child > 0 && comparator.compare(storage[child], storage[parent]) < 0) {
             storage.swap(child, parent)
             child = parent
             parent = parentIndex(child)

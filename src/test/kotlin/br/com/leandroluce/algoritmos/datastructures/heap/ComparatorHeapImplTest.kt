@@ -1,4 +1,4 @@
-package br.com.leandroluce.algoritmos.heap
+package br.com.leandroluce.algoritmos.datastructures.heap
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
