@@ -2,37 +2,38 @@ package br.uem.din.datastructures.heap
 
 import br.uem.din.extensions.swap
 
-
-
 class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
-    override val count: Int
-        get() = storage.size
+    override fun size(): Int = storage.size
 
     override fun peek(): T? = storage.firstOrNull()
 
+    override fun isEmpty(): Boolean = size() == 0
+
     override fun insert(element: T) {
         storage.add(element)
-        siftUp(count - 1)
+        siftUp(size() - 1)
     }
 
     override fun remove(): T? {
-        if (isEmpty) return null
-        storage.swap(0, count - 1)
-        val removed = storage.removeAt(count - 1)
-        siftDown(0)
+        if (isEmpty()) return null
+        storage.swap(0, size() - 1)
+        val removed = storage.removeAt(size() - 1)
+        if (size() > 0) {
+            siftDown(0)
+        }
         return removed
     }
 
     override fun remove(index: Int): T? {
-        if (index >= count) return null
-        return if (index == count - 1) {
-            storage.removeAt(count - 1)
+        if (index >= size()) return null
+        return if (index == size() - 1) {
+            storage.removeAt(size() - 1)
         } else {
-            storage.swap(index, count - 1)
-            val removed = storage.removeAt(count - 1)
+            storage.swap(index, size() - 1)
+            val removed = storage.removeAt(size() - 1)
             siftDown(index)
             siftUp(index)
             removed
@@ -45,10 +46,10 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
             val left = leftChildIndex(parent)
             val right = rightChildIndex(parent)
             var candidate = parent
-            if (left < count && storage[left] < storage[candidate]) {
+            if (left < size() && storage[left] < storage[candidate]) {
                 candidate = left
             }
-            if (right < count && storage[right] < storage[candidate]) {
+            if (right < size() && storage[right] < storage[candidate]) {
                 candidate = right
             }
             if (candidate == parent) {
@@ -67,13 +68,5 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
             child = parent
             parent = parentIndex(child)
         }
-    }
-
-    override fun enqueue(element: T) {
-        insert(element)
-    }
-
-    override fun dequeue(): T? {
-        return remove()
     }
 }

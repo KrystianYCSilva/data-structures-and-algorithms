@@ -1,12 +1,21 @@
 package br.uem.din.datastructures.heap
 
-import br.uem.din.datastructures.queue.Queue
+import br.uem.din.datastructures.queue.MutableQueue
 
-abstract class AbstractHeap<T> : Queue<T> {
+abstract class AbstractHeap<T> : MutableQueue<T> {
 
-    abstract override val count: Int
+    abstract override fun size(): Int
     abstract override fun peek(): T?
     abstract fun insert(element: T)
+
+    // Implement MutableQueue
+    override fun enqueue(element: T) {
+        insert(element)
+    }
+
+    override fun dequeue(): T? {
+        return remove()
+    }
 
     protected fun leftChildIndex(index: Int) = (2 * index) + 1
     protected fun rightChildIndex(index: Int) = (2 * index) + 2

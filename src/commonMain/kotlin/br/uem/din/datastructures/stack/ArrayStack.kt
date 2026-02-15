@@ -1,31 +1,13 @@
 package br.uem.din.datastructures.stack
 
-class ArrayStack<T> : Stack<T> {
-
-    private val storage = arrayListOf<T>()
-
-    override val count: Int
-        get() = storage.size
-
-    override fun push(element: T) {
-        storage.add(element)
-    }
-
-    override fun pop(): T? {
-        return if (isEmpty) {
-            null
-        } else {
-            storage.removeAt(count - 1)
-        }
-    }
-
-    override fun peek(): T? = storage.lastOrNull()
-
-    override fun toString() = buildString {
-        appendLine("----top----")
-        storage.reversed().forEach {
-            appendLine(it)
-        }
-        appendLine("-----------")
-    }
+/**
+ * A concrete implementation of [MutableStack] backed by an array (or Vector on JVM).
+ */
+expect class ArrayStack<T>() : MutableStack<T> {
+    override fun push(element: T): T
+    override fun pop(): T?
+    override fun peek(): T?
+    override fun size(): Int
+    override fun isEmpty(): Boolean
+    override fun toString(): String
 }
