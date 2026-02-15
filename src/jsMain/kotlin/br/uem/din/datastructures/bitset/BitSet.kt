@@ -1,8 +1,16 @@
 package br.uem.din.datastructures.bitset
 
+import kotlin.math.max
+
+/**
+ * Implementação JS do [BitSet] usando [IntArray] (palavras de 32 bits).
+ *
+ * JavaScript não possui tipos inteiros de 64 bits nativos, por isso utiliza
+ * palavras de 32 bits com operações bitwise seguras no range de Int.
+ * Cresce automaticamente quando bits além da capacidade são acessados.
+ */
 actual class BitSet actual constructor(size: Int) {
     private var bits = IntArray((size + 31) / 32)
-    private var actualSize = size
 
     actual fun set(index: Int) {
         ensureCapacity(index)
@@ -46,7 +54,7 @@ actual class BitSet actual constructor(size: Int) {
         }
         return 0
     }
-    
+
     actual fun isEmpty(): Boolean {
         return length() == 0
     }
@@ -54,13 +62,12 @@ actual class BitSet actual constructor(size: Int) {
     private fun ensureCapacity(bitIndex: Int) {
         val wordIndex = bitIndex / 32
         if (wordIndex >= bits.size) {
-            val newSize = maxOf(bits.size * 2, wordIndex + 1)
+            val newSize = max(bits.size * 2, wordIndex + 1)
             bits = bits.copyOf(newSize)
         }
     }
-    
+
     override fun toString(): String {
-        // Mimic Java BitSet toString: {0, 2, 4}
         val sb = StringBuilder()
         sb.append('{')
         var first = true
@@ -76,8 +83,4 @@ actual class BitSet actual constructor(size: Int) {
         sb.append('}')
         return sb.toString()
     }
-}
-
-private fun maxOf(a: Int, b: Int): Int {
-    return if (a >= b) a else b
 }

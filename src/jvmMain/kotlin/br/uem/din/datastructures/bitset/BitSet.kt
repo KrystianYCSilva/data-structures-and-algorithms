@@ -2,6 +2,14 @@ package br.uem.din.datastructures.bitset
 
 import java.util.BitSet as JavaBitSet
 
+/**
+ * Implementação JVM do [BitSet], delegando para [java.util.BitSet].
+ *
+ * Utiliza `long[]` internamente (palavras de 64 bits), com operações
+ * nativas otimizadas pela JVM e suporte a crescimento automático.
+ *
+ * @see java.util.BitSet
+ */
 actual class BitSet actual constructor(size: Int) {
     private val bitSet = JavaBitSet(size)
 
@@ -32,7 +40,7 @@ actual class BitSet actual constructor(size: Int) {
     actual fun isEmpty(): Boolean {
         return bitSet.isEmpty
     }
-    
+
     override fun toString(): String = bitSet.toString()
     override fun equals(other: Any?): Boolean = other is BitSet && bitSet == other.bitSet
     override fun hashCode(): Int = bitSet.hashCode()

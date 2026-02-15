@@ -1,5 +1,14 @@
 package br.uem.din.datastructures.bitset
 
+import kotlin.math.max
+
+/**
+ * Implementação Native do [BitSet] usando [LongArray] (palavras de 64 bits).
+ *
+ * Kotlin/Native não dispõe de `java.util.BitSet`, por isso esta implementação
+ * manual utiliza `LongArray` para eficiência máxima de armazenamento em plataformas
+ * de 64 bits. Cresce automaticamente quando bits além da capacidade são acessados.
+ */
 actual class BitSet actual constructor(size: Int) {
     private var words = LongArray((size + 63) / 64)
 
@@ -48,7 +57,7 @@ actual class BitSet actual constructor(size: Int) {
 
     private fun ensureCapacity(wordsRequired: Int) {
         if (words.size < wordsRequired) {
-            val request = kotlin.math.max(2 * words.size, wordsRequired)
+            val request = max(2 * words.size, wordsRequired)
             words = words.copyOf(request)
         }
     }

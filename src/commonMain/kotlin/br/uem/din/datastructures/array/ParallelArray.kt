@@ -1,112 +1,205 @@
 package br.uem.din.datastructures.array
 
 /**
- * Arrays paralelos (Parallel Arrays / Structure of Arrays — SoA).
+ * Arrays paralelos genéricos (Parallel Arrays / Structure of Arrays — SoA).
  *
- * Em vez de manter um array de objetos (Array of Structures — AoS), utiliza arrays separados
- * para cada campo (id, nome, pontuação). Essa organização melhora a localidade de cache
- * ao processar campos específicos isoladamente (e.g., calcular média de pontuações),
- * pois os dados de um mesmo campo ficam contíguos na memória.
+ * Em vez de manter um array de objetos (Array of Structures — AoS), utiliza arrays
+ * separados para cada "coluna" de dados. Essa organização melhora a localidade de cache
+ * ao processar colunas específicas isoladamente, pois os dados de um mesmo campo ficam
+ * contíguos na memória.
+ *
+ * Esta implementação genérica aceita N colunas nomeadas de tipo `Any?`, permitindo
+ * uso flexível para qualquer esquema de dados tabulares.
  *
  * Complexidades:
- * - [add]: O(1) amortizado (com redimensionamento por duplicação)
- * - [get] / [getId] / [getName] / [getScore]: O(1)
+ * - [addRow]: O(1) amortizado (com redimensionamento por duplicação)
+ * - [get]: O(1)
+ * - [getColumn]: O(1)
+ * - [removeAt]: O(n)
  *
- * @param initialCapacity capacidade inicial dos arrays internos (padrão: 10).
+ * Exemplo de uso:
+ * ```kotlin
+ * val pa = ParallelArray("id", "name", "score")
+ * pa.addRow(1, "Alice", 9.5)
+ * pa.addRow(2, "Bob", 8.3)
+ * val name = pa.get(0, "name") // "Alice"
+ * ```
+ *
+ * @param columnNames os nomes das colunas. Devem ser únicos.
+ * @throws IllegalArgumentException se nomes de colunas forem duplicados.
  *
  * Referência: Drepper, U. "What Every Programmer Should Know About Memory" (2007);
  *             padrão SoA amplamente discutido em otimização de cache para Data-Oriented Design.
  */
-class ParallelArray(initialCapacity: Int = 10) {
-    private var ids = IntArray(initialCapacity)
-    private var names = Array<String?>(initialCapacity) { null }
-    private var scores = DoubleArray(initialCapacity)
-    
-    /** Número de registros armazenados. */
+class ParallelArray(vararg columnNames: String) {
+
+    private val columnIndex: Map<String, Int>
+    private val columns: Array<MutableList<Any?>>
+
+    /**
+     * Número de registros (linhas) armazenados.
+     */
     var size = 0
         private set
 
     /**
-     * Adiciona um novo registro com id, nome e pontuação.
+     * Número de colunas definidas.
+     */
+    val columnCount: Int
+        get() = columns.size
+
+    /**
+     * Nomes das colunas na ordem de definição.
+     */
+    val columnNames: List<String>
+
+    init {
+        require(columnNames.toSet().size == columnNames.size) {
+            "Column names must be unique"
+        }
+        this.columnNames = columnNames.toList()
+        columnIndex = columnNames.withIndex().associate { (i, name) -> name to i }
+        columns = Array(columnNames.size) { mutableListOf<Any?>() }
+    }
+
+    /**
+     * Adiciona uma nova linha de dados.
+     *
+     * O número de valores deve corresponder exatamente ao número de colunas.
      *
      * Complexidade: O(1) amortizado.
      *
-     * @param id identificador do registro.
-     * @param name nome associado.
-     * @param score pontuação associada.
+     * @param values os valores da nova linha, na mesma ordem das colunas.
+     * @throws IllegalArgumentException se o número de valores não corresponder ao de colunas.
      */
-    fun add(id: Int, name: String, score: Double) {
-        if (size == ids.size) resize()
-        ids[size] = id
-        names[size] = name
-        scores[size] = score
+    fun addRow(vararg values: Any?) {
+        require(values.size == columns.size) {
+            "Expected ${columns.size} values, got ${values.size}"
+        }
+        for (i in columns.indices) {
+            columns[i].add(values[i])
+        }
         size++
     }
 
     /**
-     * Retorna o registro completo na posição especificada como uma [Triple].
+     * Retorna o valor na posição [row], coluna [column].
      *
      * Complexidade: O(1).
      *
-     * @param index a posição do registro (0-based).
-     * @return [Triple] contendo (id, name, score).
-     * @throws IndexOutOfBoundsException se o índice for inválido.
+     * @param row o índice da linha (0-based).
+     * @param column o nome da coluna.
+     * @return o valor armazenado na célula.
+     * @throws IndexOutOfBoundsException se o índice da linha for inválido.
+     * @throws IllegalArgumentException se a coluna não existir.
      */
-    fun get(index: Int): Triple<Int, String, Double> {
-        checkIndex(index)
-        return Triple(ids[index], names[index] ?: "", scores[index])
-    }
-    
-    /**
-     * Retorna o id do registro na posição especificada.
-     *
-     * Complexidade: O(1).
-     *
-     * @param index a posição do registro (0-based).
-     * @return o id do registro.
-     * @throws IndexOutOfBoundsException se o índice for inválido.
-     */
-    fun getId(index: Int): Int {
-        checkIndex(index)
-        return ids[index]
-    }
-    
-    /**
-     * Retorna o nome do registro na posição especificada.
-     *
-     * Complexidade: O(1).
-     *
-     * @param index a posição do registro (0-based).
-     * @return o nome do registro, ou `null` se não definido.
-     * @throws IndexOutOfBoundsException se o índice for inválido.
-     */
-    fun getName(index: Int): String? {
-        checkIndex(index)
-        return names[index]
-    }
-    
-    /**
-     * Retorna a pontuação do registro na posição especificada.
-     *
-     * Complexidade: O(1).
-     *
-     * @param index a posição do registro (0-based).
-     * @return a pontuação do registro.
-     * @throws IndexOutOfBoundsException se o índice for inválido.
-     */
-    fun getScore(index: Int): Double {
-        checkIndex(index)
-        return scores[index]
+    fun get(row: Int, column: String): Any? {
+        checkRow(row)
+        val colIdx = requireColumn(column)
+        return columns[colIdx][row]
     }
 
-    private fun checkIndex(index: Int) {
-        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index: $index, Size: $size")
+    /**
+     * Retorna o valor na posição [row], coluna de índice [colIndex].
+     *
+     * Complexidade: O(1).
+     *
+     * @param row o índice da linha (0-based).
+     * @param colIndex o índice da coluna (0-based).
+     * @return o valor armazenado na célula.
+     * @throws IndexOutOfBoundsException se os índices forem inválidos.
+     */
+    fun get(row: Int, colIndex: Int): Any? {
+        checkRow(row)
+        if (colIndex < 0 || colIndex >= columns.size)
+            throw IndexOutOfBoundsException("Column index: $colIndex, Columns: ${columns.size}")
+        return columns[colIndex][row]
     }
 
-    private fun resize() {
-        val newCapacity = ids.size * 2
-        ids = ids.copyOf(newCapacity)
-        names = names.copyOf(newCapacity)
-        scores = scores.copyOf(newCapacity)
+    /**
+     * Retorna todos os valores de uma coluna como lista imutável.
+     *
+     * Complexidade: O(n) para a cópia.
+     *
+     * @param column o nome da coluna.
+     * @return lista com todos os valores da coluna.
+     * @throws IllegalArgumentException se a coluna não existir.
+     */
+    fun getColumn(column: String): List<Any?> {
+        val colIdx = requireColumn(column)
+        return columns[colIdx].toList()
+    }
+
+    /**
+     * Retorna todos os valores de uma linha como lista imutável.
+     *
+     * Complexidade: O(k) onde k é o número de colunas.
+     *
+     * @param row o índice da linha (0-based).
+     * @return lista com todos os valores da linha, na ordem das colunas.
+     * @throws IndexOutOfBoundsException se o índice da linha for inválido.
+     */
+    fun getRow(row: Int): List<Any?> {
+        checkRow(row)
+        return columns.map { it[row] }
+    }
+
+    /**
+     * Define o valor na posição [row], coluna [column].
+     *
+     * Complexidade: O(1).
+     *
+     * @param row o índice da linha (0-based).
+     * @param column o nome da coluna.
+     * @param value o novo valor.
+     * @throws IndexOutOfBoundsException se o índice da linha for inválido.
+     * @throws IllegalArgumentException se a coluna não existir.
+     */
+    fun set(row: Int, column: String, value: Any?) {
+        checkRow(row)
+        val colIdx = requireColumn(column)
+        columns[colIdx][row] = value
+    }
+
+    /**
+     * Remove a linha no índice especificado.
+     *
+     * Complexidade: O(n * k) onde n é o número de linhas restantes e k é o número de colunas.
+     *
+     * @param row o índice da linha a ser removida (0-based).
+     * @throws IndexOutOfBoundsException se o índice for inválido.
+     */
+    fun removeAt(row: Int) {
+        checkRow(row)
+        for (col in columns) {
+            col.removeAt(row)
+        }
+        size--
+    }
+
+    /**
+     * Retorna `true` se não houver linhas armazenadas.
+     */
+    fun isEmpty(): Boolean = size == 0
+
+    override fun toString(): String {
+        if (isEmpty()) return "ParallelArray(columns=${columnNames}, rows=0)"
+        val sb = StringBuilder()
+        sb.appendLine("ParallelArray(columns=${columnNames}, rows=$size)")
+        for (r in 0 until size) {
+            sb.append("  [$r] ")
+            sb.appendLine(columns.mapIndexed { i, col -> "${columnNames[i]}=${col[r]}" }.joinToString())
+        }
+        return sb.toString()
+    }
+
+    private fun checkRow(row: Int) {
+        if (row < 0 || row >= size)
+            throw IndexOutOfBoundsException("Row index: $row, Size: $size")
+    }
+
+    private fun requireColumn(column: String): Int {
+        return columnIndex[column]
+            ?: throw IllegalArgumentException("Unknown column: '$column'. Available: $columnNames")
     }
 }

@@ -6,80 +6,92 @@ description: "Guia de decisão para escolher a estrutura de dados correta basead
 
 ## Como Escolher a Estrutura de Dados Correta
 
-Este guia ajuda a escolher a estrutura mais apropriada para cada situação, baseado em padrões de acesso e requisitos de performance.
-
-## Tabela Comparativa Rápida
-
-### Estruturas Lineares
-
-| Estrutura | Acesso | Inserção (fim) | Inserção (início) | Busca | Memória |
-|-----------|--------|----------------|-------------------|-------|---------|
-| **ArrayList** | O(1) | O(1)* | O(n) | O(n) / O(log n)† | Baixo |
-| **LinkedList** | O(n) | O(1) | O(1) | O(n) | Alto |
-| **Stack** | O(1)‡ | O(1)* | N/A | N/A | Baixo |
-| **Queue** | O(1)‡ | O(1)* | N/A | N/A | Baixo |
-
-### Estruturas Associativas e Árvores
-
-| Estrutura | Insert | Search | Delete | Min/Max | Ordenado |
-|-----------|--------|--------|--------|---------|----------|
-| **HashTable** | O(1)* | O(1)* | O(1)* | O(n) | Não |
-| **BST** | O(log n)§ | O(log n)§ | O(log n)§ | O(log n)§ | Sim |
-| **AVL Tree** | O(log n) | O(log n) | O(log n) | O(log n) | Sim |
-| **Heap** | O(log n) | O(n) | O(log n)‖ | O(1) | Parcial |
-| **Trie** | O(m) | O(m) | O(m) | N/A | Sim (lex) |
-
-*: Amortizado | †: Com array ordenado | ‡: Apenas topo/front | §: Caso médio, O(n) pior caso | ‖: Extract-min/max | m: comprimento da string
-
-### Estruturas Especializadas
-
-| Estrutura | Operação Principal | Complexidade | Uso Típico |
-|-----------|-------------------|-------------|------------|
-| **Priority Queue** | Extract-min/max | O(log n) | Scheduling, Dijkstra |
-| **Union-Find** | Find / Union | O(α(n)) ≈ O(1) | Componentes conexos, Kruskal |
-| **Graph** | BFS/DFS | O(V+E) | Redes, caminhos |
+Este guia ajuda a escolher a estrutura mais apropriada para cada situação, baseado em padrões de acesso e requisitos de performance. Todos os exemplos utilizam a API Kotlin Multiplatform da biblioteca.
 
 ---
 
-## Casos de Uso Detalhados
+## 1. Estruturas Primitivas
 
-### ArrayList - Use Quando:
+Kotlin já fornece tipos primitivos nativos: `Int`, `Long`, `Double`, `Float`, `Char`, `Boolean`.
+Não é necessário implementar — a linguagem os trata como value types no JVM.
 
-✅ **INDICADO**:
-- Acesso frequente por índice
-- Inserções principalmente no final
-- Memória contígua (cache locality)
-- Busca binária após ordenação
+---
 
-❌ **NÃO INDICADO**:
-- Inserções/remoções frequentes no início/meio
-- Tamanho varia muito e imprevisível
+## 2. Estruturas Lineares
 
-```c
-ArrayList *arr = arraylist_create(sizeof(int), 100, NULL);
-arraylist_push_back(arr, &val);
-arraylist_get(arr, i, &out);
-arraylist_sort(arr, compare_int);
+### Tabela Comparativa
+
+| Estrutura | Acesso | Inserção (fim) | Inserção (início) | Busca | Memória |
+|-----------|--------|----------------|-------------------|-------|---------|
+| **DynamicArray** | O(1) | O(1)* | O(n) | O(n) / O(log n)† | Baixo |
+| **LinkedList** | O(n) | O(1) | O(1) | O(n) | Alto |
+| **DoublyLinkedList** | O(n) | O(1) | O(1) | O(n) | Alto |
+| **CircularLinkedList** | O(n) | O(1) | O(1) | O(n) | Alto |
+| **UnrolledLinkedList** | O(n/B) | O(1) | O(n) | O(n) | Médio |
+| **Stack** | O(1)‡ | O(1)* | N/A | N/A | Baixo |
+| **Queue** | O(1)‡ | O(1)* | N/A | N/A | Baixo |
+| **CircularQueue** | O(1)‡ | O(1) | N/A | N/A | Baixo |
+| **Deque** | O(1)‡ | O(1) | O(1) | N/A | Baixo |
+
+*: Amortizado | †: Com array ordenado + busca binária | ‡: Apenas topo/front/back | B: tamanho do bloco
+
+---
+
+### DynamicArray (ArrayList) - Use Quando:
+
+✅ **INDICADO**: Acesso frequente por índice, inserções no final, cache locality, busca binária
+
+❌ **NÃO INDICADO**: Inserções/remoções frequentes no início/meio
+
+```kotlin
+import br.uem.din.datastructures.array.DynamicArray
+
+val array = DynamicArray<Int>()
+array.add(1)
+array.add(2)
+array.add(3)
+println(array[1])   // 2
+array.removeAt(0)   // remove 1
 ```
+
+> `DynamicArray<T>` é um typealias para `ArrayList<T>`, aproveitando a implementação nativa de cada plataforma.
 
 ---
 
 ### LinkedList - Use Quando:
 
-✅ **INDICADO**:
-- Inserções/remoções em posições arbitrárias
-- Tamanho muito variável
-- Implementar outras estruturas (Graph adjacencies)
+✅ **INDICADO**: Inserções/remoções em posições arbitrárias, tamanho variável, implementar outras estruturas
 
-❌ **NÃO INDICADO**:
-- Acesso por índice frequente
-- Cache locality crítica
+❌ **NÃO INDICADO**: Acesso por índice frequente, cache locality crítica
 
-```c
-LinkedList *list = list_create(sizeof(int), LIST_DOUBLY, NULL);
-list_push_front(list, &val);
-list_push_back(list, &val);
+```kotlin
+import br.uem.din.datastructures.linkedlist.LinkedList
+
+val list = LinkedList<Int>()
+list.push(30)        // [30]
+list.append(10)      // [30, 10]
+list.append(20)      // [30, 10, 20]
+println(list.pop())  // 30
 ```
+
+---
+
+### DoublyLinkedList - Use Quando:
+
+✅ **INDICADO**: Navegação bidirecional, remoção do final em O(1)
+
+```kotlin
+import br.uem.din.datastructures.linkedlist.DoublyLinkedList
+
+val dll = DoublyLinkedList<String>()
+dll.addFirst("B")
+dll.addFirst("A")
+dll.addLast("C")          // [A, B, C]
+println(dll.removeFirst()) // A
+println(dll.removeLast())  // C
+```
+
+> **JVM**: delega para `java.util.LinkedList`. **JS/Native**: implementação manual.
 
 ---
 
@@ -87,11 +99,17 @@ list_push_back(list, &val);
 
 ✅ **INDICADO**: LIFO, backtracking, undo/redo, DFS, parsing de expressões, parênteses balanceados
 
-```c
-Stack *s = stack_create(sizeof(int), STACK_ARRAY, 50, NULL);
-stack_push(s, &val);
-stack_pop(s, &out);
+```kotlin
+import br.uem.din.datastructures.stack.ArrayStack
+
+val stack = ArrayStack<Int>()
+stack.push(1)
+stack.push(2)
+println(stack.peek()) // 2
+println(stack.pop())  // 2
 ```
+
+> **JVM**: delega para `java.util.Stack`. **JS/Native**: implementação manual com ArrayList.
 
 ---
 
@@ -99,62 +117,122 @@ stack_pop(s, &out);
 
 ✅ **INDICADO**: FIFO, BFS, buffer de eventos, scheduling, producer-consumer
 
-```c
-Queue *q = queue_create(sizeof(int), QUEUE_ARRAY, 100, NULL);
-queue_enqueue(q, &val);
-queue_dequeue(q, &out);
+```kotlin
+import br.uem.din.datastructures.queue.ArrayQueue
+
+val queue = ArrayQueue<Int>()
+queue.enqueue(10)
+queue.enqueue(20)
+println(queue.peek())    // 10
+println(queue.dequeue()) // 10
+```
+
+> **JVM**: delega para `java.util.ArrayDeque`. **JS/Native**: circular buffer manual.
+
+---
+
+### CircularQueue - Use Quando:
+
+✅ **INDICADO**: Buffer circular de capacidade fixa, reuso de memória
+
+```kotlin
+import br.uem.din.datastructures.queue.CircularQueue
+
+val cq = CircularQueue<String>(capacity = 4)
+cq.enqueue("A")
+cq.enqueue("B")
+println(cq.isFull)    // false
+println(cq.dequeue())  // A
 ```
 
 ---
 
-### HashTable - Use Quando:
+### Deque - Use Quando:
 
-✅ **INDICADO**:
-- Lookup O(1) por chave
-- Dicionários, caches, sets, contagem de frequência
-- Deduplicação
+✅ **INDICADO**: Inserção/remoção em ambas as pontas, sliding window
 
-❌ **NÃO INDICADO**:
-- Dados precisam estar ordenados
-- Range queries
-- Memória limitada (overhead de buckets)
+```kotlin
+import br.uem.din.datastructures.queue.Deque
 
-```c
-HashTable *ht = hashtable_create(sizeof(char*), sizeof(int), 16,
-    hash_string, compare_string, HASH_CHAINING,
-    destroy_string, NULL);
-hashtable_put(ht, &key, &val);
-hashtable_get(ht, &key, &out);
+val deque = Deque<Int>()
+deque.enqueue(1)
+deque.enqueueFront(0)
+println(deque.dequeue())     // 0
+println(deque.dequeueBack()) // 1
 ```
 
-**Estratégias de colisão**:
-- `HASH_CHAINING`: Melhor para load factors altos, simples
-- `HASH_LINEAR_PROBING`: Melhor cache locality, clustering
-- `HASH_QUADRATIC_PROBING`: Menos clustering que linear
-- `HASH_DOUBLE_HASHING`: Melhor distribuição, mais lento
+---
+
+### ParallelArray - Use Quando:
+
+✅ **INDICADO**: Dados tabulares com processamento por coluna, otimização de cache (SoA pattern)
+
+```kotlin
+import br.uem.din.datastructures.array.ParallelArray
+
+val pa = ParallelArray("id", "name", "score")
+pa.addRow(1, "Alice", 9.5)
+pa.addRow(2, "Bob", 8.3)
+println(pa.get(0, "name"))      // Alice
+println(pa.getColumn("score"))  // [9.5, 8.3]
+```
+
+---
+
+### BitSet - Use Quando:
+
+✅ **INDICADO**: Conjuntos densos de inteiros, flags, filtros de bits, operações bitwise
+
+```kotlin
+import br.uem.din.datastructures.bitset.BitSet
+
+val bs = BitSet(64)
+bs.set(10)
+bs.set(20)
+println(bs[10])     // true
+bs.clear(10)
+println(bs.length()) // 21
+```
+
+> **JVM**: delega para `java.util.BitSet`. **JS**: `IntArray` (32-bit words). **Native**: `LongArray` (64-bit words).
+
+---
+
+## 3. Estruturas Não-Lineares
+
+### 3A. Árvores
+
+| Estrutura | Insert | Search | Delete | Min/Max | Ordenado |
+|-----------|--------|--------|--------|---------|----------|
+| **BST** | O(log n)§ | O(log n)§ | O(log n)§ | O(log n)§ | Sim |
+| **AVL Tree** | O(log n) | O(log n) | O(log n) | O(log n) | Sim |
+| **Red-Black Tree** | O(log n) | O(log n) | O(log n) | O(log n) | Sim |
+| **Splay Tree** | O(log n)* | O(log n)* | O(log n)* | O(log n)* | Sim |
+| **Treap** | O(log n)† | O(log n)† | O(log n)† | O(log n) | Sim |
+| **B-Tree** | O(log n) | O(log n) | O(log n) | O(log n) | Sim |
+| **Trie** | O(m) | O(m) | O(m) | N/A | Sim (lex) |
+
+*: Amortizado | §: Caso médio, O(n) pior caso | †: Esperado | m: comprimento da string
 
 ---
 
 ### BST / AVL Tree - Use Quando:
 
-✅ **INDICADO**:
-- Dados ordenados com insert/search/delete O(log n)
-- Range queries eficientes
-- Successor/predecessor queries
-- Min/max em O(log n)
+✅ **INDICADO**: Dados ordenados com insert/search/delete O(log n), range queries, min/max
 
-❌ **NÃO INDICADO**:
-- Apenas lookup por chave (use HashTable)
-- Dados não têm ordem natural
+❌ **NÃO INDICADO**: Apenas lookup por chave (use HashTable), dados sem ordem natural
 
-```c
-// BST - O(log n) médio, O(n) pior caso
-BST *tree = bst_create(sizeof(int), compare_int, NULL);
-bst_insert(tree, &val);
+```kotlin
+import br.uem.din.datastructures.tree.BinarySearchTree
+import br.uem.din.datastructures.tree.AVLTree
 
-// AVL - O(log n) GARANTIDO
-AVLTree *avl = avl_create(sizeof(int), compare_int, NULL);
-avl_insert(avl, &val);
+val bst = BinarySearchTree<Int>()
+bst.insert(50); bst.insert(30); bst.insert(70)
+println(bst.contains(30)) // true
+
+val avl = AVLTree<Int>()
+for (i in 1..100) avl.insert(i)  // mantém balanceamento O(log n)
+println(avl.contains(42)) // true
 ```
 
 **Quando BST vs AVL?**
@@ -163,35 +241,138 @@ avl_insert(avl, &val);
 
 ---
 
-### Heap / Priority Queue - Use Quando:
+### Red-Black Tree - Use Quando:
 
-✅ **INDICADO**:
-- Extrair mínimo/máximo repetidamente
-- Dijkstra, A*, scheduling
-- Top-K elements
-- Mediana em streaming
+✅ **INDICADO**: Mesmo que AVL, mas com balanceamento menos estrito (rotações menos frequentes)
 
-❌ **NÃO INDICADO**:
-- Busca por chave arbitrária (O(n))
-- Dados precisam estar totalmente ordenados
+```kotlin
+import br.uem.din.datastructures.tree.RedBlackTree
 
-```c
-Heap *h = heap_create(sizeof(int), 16, HEAP_MIN, compare_int, NULL);
-PriorityQueue *pq = priority_queue_create(sizeof(int), 16, PQ_MIN, compare_int, NULL);
+val rbt = RedBlackTree<Int>()
+rbt.insert(50); rbt.insert(30); rbt.insert(70)
+println(rbt.contains(30)) // true
+println(rbt.size())       // 3
+```
+
+> **JVM**: delega para `java.util.TreeSet` (internamente Red-Black). **JS/Native**: implementação manual com rotações.
+
+---
+
+### Splay / Treap - Use Quando:
+
+✅ **INDICADO**: Padrões de acesso com localidade temporal (Splay), aleatoriedade desejada (Treap)
+
+```kotlin
+import br.uem.din.datastructures.tree.SplayTree
+import br.uem.din.datastructures.tree.Treap
+
+val splay = SplayTree<Int>()
+splay.insert(10); splay.insert(20); splay.insert(5)
+
+val treap = Treap<Int>()
+treap.insert(15); treap.insert(7); treap.insert(23)
 ```
 
 ---
+
+### B-Tree / B+ Tree - Use Quando:
+
+✅ **INDICADO**: Dados em disco, bancos de dados, sistemas de arquivo, índices
+
+```kotlin
+import br.uem.din.datastructures.tree.BTree
+import br.uem.din.datastructures.tree.BPlusTree
+
+val btree = BTree<Int>(order = 3)
+btree.insert(10); btree.insert(20); btree.insert(5)
+println(btree.search(10)) // true
+```
+
+---
+
+### Trie / RadixTree - Use Quando:
+
+✅ **INDICADO**: Autocomplete, prefix matching, dicionários de strings, longest common prefix
+
+```kotlin
+import br.uem.din.datastructures.tree.Trie
+
+val trie = Trie<Char>()
+trie.insert("algo".toList())
+trie.insert("algorithm".toList())
+println(trie.contains("algo".toList()))                     // true
+println(trie.collections("al".toList()).map { it.joinToString("") }) // [algo, algorithm]
+```
+
+---
+
+### Segment Tree / Fenwick Tree - Use Quando:
+
+✅ **INDICADO**: Range queries (soma, min, max), atualizações pontuais, competições de programação
+
+```kotlin
+import br.uem.din.datastructures.tree.SegmentTree
+import br.uem.din.datastructures.tree.FenwickTree
+
+// SegmentTree: query(1,3) = soma do intervalo [1,3]
+// FenwickTree: prefixSum(k) = soma dos primeiros k+1 elementos
+```
+
+---
+
+### 3B. Heaps
+
+| Estrutura | Insert | ExtractMin | Merge | DecreaseKey |
+|-----------|--------|------------|-------|-------------|
+| **Binary Heap** | O(log n) | O(log n) | O(n) | O(log n) |
+| **Binomial Heap** | O(log n) | O(log n) | O(log n) | O(log n) |
+| **Fibonacci Heap** | O(1)* | O(log n)* | O(1) | O(1)* |
+
+*: Amortizado
+
+### Heap / Priority Queue - Use Quando:
+
+✅ **INDICADO**: Extrair mínimo/máximo repetidamente, Dijkstra, A*, scheduling, Top-K
+
+❌ **NÃO INDICADO**: Busca por chave arbitrária (O(n)), dados totalmente ordenados
+
+```kotlin
+import br.uem.din.datastructures.heap.ComparableHeapImpl
+import br.uem.din.datastructures.queue.PriorityQueue
+
+val heap = ComparableHeapImpl<Int>()
+heap.insert(42); heap.insert(15); heap.insert(88)
+println(heap.peek())   // 15 (min-heap)
+println(heap.remove())  // 15
+
+val pq = PriorityQueue<Int>()
+pq.enqueue(100); pq.enqueue(5); pq.enqueue(50)
+println(pq.dequeue()) // 5
+```
+
+> **JVM PriorityQueue**: delega para `java.util.PriorityQueue`. **JS/Native**: heap manual.
+
+---
+
+### 3C. Grafos
+
+| Representação | Espaço | Verificar Aresta | Listar Vizinhos |
+|---------------|--------|------------------|-----------------|
+| **AdjacencyList** | O(V+E) | O(grau) | O(grau) |
+| **AdjacencyMatrix** | O(V²) | O(1) | O(V) |
 
 ### Graph - Use Quando:
 
 ✅ **INDICADO**: Modelagem de redes, caminhos mínimos, árvore geradora, ciclos, componentes
 
-```c
-// Adjacency List (esparso) - recomendado para maioria dos casos
-Graph *g = graph_create(100, GRAPH_UNDIRECTED, GRAPH_ADJACENCY_LIST, true);
+```kotlin
+import br.uem.din.datastructures.graph.AdjacencyList
 
-// Adjacency Matrix (denso) - quando E ≈ V²
-Graph *g = graph_create(100, GRAPH_DIRECTED, GRAPH_ADJACENCY_MATRIX, true);
+val graph = AdjacencyList<String>()
+val a = graph.createVertex("A")
+val b = graph.createVertex("B")
+graph.addDirectedEdge(a, b, 4.0)
+println(graph.weight(a, b)) // 4.0
 ```
 
 **Quando List vs Matrix?**
@@ -200,54 +381,149 @@ Graph *g = graph_create(100, GRAPH_DIRECTED, GRAPH_ADJACENCY_MATRIX, true);
 
 ---
 
-### Trie - Use Quando:
+### DAG - Use Quando:
 
-✅ **INDICADO**: Autocomplete, prefix matching, dicionários de strings, longest common prefix
+✅ **INDICADO**: Dependências (build systems, task scheduling), pipelines, ordenação topológica
 
-```c
-Trie *t = trie_create(26);
-trie_insert(t, "algorithm");
-trie_starts_with(t, "algo");  // true
-trie_autocomplete(t, "al", &results, &count);
+```kotlin
+import br.uem.din.datastructures.graph.DirectedAcyclicGraph
+
+val dag = DirectedAcyclicGraph<String>()
+dag.addVertex("A"); dag.addVertex("B"); dag.addVertex("C")
+dag.addEdge("A", "B"); dag.addEdge("B", "C")
+println(dag.topologicalSort()) // [A, B, C]
 ```
 
 ---
+
+### 3D. Estruturas Espaciais
+
+| Estrutura | Insert | Query (range) | Nearest | Uso |
+|-----------|--------|---------------|---------|-----|
+| **QuadTree** | O(log n) | O(√n + k) | N/A | 2D |
+| **K-D Tree** | O(log n) | O(√n + k) | O(log n) | k-dim |
+
+✅ **INDICADO**: Computação gráfica, geolocalização, jogos, colisão
+
+---
+
+## 4. Estruturas Baseadas em Hash
+
+| Estrutura | Insert | Search | Delete | Uso |
+|-----------|--------|--------|--------|-----|
+| **HashTable** (chaining) | O(1)* | O(1)* | O(1)* | Geral |
+| **OpenAddressing** | O(1)* | O(1)* | O(1)* | Cache locality |
+| **CuckooHashTable** | O(1)* | O(1) worst | O(1) | Lookup garantido |
+| **BloomFilter** | O(k) | O(k) | N/A | Probabilístico |
+
+*: Amortizado
+
+### HashTable - Use Quando:
+
+✅ **INDICADO**: Lookup O(1) por chave, dicionários, caches, sets, contagem de frequência
+
+❌ **NÃO INDICADO**: Dados precisam estar ordenados, range queries
+
+```kotlin
+import br.uem.din.datastructures.hash.HashTable
+
+val ht = HashTable<String, Int>()
+ht["idade"] = 25
+ht["altura"] = 180
+println(ht["idade"])          // 25
+println(ht.containsKey("idade")) // true
+```
+
+> `HashTable<K,V>` é typealias para `HashMap<K,V>`, aproveitando implementação nativa de cada plataforma.
+
+---
+
+### BloomFilter - Use Quando:
+
+✅ **INDICADO**: Teste de pertinência probabilístico, cache de URLs, detecção de duplicatas em escala
+
+```kotlin
+import br.uem.din.datastructures.probabilistic.BloomFilter
+
+val bf = BloomFilter(expectedInsertions = 1000, falsePositiveProbability = 0.01)
+bf.add("kotlin")
+println(bf.contains("kotlin")) // true (ou falso positivo raro)
+println(bf.contains("java"))   // false (definitivamente não está)
+```
+
+---
+
+## 5. ADTs / Conjuntos
+
+| Estrutura | Operação Principal | Complexidade | Uso Típico |
+|-----------|-------------------|-------------|------------|
+| **UnionFind** | Find / Union | O(α(n)) ≈ O(1) | Componentes conexos, Kruskal |
+| **Multiset** | Add / Count | O(1) | Contagem de frequência |
+| **SkipList** | Insert / Search | O(log n) esperado | Alternativa probabilística a BST |
 
 ### Union-Find - Use Quando:
 
 ✅ **INDICADO**: Componentes conexos dinâmicos, Kruskal MST, equivalência de classes
 
-```c
-UnionFind *uf = union_find_create(n);
-union_find_union(uf, a, b);
-union_find_connected(uf, a, b);
+```kotlin
+import br.uem.din.datastructures.unionfind.UnionFind
+
+val uf = UnionFind(10)
+uf.union(0, 1)
+uf.union(2, 3)
+uf.union(1, 3)
+println(uf.connected(0, 3)) // true
+println(uf.numberOfSets)     // 7
+```
+
+---
+
+### Multiset - Use Quando:
+
+✅ **INDICADO**: Contagem de frequência, histogramas, bags
+
+```kotlin
+import br.uem.din.datastructures.set.Multiset
+
+val ms = Multiset<String>()
+ms.add("a"); ms.add("a"); ms.add("b")
+println(ms.count("a")) // 2
 ```
 
 ---
 
 ## Regras de Ouro
 
-1. **Acesso aleatório frequente** → ArrayList
-2. **Inserções/remoções frequentes** → LinkedList
-3. **LIFO** → Stack
-4. **FIFO** → Queue
-5. **Lookup por chave O(1)** → HashTable
-6. **Dados ordenados + range queries** → BST / AVL
-7. **Extrair min/max repetidamente** → Heap / Priority Queue
-8. **Prefix matching em strings** → Trie
-9. **"Quem pertence ao mesmo grupo?"** → Union-Find
-10. **Modelar relações entre entidades** → Graph
-11. **Quando em dúvida e performance importa** → ArrayList (cache locality)
+1. **Acesso aleatório frequente** → DynamicArray (ArrayList)
+2. **Inserções/remoções frequentes** → LinkedList / DoublyLinkedList
+3. **LIFO** → Stack (ArrayStack / LinkedStack)
+4. **FIFO** → Queue (ArrayQueue / LinkedQueue)
+5. **Lookup por chave O(1)** → HashTable / CuckooHashTable
+6. **Dados ordenados + range queries** → BST / AVL / Red-Black Tree
+7. **Extrair min/max repetidamente** → Heap / PriorityQueue
+8. **Merge de heaps eficiente** → BinomialHeap / FibonacciHeap
+9. **Prefix matching em strings** → Trie / RadixTree
+10. **"Quem pertence ao mesmo grupo?"** → UnionFind
+11. **Modelar relações entre entidades** → Graph (AdjacencyList / AdjacencyMatrix)
+12. **Sem ciclos + ordenação de dependências** → DAG
+13. **Dados espaciais 2D/kD** → QuadTree / KDTree
+14. **Range queries em arrays** → SegmentTree / FenwickTree
+15. **Teste de pertinência rápido** → BloomFilter
+16. **Quando em dúvida e performance importa** → ArrayList (cache locality)
 
 ---
 
 ## Referências
 
-1. Cormen et al. (2009), Chapters 6, 10-13, 21-22
-2. Knuth (1997-1998), TAOCP Vol 1-3
-3. Sedgewick & Wayne (2011), Algorithms (4th ed.)
-4. Skiena (2020), The Algorithm Design Manual (3rd ed.), Chapter 3
+1. Cormen, T. H. et al. (2009). *Introduction to Algorithms* (3rd ed.), Chapters 6, 10-13, 18-19, 21-22
+2. Knuth, D. E. (1997-1998). *The Art of Computer Programming*, Vol 1-3
+3. Sedgewick, R. & Wayne, K. (2011). *Algorithms* (4th ed.)
+4. Skiena, S. S. (2020). *The Algorithm Design Manual* (3rd ed.), Chapter 3
+5. Sleator, D. D. & Tarjan, R. E. (1985). Self-adjusting binary search trees. *JACM*
+6. Fredman, M. L. & Tarjan, R. E. (1987). Fibonacci heaps. *JACM*
+7. Pagh, R. & Rodler, F. F. (2004). Cuckoo hashing. *J. Algorithms*
+8. Fenwick, P. M. (1994). A new data structure for cumulative frequency tables. *Software: P&E*
 
 ---
 
-**Última atualização**: 2026-02-12
+**Última atualização**: 2026-02-15
