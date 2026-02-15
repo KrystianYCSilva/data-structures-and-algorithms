@@ -2,23 +2,45 @@ package br.uem.din.datastructures.heap
 
 import br.uem.din.extensions.swap
 
-
-
+/**
+ * Implementação de heap binário utilizando um [Comparator] externo para definir a ordenação.
+ *
+ * Diferentemente de [ComparableHeapImpl], esta classe aceita qualquer tipo `T` e delega
+ * a comparação ao [Comparator] fornecido no construtor. Isso permite criar tanto min-heaps
+ * quanto max-heaps, ou heaps com critérios de ordenação customizados.
+ *
+ * O heap é representado implicitamente em um [ArrayList].
+ *
+ * Complexidades:
+ * - [insert]: O(log n)
+ * - [remove]: O(log n)
+ * - [peek]: O(1)
+ *
+ * @param T o tipo dos elementos armazenados.
+ * @param comparator o comparador utilizado para ordenação dos elementos no heap.
+ *
+ * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort.
+ */
 class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
+    /** {@inheritDoc} */
     override fun size(): Int = storage.size
 
+    /** {@inheritDoc} */
     override fun peek(): T? = storage.firstOrNull()
 
+    /** {@inheritDoc} */
     override fun isEmpty(): Boolean = size() == 0
 
+    /** {@inheritDoc} */
     override fun insert(element: T) {
         storage.add(element)
         siftUp(size() - 1)
     }
 
+    /** {@inheritDoc} */
     override fun remove(): T? {
         if (isEmpty()) return null
         storage.swap(0, size() - 1)
@@ -27,6 +49,7 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
         return removed
     }
 
+    /** {@inheritDoc} */
     override fun remove(index: Int): T? {
         if (index >= size()) return null
         return if (index == size() - 1) {
@@ -40,6 +63,7 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
         }
     }
 
+    /** {@inheritDoc} */
     protected override fun siftDown(index: Int) {
         var parent = index
         while (true) {
@@ -60,6 +84,7 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
         }
     }
 
+    /** {@inheritDoc} */
     protected override fun siftUp(index: Int) {
         var child = index
         var parent = parentIndex(child)
@@ -68,13 +93,5 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
             child = parent
             parent = parentIndex(child)
         }
-    }
-
-    override fun enqueue(element: T) {
-        insert(element)
-    }
-
-    override fun dequeue(): T? {
-        return remove()
     }
 }

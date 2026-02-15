@@ -1,5 +1,5 @@
 ---
-description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos fundamentais (~45), heurísticas (planejado). Progresso e métricas."
+description: "Roadmap completo do projeto: estruturas de dados (36), algoritmos fundamentais (~45), heurísticas (planejado). Progresso e métricas."
 ---
 
 # Project Roadmap - Algoritmos e Heurísticas
@@ -9,7 +9,7 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 **Objetivo**: Biblioteca acadêmica em C11 de estruturas de dados, algoritmos clássicos, heurísticas e meta-heurísticas com rigor científico.
 
 **Status Atual**:
-- Fase 1 (Estruturas de Dados): ✅ COMPLETA (14/14)
+- Fase 1 (Estruturas de Dados): ✅ COMPLETA (36/36)
 - Fase 2 (Algoritmos Fundamentais): ✅ COMPLETA (~45 algoritmos, 9 categorias)
 - Fase 3 (Heurísticas e Meta-Heurísticas): 🔄 EM PROGRESSO (3A ✅, 3B ✅, 3C ⏳)
 
@@ -52,7 +52,7 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 
 **Métricas**: ~1.507 linhas, 59 testes | **Conclusão**: 2025-02-12
 
-### Fase 1D - Estruturas Adicionais (KMP) ✅ (5/5)
+### Fase 1D - Estruturas Adicionais (KMP) ✅ (22/22)
 
 | # | Estrutura | Tipo | Implementação | Status |
 |---|-----------|------|---------------|--------|
@@ -61,8 +61,25 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 | 17 | RedBlackTree | Tree (Self-Balancing) | Manual (Common) | ✅ |
 | 18 | SkipList | Probabilistic | Manual (Common) | ✅ |
 | 19 | BloomFilter | Probabilistic | Manual (Common) | ✅ |
+| 20 | SplayTree | Tree (Self-Adjusting) | Manual (Common) | ✅ |
+| 21 | Treap | Tree (Randomized) | Manual (Common) | ✅ |
+| 22 | CartesianTree | Tree | Manual (Common) | ✅ |
+| 23 | BTree | Tree (Balanced, Multi-way) | Manual (Common) | ✅ |
+| 24 | BPlusTree | Tree (Balanced, Multi-way) | Manual (Common) | ✅ |
+| 25 | RadixTree | Tree (Compressed Trie) | Manual (Common) | ✅ |
+| 26 | SuffixTree | Tree (String) | Manual (Common) | ✅ |
+| 27 | SegmentTree | Tree (Range Query) | Manual (Common) | ✅ |
+| 28 | FenwickTree | Tree (Range Query) | Manual (Common) | ✅ |
+| 29 | BinomialHeap | Heap | Manual (Common) | ✅ |
+| 30 | FibonacciHeap | Heap | Manual (Common) | ✅ |
+| 31 | QuadTree | Spatial | Manual (Common) | ✅ |
+| 32 | KDTree | Spatial | Manual (Common) | ✅ |
+| 33 | OpenAddressingHashTable | Hash | Manual (Common) | ✅ |
+| 34 | CuckooHashTable | Hash | Manual (Common) | ✅ |
+| 35 | Multiset | ADT | Manual (Common) | ✅ |
+| 36 | DirectedAcyclicGraph | Graph | Manual (Common) | ✅ |
 
-**Total Fase 1**: 19 estruturas, multiplataforma (JVM/JS/Native).
+**Total Fase 1**: 36 estruturas, multiplataforma (JVM/JS/Native).
 
 ---
 
@@ -144,10 +161,11 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 ╔═══════════════════════════════════════════════════════════════╗
 ║                    PROGRESSO DO PROJETO                       ║
 ╠═══════════════════════════════════════════════════════════════╣
-║ Fase 1 (Estruturas de Dados):    ✅ 100% (14/14)             ║
+║ Fase 1 (Estruturas de Dados):    ✅ 100% (36/36)             ║
 ║   - 1A Lineares: 5/5 ✅                                      ║
 ║   - 1B Associativas/Árvores: 5/5 ✅                          ║
 ║   - 1C Balanceadas/Especializadas: 4/4 ✅                    ║
+║   - 1D Adicionais (KMP): 22/22 ✅                            ║
 ║                                                               ║
 ║ Fase 2 (Algoritmos Fundamentais): ✅ 100% (~45 algoritmos)   ║
 ║   - W1 Sorting/Searching/Graph: 21 algs ✅                   ║
@@ -168,7 +186,7 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 ## Estatísticas do Projeto
 
 ```
-Estruturas de Dados:      14 completas
+Estruturas de Dados:      36 completas
 Algoritmos:               ~45 completos
 Heurísticas:              8 completas + 2 benchmarks (Phase 3A+3B)
 Linhas de Código:         ~21.500+
@@ -194,5 +212,5 @@ Pseudocódigos:            35+ implementados do CLRS
 
 ---
 
-**Última Atualização**: 2026-02-13  
+**Última Atualização**: 2026-02-15  
 **Próximo Marco**: Fase 3C - Specialized (DE, VNS, Memetic, LNS)

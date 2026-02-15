@@ -4,6 +4,39 @@ description: "Exemplos de uso das estruturas de dados e algoritmos da biblioteca
 
 # Exemplos de Uso - Algoritmos e Heurísticas
 
+## Kotlin Multiplatform - Exemplos rápidos
+
+```kotlin
+// Exemplo mínimo usando ArrayStack e a view read-only adicionada pela biblioteca
+import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.stack.asReadOnly
+
+fun main() {
+    val stack = ArrayStack<Int>()
+    stack.push(1)
+    stack.push(2)
+
+    // Obter uma view read-only (leve, sem cópia)
+    val view = stack.asReadOnly()
+    println(view.peek()) // 2
+}
+```
+
+```kotlin
+// Exemplo mínimo usando ArrayQueue e a view read-only
+import br.uem.din.datastructures.queue.ArrayQueue
+import br.uem.din.datastructures.stack.asReadOnly
+
+fun main() {
+    val q = ArrayQueue<Int>()
+    q.enqueue(10)
+    q.enqueue(20)
+
+    val qView = q.asReadOnly()
+    println(qView.peek()) // 10
+}
+```
+
 > Exemplos práticos demonstrando a API da biblioteca. Todos compilam com:
 > ```bash
 > gcc -std=c11 -Wall -Wextra -I include -o example example.c src/data_structures/*.c src/algorithms/*.c -lm

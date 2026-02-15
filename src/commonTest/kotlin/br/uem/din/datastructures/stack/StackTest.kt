@@ -5,7 +5,7 @@ import kotlin.test.*
 class StackTest {
     @Test
     fun testPushPop() {
-        val stack = Stack<Int>()
+        val stack = ArrayStack<Int>()
         assertTrue(stack.isEmpty())
         stack.push(1)
         stack.push(2)

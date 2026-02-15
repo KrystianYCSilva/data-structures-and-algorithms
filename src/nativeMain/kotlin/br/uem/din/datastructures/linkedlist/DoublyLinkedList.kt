@@ -64,7 +64,7 @@ actual class DoublyLinkedList<T> {
     actual fun size(): Int = count
     actual fun isEmpty(): Boolean = count == 0
 
-    override fun toString(): String {
+    actual override fun toString(): String {
         if (isEmpty()) return "[]"
         val sb = StringBuilder("[")
         var current = head

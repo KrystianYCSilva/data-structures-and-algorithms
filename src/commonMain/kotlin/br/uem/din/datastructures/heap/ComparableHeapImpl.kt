@@ -2,21 +2,44 @@ package br.uem.din.datastructures.heap
 
 import br.uem.din.extensions.swap
 
+/**
+ * Implementação de heap binário (min-heap) para tipos que implementam [Comparable].
+ *
+ * Utiliza a ordenação natural dos elementos (via [Comparable.compareTo]) para manter
+ * a propriedade de min-heap: o menor elemento está sempre na raiz.
+ *
+ * O heap é representado implicitamente em um [ArrayList], onde os índices dos filhos
+ * e do pai são calculados aritmeticamente.
+ *
+ * Complexidades:
+ * - [insert]: O(log n)
+ * - [remove]: O(log n)
+ * - [peek]: O(1)
+ *
+ * @param T o tipo dos elementos, deve implementar [Comparable].
+ *
+ * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort.
+ */
 class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
+    /** {@inheritDoc} */
     override fun size(): Int = storage.size
 
+    /** {@inheritDoc} */
     override fun peek(): T? = storage.firstOrNull()
 
+    /** {@inheritDoc} */
     override fun isEmpty(): Boolean = size() == 0
 
+    /** {@inheritDoc} */
     override fun insert(element: T) {
         storage.add(element)
         siftUp(size() - 1)
     }
 
+    /** {@inheritDoc} */
     override fun remove(): T? {
         if (isEmpty()) return null
         storage.swap(0, size() - 1)
@@ -27,6 +50,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
         return removed
     }
 
+    /** {@inheritDoc} */
     override fun remove(index: Int): T? {
         if (index >= size()) return null
         return if (index == size() - 1) {
@@ -40,6 +64,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
         }
     }
 
+    /** {@inheritDoc} */
     override fun siftDown(index: Int) {
         var parent = index
         while (true) {
@@ -60,6 +85,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
         }
     }
 
+    /** {@inheritDoc} */
     override protected fun siftUp(index: Int) {
         var child = index
         var parent = parentIndex(child)
