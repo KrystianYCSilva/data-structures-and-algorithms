@@ -49,3 +49,14 @@ To execute the unit tests and other verification tasks, use the `check` command.
     -   `PROJECT_ROADMAP.md`: To reflect progress on the project's long-term goals.
     -   `ALGORITHM_CATALOG.md`: To add the new algorithm and its implementation status.
     -   `USAGE_EXAMPLES.md`: To provide clear examples of how to use the new feature.
+
+## Agents and Root Memos
+
+The repository provides multiple agent memos and CLI-specific guidance. Recommended hierarchy:
+
+1. AGENTS.md (root) — top-level agent catalogue and usage memo
+2. GEMINI.md — CLI-specific guidance and commands
+3. .github/copilot-instructions.md — Copilot/assistant operational notes
+4. .context/ai-assistant-guide.md — authoritative runtime guide for agents
+
+Create or consult AGENTS.md at the repository root for the canonical list of agents and how to invoke them.

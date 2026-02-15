@@ -26,7 +26,7 @@ package br.uem.din.datastructures.linkedlist
  * @see LinkedList
  * @see DoublyLinkedList
  */
-class CircularLinkedList<T> : Iterable<T> {
+class CircularLinkedList<T> : MutableLinkedList<T> {
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
@@ -36,7 +36,7 @@ class CircularLinkedList<T> : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    var size = 0
+    override var size = 0
         private set
 
     /**
@@ -46,7 +46,7 @@ class CircularLinkedList<T> : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty() = size == 0
+    override fun isEmpty() = size == 0
 
     /**
      * Adiciona um elemento no início da lista circular.
@@ -55,7 +55,7 @@ class CircularLinkedList<T> : Iterable<T> {
      *
      * @param value o valor a ser adicionado.
      */
-    fun addFirst(value: T) {
+    override fun addFirst(value: T) {
         val newNode = Node(value)
         if (isEmpty()) {
             head = newNode
@@ -79,7 +79,7 @@ class CircularLinkedList<T> : Iterable<T> {
      *
      * @param value o valor a ser adicionado.
      */
-    fun addLast(value: T) {
+    override fun addLast(value: T) {
         val newNode = Node(value)
         if (isEmpty()) {
             head = newNode
@@ -154,6 +154,27 @@ class CircularLinkedList<T> : Iterable<T> {
      * @return o valor removido.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
+    /**
+     * Remove e retorna o primeiro elemento da lista circular.
+     *
+     * Complexidade: O(1).
+     *
+     * @return o valor removido, ou `null` se a lista estiver vazia.
+     */
+    override fun removeFirst(): T? {
+        if (isEmpty()) return null
+        val value = head!!.value
+        if (head == tail) {
+            head = null
+            tail = null
+        } else {
+            head = head?.next
+            tail?.next = head
+        }
+        size--
+        return value
+    }
+
     fun removeAt(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         if (index == 0) {

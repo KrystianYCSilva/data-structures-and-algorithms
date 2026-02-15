@@ -1,6 +1,7 @@
 package br.uem.din.datastructures.bitset
 
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Implementação JS do [BitSet] usando [IntArray] (palavras de 32 bits).
@@ -9,10 +10,11 @@ import kotlin.math.max
  * palavras de 32 bits com operações bitwise seguras no range de Int.
  * Cresce automaticamente quando bits além da capacidade são acessados.
  */
-actual class BitSet actual constructor(size: Int) {
+actual class BitSet actual constructor(size: Int) : Iterable<Int> {
     private var bits = IntArray((size + 31) / 32)
 
     actual fun set(index: Int) {
+        require(index >= 0) { "index ($index) must be >= 0" }
         ensureCapacity(index)
         val wordIndex = index / 32
         val bitIndex = index % 32
@@ -28,6 +30,10 @@ actual class BitSet actual constructor(size: Int) {
         if (wordIndex >= bits.size) return
         val bitIndex = index % 32
         bits[wordIndex] = bits[wordIndex] and (1 shl bitIndex).inv()
+    }
+
+    actual fun clear() {
+        bits.fill(0)
     }
 
     actual operator fun get(index: Int): Boolean {
@@ -56,7 +62,109 @@ actual class BitSet actual constructor(size: Int) {
     }
 
     actual fun isEmpty(): Boolean {
-        return length() == 0
+        return bits.all { it == 0 }
+    }
+
+    actual fun cardinality(): Int {
+        var count = 0
+        for (word in bits) {
+            count += word.countOneBits()
+        }
+        return count
+    }
+
+    actual fun nextSetBit(fromIndex: Int): Int {
+        if (fromIndex < 0) return -1
+        var wordIndex = fromIndex / 32
+        if (wordIndex >= bits.size) return -1
+        var word = bits[wordIndex] and (-1 shl (fromIndex % 32))
+        while (true) {
+            if (word != 0) {
+                return (wordIndex * 32) + word.countTrailingZeroBits()
+            }
+            wordIndex++
+            if (wordIndex >= bits.size) return -1
+            word = bits[wordIndex]
+        }
+    }
+
+    actual fun and(other: BitSet) {
+        val commonWords = min(bits.size, other.bits.size)
+        for (i in 0 until commonWords) {
+            bits[i] = bits[i] and other.bits[i]
+        }
+        for (i in commonWords until bits.size) {
+            bits[i] = 0
+        }
+    }
+
+    actual fun or(other: BitSet) {
+        if (other.bits.size > bits.size) {
+            bits = bits.copyOf(other.bits.size)
+        }
+        for (i in other.bits.indices) {
+            bits[i] = bits[i] or other.bits[i]
+        }
+    }
+
+    actual fun xor(other: BitSet) {
+        if (other.bits.size > bits.size) {
+            bits = bits.copyOf(other.bits.size)
+        }
+        for (i in other.bits.indices) {
+            bits[i] = bits[i] xor other.bits[i]
+        }
+    }
+
+    actual fun andNot(other: BitSet) {
+        val commonWords = min(bits.size, other.bits.size)
+        for (i in 0 until commonWords) {
+            bits[i] = bits[i] and other.bits[i].inv()
+        }
+    }
+
+    actual override fun iterator(): Iterator<Int> = object : Iterator<Int> {
+        private var next = nextSetBit(0)
+        override fun hasNext(): Boolean = next != -1
+        override fun next(): Int {
+            if (next == -1) throw NoSuchElementException()
+            val current = next
+            next = nextSetBit(current + 1)
+            return current
+        }
+    }
+
+    actual override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append('{')
+        var first = true
+        for (i in this) {
+            if (!first) sb.append(", ")
+            sb.append(i)
+            first = false
+        }
+        sb.append('}')
+        return sb.toString()
+    }
+
+    actual override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BitSet) return false
+        val len = max(bits.size, other.bits.size)
+        for (i in 0 until len) {
+            val a = if (i < bits.size) bits[i] else 0
+            val b = if (i < other.bits.size) other.bits[i] else 0
+            if (a != b) return false
+        }
+        return true
+    }
+
+    actual override fun hashCode(): Int {
+        var h = 1234L
+        for (i in bits.indices.reversed()) {
+            h = h xor (bits[i].toLong() * (i + 1))
+        }
+        return (h shr 32 xor h).toInt()
     }
 
     private fun ensureCapacity(bitIndex: Int) {
@@ -65,22 +173,5 @@ actual class BitSet actual constructor(size: Int) {
             val newSize = max(bits.size * 2, wordIndex + 1)
             bits = bits.copyOf(newSize)
         }
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append('{')
-        var first = true
-        for (i in 0 until length()) {
-            if (get(i)) {
-                if (!first) {
-                    sb.append(", ")
-                }
-                sb.append(i)
-                first = false
-            }
-        }
-        sb.append('}')
-        return sb.toString()
     }
 }

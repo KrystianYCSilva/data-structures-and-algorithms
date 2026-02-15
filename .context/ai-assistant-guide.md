@@ -1,3 +1,7 @@
+---
+description: System prompt and navigation hints for AI agents; canonical ai-assistant guide relocated into .context for authoritative agent guidance.
+---
+
 # AI Assistant Guide
 
 This file provides guidance for AI agents operating on this repository and points to the primary skills and agents to use.

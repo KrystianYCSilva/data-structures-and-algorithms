@@ -1,5 +1,5 @@
 ---
-description: Project overview: goals, scope, and current state.
+description: Project overview goals, scope, and current state.
 ---
 
 # Project Overview

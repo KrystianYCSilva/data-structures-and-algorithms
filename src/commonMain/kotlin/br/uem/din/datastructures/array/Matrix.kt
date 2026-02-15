@@ -23,7 +23,7 @@ package br.uem.din.datastructures.array
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 4 (Strassen),
  *             Cap. 25 (Floyd-Warshall).
  */
-class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) {
+class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) : Iterable<T> {
 
     private val data: MutableList<T>
 
@@ -127,8 +127,56 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) {
 
     /**
      * Retorna o número total de elementos na matriz.
+     *
+     * Complexidade: O(1).
      */
     val size: Int get() = rows * cols
+
+    /**
+     * Verifica se a matriz contém o elemento especificado.
+     *
+     * Complexidade: O(rows × cols).
+     *
+     * @param element o valor a ser procurado.
+     * @return `true` se encontrado, `false` caso contrário.
+     */
+    fun contains(element: T): Boolean = data.contains(element)
+
+    /**
+     * Uma matriz nunca está vazia (dimensões devem ser > 0).
+     *
+     * Complexidade: O(1).
+     *
+     * @return sempre `false`.
+     */
+    fun isEmpty(): Boolean = false
+
+    /**
+     * Retorna todos os elementos em row-major order como [List] imutável.
+     *
+     * Complexidade: O(rows × cols).
+     *
+     * @return lista com todos os elementos.
+     */
+    fun toList(): List<T> = data.toList()
+
+    /**
+     * Retorna todos os elementos como lista de listas (cada sub-lista é uma linha).
+     *
+     * Complexidade: O(rows × cols).
+     *
+     * @return lista de listas representando as linhas.
+     */
+    fun toNestedList(): List<List<T>> = List(rows) { r -> getRow(r) }
+
+    /**
+     * Retorna um [Iterator] que percorre todos os elementos em row-major order.
+     *
+     * Complexidade: O(1) para criação; O(rows × cols) para travessia completa.
+     *
+     * @return iterador sobre os elementos.
+     */
+    override fun iterator(): Iterator<T> = data.iterator()
 
     override fun toString(): String {
         val sb = StringBuilder()

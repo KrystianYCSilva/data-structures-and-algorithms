@@ -14,7 +14,7 @@ package br.uem.din.datastructures.array
  * Complexidades:
  * - [addRow]: O(1) amortizado (com redimensionamento por duplicação)
  * - [get]: O(1)
- * - [getColumn]: O(1)
+ * - [getColumn]: O(n)
  * - [removeAt]: O(n)
  *
  * Exemplo de uso:
@@ -179,8 +179,59 @@ class ParallelArray(vararg columnNames: String) {
 
     /**
      * Retorna `true` se não houver linhas armazenadas.
+     *
+     * Complexidade: O(1).
+     *
+     * @return `true` se o array não contiver linhas.
      */
     fun isEmpty(): Boolean = size == 0
+
+    /**
+     * Remove todas as linhas do array paralelo.
+     *
+     * Complexidade: O(k) onde k é o número de colunas.
+     */
+    fun clear() {
+        for (col in columns) {
+            col.clear()
+        }
+        size = 0
+    }
+
+    /**
+     * Verifica se alguma célula contém o valor especificado.
+     *
+     * Complexidade: O(n × k) onde n é o número de linhas e k é o número de colunas.
+     *
+     * @param value o valor a ser procurado.
+     * @return `true` se o valor existir em alguma célula.
+     */
+    fun contains(value: Any?): Boolean {
+        for (col in columns) {
+            if (col.contains(value)) return true
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ParallelArray) return false
+        if (size != other.size) return false
+        if (columnNames != other.columnNames) return false
+        for (i in columns.indices) {
+            if (columns[i] != other.columns[i]) return false
+        }
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = columnNames.hashCode()
+        result = 31 * result + size
+        for (col in columns) {
+            result = 31 * result + col.hashCode()
+        }
+        return result
+    }
 
     override fun toString(): String {
         if (isEmpty()) return "ParallelArray(columns=${columnNames}, rows=0)"

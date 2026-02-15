@@ -10,24 +10,31 @@ description: Tech stack and architecture decisions; includes detected tools and 
 |--------|------------|--------|
 | Linguagem | Kotlin | 2.1.0 |
 | Framework | Kotlin Multiplatform (KMP) | kotlin-multiplatform plugin |
-| Database | *(ex: PostgreSQL 16)* | |
+| Database | (none detected) | - |
 | Build | Gradle Wrapper | 8.7 |
-| Testes | kotlin("test") across targets; Kotest may be used in examples | |
+| Testes | kotlin.test (common) / Kotest (examples) | kotlin.test / Kotest |
 
 ## Arquitetura
 
-*(Descreva o padrao: monolito, microservices, hexagonal, etc.)*
+Kotlin Multiplatform library: common core (src/commonMain) with platform modules for JVM, JS(IR) (browser + nodejs) and native (mingwX64). Modularization pattern: core, jvm, js, native to maximize code reuse and enable platform-specific adaptors.
 
 ## Estrutura de diretorios
 
 ```
 src/
-├── ...
+├── commonMain/
+├── jvmMain/
+├── jsMain/
+└── nativeMain/
 ```
 
 ## Dependencias criticas
 
-*(Libs/servicos externos dos quais o projeto depende)*
+- kotlinx.coroutines (concurrency & coroutines)
+- kotlinx.serialization (serialization)
+- kotlin.test / Kotest (testing)
+- Dokka (documentation)
+- Optional: Arrow (functional programming), Multik / Kotlin Dataframe (data science)
 
 ## Relevant Kotlin Skills & Agents
 
@@ -53,3 +60,4 @@ Notes:
 - Kotlin version detected: 2.1.0 (from gradle.properties)
 - Gradle wrapper detected: 8.7 (from gradle/wrapper/gradle-wrapper.properties)
 - Project is configured as Kotlin Multiplatform with JVM, JS(IR) and mingwX64 targets (see build.gradle.kts)
+

@@ -31,7 +31,7 @@ package br.uem.din.datastructures.linkedlist
  * @see DoublyLinkedList
  * @see CircularLinkedList
  */
-class LinkedList<T> : Iterable<T> {
+class LinkedList<T> : MutableLinkedList<T> {
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
@@ -41,7 +41,7 @@ class LinkedList<T> : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    var size = 0
+    override var size = 0
         private set
 
     /**
@@ -51,7 +51,7 @@ class LinkedList<T> : Iterable<T> {
      *
      * @return `true` se a lista não contiver elementos, `false` caso contrário.
      */
-    fun isEmpty() = size == 0
+    override fun isEmpty() = size == 0
 
     /**
      * Retorna a representação textual da lista no formato `[v1, v2, ..., vn]`.
@@ -73,7 +73,10 @@ class LinkedList<T> : Iterable<T> {
      * @param value o valor a ser inserido.
      * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun push(value: T): LinkedList<T> = addFirst(value)
+    fun push(value: T): LinkedList<T> {
+        addFirst(value)
+        return this
+    }
 
     /**
      * Insere um elemento no início da lista.
@@ -81,15 +84,13 @@ class LinkedList<T> : Iterable<T> {
      * Complexidade: O(1).
      *
      * @param value o valor a ser inserido.
-     * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun addFirst(value: T): LinkedList<T> {
+    override fun addFirst(value: T) {
         head = Node(value = value, next = head)
         if (tail == null) {
             tail = head
         }
         size++
-        return this
     }
 
     /**
@@ -100,7 +101,10 @@ class LinkedList<T> : Iterable<T> {
      * @param value o valor a ser inserido.
      * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun append(value: T): LinkedList<T> = addLast(value)
+    fun append(value: T): LinkedList<T> {
+        addLast(value)
+        return this
+    }
 
     /**
      * Insere um elemento no final da lista.
@@ -108,18 +112,16 @@ class LinkedList<T> : Iterable<T> {
      * Complexidade: O(1).
      *
      * @param value o valor a ser inserido.
-     * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun addLast(value: T): LinkedList<T> {
+    override fun addLast(value: T) {
         if (isEmpty()) {
             addFirst(value)
-            return this
+            return
         }
         val newNode = Node(value = value)
         tail!!.next = newNode
         tail = newNode
         size++
-        return this
     }
 
     /**
@@ -177,7 +179,7 @@ class LinkedList<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se o elemento existir na lista, `false` caso contrário.
      */
-    fun contains(element: T): Boolean {
+    override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
@@ -192,7 +194,7 @@ class LinkedList<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    fun indexOf(element: T): Int {
+    override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -255,7 +257,7 @@ class LinkedList<T> : Iterable<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeFirst(): T? {
+    override fun removeFirst(): T? {
         if (isEmpty()) return null
         val result = head?.value
         head = head?.next
@@ -334,7 +336,7 @@ class LinkedList<T> : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    fun clear() {
+    override fun clear() {
         head = null
         tail = null
         size = 0
@@ -365,7 +367,7 @@ class LinkedList<T> : Iterable<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    fun toList(): List<T> = iterator().asSequence().toList()
+    override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna um [Iterator] que percorre os elementos da lista do início ao fim.

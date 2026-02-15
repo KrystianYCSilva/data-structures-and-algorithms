@@ -1,3 +1,7 @@
+---
+description: Navigation hub for .context/ files and key links.
+---
+
 # .context/ Navigation Hub
 
 ## T2: Project Identity

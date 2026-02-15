@@ -31,6 +31,7 @@ fun <T> MutableStack<T>.asReadOnly(): Stack<T> = object : Stack<T> {
     override fun isEmpty(): Boolean = this@asReadOnly.isEmpty()
     override fun contains(element: T): Boolean = this@asReadOnly.contains(element)
     override fun iterator(): Iterator<T> = this@asReadOnly.iterator()
+    override fun toString(): String = this@asReadOnly.toString()
 }
 
 /**
@@ -48,4 +49,5 @@ fun <T> MutableQueue<T>.asReadOnly(): Queue<T> = object : Queue<T> {
     override fun isEmpty(): Boolean = this@asReadOnly.isEmpty()
     override fun contains(element: T): Boolean = this@asReadOnly.contains(element)
     override fun iterator(): Iterator<T> = this@asReadOnly.iterator()
+    override fun toString(): String = this@asReadOnly.toString()
 }
