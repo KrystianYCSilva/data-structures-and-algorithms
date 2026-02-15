@@ -52,7 +52,17 @@ description: "Roadmap completo do projeto: estruturas de dados (14), algoritmos 
 
 **Métricas**: ~1.507 linhas, 59 testes | **Conclusão**: 2025-02-12
 
-**Total Fase 1**: 14 estruturas, ~8.577 linhas, ~308 testes, 0 memory leaks
+### Fase 1D - Estruturas Adicionais (KMP) ✅ (5/5)
+
+| # | Estrutura | Tipo | Implementação | Status |
+|---|-----------|------|---------------|--------|
+| 15 | CircularLinkedList | Linear | Manual (Common) | ✅ |
+| 16 | BitSet | Bit Manipulation | Expect/Actual (Java Wrapper / Manual JS/Native) | ✅ |
+| 17 | RedBlackTree | Tree (Self-Balancing) | Manual (Common) | ✅ |
+| 18 | SkipList | Probabilistic | Manual (Common) | ✅ |
+| 19 | BloomFilter | Probabilistic | Manual (Common) | ✅ |
+
+**Total Fase 1**: 19 estruturas, multiplataforma (JVM/JS/Native).
 
 ---
 

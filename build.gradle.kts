@@ -15,6 +15,16 @@ kotlin {
     jvm {
         withJava()
     }
+    js(IR) {
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
+        nodejs()
+    }
     mingwX64("native") {
         // Default binaries for KMP library usage are sufficient.
         // If C-interop is needed, sharedLib() can be re-added.
@@ -28,6 +38,17 @@ kotlin {
             }
         }
         val jvmMain by getting
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+        val jsMain by getting
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
         val nativeMain by getting
     }
 }
