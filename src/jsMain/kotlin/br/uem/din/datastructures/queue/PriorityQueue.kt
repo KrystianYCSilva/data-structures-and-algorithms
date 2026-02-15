@@ -28,7 +28,7 @@ actual class PriorityQueue<T> actual constructor(private val comparator: Compara
 
     actual override fun peek(): T? = if (isEmpty()) null else heap[0]
 
-    actual override fun size(): Int = heap.size
+    actual override val size: Int get() = heap.size
 
     actual override fun isEmpty(): Boolean = heap.isEmpty()
 
@@ -38,7 +38,7 @@ actual class PriorityQueue<T> actual constructor(private val comparator: Compara
 
     actual override fun iterator(): Iterator<T> = heap.iterator()
 
-    override fun toString(): String = heap.toString()
+    actual override fun toString(): String = heap.toString()
 
     @Suppress("UNCHECKED_CAST")
     private fun compare(a: T, b: T): Int {

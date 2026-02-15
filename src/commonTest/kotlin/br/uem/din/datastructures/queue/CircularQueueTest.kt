@@ -10,12 +10,12 @@ class CircularQueueTest {
         queue.enqueue(1)
         queue.enqueue(2)
         queue.enqueue(3)
-        assertEquals(3, queue.size())
+        assertEquals(3, queue.size)
         assertTrue(queue.isFull)
         assertEquals(1, queue.dequeue())
         assertFalse(queue.isFull)
         queue.enqueue(4)
-        assertEquals(3, queue.size())
+        assertEquals(3, queue.size)
     }
 
     @Test
@@ -57,7 +57,7 @@ class CircularQueueTest {
         queue.enqueue(2)
         queue.clear()
         assertTrue(queue.isEmpty())
-        assertEquals(0, queue.size())
+        assertEquals(0, queue.size)
         assertNull(queue.peek())
     }
 

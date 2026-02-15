@@ -13,20 +13,20 @@ import java.util.LinkedList
  *
  * Referência: java.util.LinkedList — JDK (implementação baseada em doubly-linked list com sentinel).
  */
-actual class DoublyLinkedList<T> : Iterable<T> {
+actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private val list = LinkedList<T>()
 
-    actual val size: Int get() = list.size
+    actual override val size: Int get() = list.size
 
-    actual fun addFirst(element: T) {
+    actual override fun addFirst(element: T) {
         list.addFirst(element)
     }
 
-    actual fun addLast(element: T) {
+    actual override fun addLast(element: T) {
         list.addLast(element)
     }
 
-    actual fun removeFirst(): T? {
+    actual override fun removeFirst(): T? {
         if (list.isEmpty()) return null
         return list.removeFirst()
     }
@@ -42,19 +42,19 @@ actual class DoublyLinkedList<T> : Iterable<T> {
         list[index] = element
     }
 
-    actual fun contains(element: T): Boolean = list.contains(element)
+    actual override fun contains(element: T): Boolean = list.contains(element)
 
-    actual fun indexOf(element: T): Int = list.indexOf(element)
+    actual override fun indexOf(element: T): Int = list.indexOf(element)
 
     actual fun removeAt(index: Int): T = list.removeAt(index)
 
-    actual fun clear() {
+    actual override fun clear() {
         list.clear()
     }
 
-    actual fun isEmpty(): Boolean = list.isEmpty()
+    actual override fun isEmpty(): Boolean = list.isEmpty()
 
-    actual fun toList(): List<T> = list.toList()
+    actual override fun toList(): List<T> = list.toList()
 
     actual override fun toString(): String = list.toString()
 

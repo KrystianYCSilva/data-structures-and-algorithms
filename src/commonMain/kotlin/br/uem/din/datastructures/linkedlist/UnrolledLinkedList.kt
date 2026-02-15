@@ -27,7 +27,7 @@ package br.uem.din.datastructures.linkedlist
  * Referência: Shao, Z. et al. "Cache-Conscious Structure Layout" (1999);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10 — Elementary Data Structures.
  */
-class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
+class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
 
     /**
      * Nó interno da lista desenrolada, contendo um array de elementos com capacidade fixa.
@@ -42,7 +42,58 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
 
         fun isFull() = count == nodeCapacity
 
-        fun add(element: T) {
+    /**
+     * Insere um elemento no início da lista desenrolada.
+     *
+     * Insere no primeiro nó interno, deslocando os elementos existentes. Se o nó estiver cheio,
+     * cria um novo nó no início.
+     *
+     * Complexidade: O(nodeCapacity) para deslocamento dentro do nó.
+     *
+     * @param element o elemento a ser adicionado.
+     */
+    override fun addFirst(element: T) {
+        if (head == null) {
+            head = UnrolledNode()
+            tail = head
+        }
+        if (head!!.isFull()) {
+            val newNode = UnrolledNode()
+            newNode.next = head
+            head = newNode
+        }
+        val node = head!!
+        for (i in node.count downTo 1) {
+            node.elements[i] = node.elements[i - 1]
+        }
+        node.elements[0] = element
+        node.count++
+        size++
+    }
+
+    /**
+     * Insere um elemento no final da lista desenrolada.
+     *
+     * Complexidade: O(1) amortizado.
+     *
+     * @param element o elemento a ser adicionado.
+     */
+    override fun addLast(element: T) = add(element)
+
+    /**
+     * Remove e retorna o primeiro elemento da lista desenrolada.
+     *
+     * Complexidade: O(nodeCapacity) para deslocamento dentro do nó.
+     *
+     * @return o valor removido, ou `null` se a lista estiver vazia.
+     */
+    @Suppress("UNCHECKED_CAST")
+    override fun removeFirst(): T? {
+        if (isEmpty()) return null
+        return removeAt(0)
+    }
+
+    fun add(element: T) {
             elements[count++] = element
         }
 
@@ -62,7 +113,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    var size = 0
+    override var size = 0
         private set
 
     /**
@@ -163,7 +214,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean {
+    override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
@@ -178,7 +229,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    fun indexOf(element: T): Int {
+    override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -192,7 +243,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    fun clear() {
+    override fun clear() {
         head = null
         tail = null
         size = 0
@@ -203,7 +254,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty() = size == 0
+    override fun isEmpty() = size == 0
 
     /**
      * Retorna uma cópia dos elementos como [List] imutável do Kotlin stdlib.
@@ -212,7 +263,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : Iterable<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    fun toList(): List<T> = iterator().asSequence().toList()
+    override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna representação textual da lista no formato `[v1, v2, ..., vn]`.

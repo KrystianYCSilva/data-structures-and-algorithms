@@ -11,7 +11,7 @@ package br.uem.din.datastructures.linkedlist
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.2 — Linked Lists.
  */
-actual class DoublyLinkedList<T> : Iterable<T> {
+actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
     private var head: Node<T>? = null

@@ -227,7 +227,7 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean {
+    override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
@@ -242,7 +242,7 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    fun indexOf(element: T): Int {
+    override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -256,7 +256,7 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      *
      * Complexidade: O(1).
      */
-    fun clear() {
+    override fun clear() {
         head = null
         tail = null
         size = 0
@@ -269,7 +269,7 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    fun toList(): List<T> = iterator().asSequence().toList()
+    override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna representação textual da lista no formato `[v1, v2, ..., vn]`.

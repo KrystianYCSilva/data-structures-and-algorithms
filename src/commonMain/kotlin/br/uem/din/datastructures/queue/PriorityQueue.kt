@@ -32,9 +32,10 @@ expect class PriorityQueue<T>(comparator: Comparator<T>? = null) : MutableQueue<
     override fun enqueue(element: T)
     override fun dequeue(): T?
     override fun peek(): T?
-    override fun size(): Int
+    override val size: Int
     override fun isEmpty(): Boolean
     override fun contains(element: T): Boolean
     override fun clear()
     override fun iterator(): Iterator<T>
+    override fun toString(): String
 }

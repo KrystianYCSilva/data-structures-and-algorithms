@@ -30,7 +30,7 @@ actual class ArrayStack<T> : MutableStack<T> {
         return deque.peek()
     }
 
-    actual override fun size(): Int = deque.size
+    actual override val size: Int get() = deque.size
 
     actual override fun isEmpty(): Boolean = deque.isEmpty()
 

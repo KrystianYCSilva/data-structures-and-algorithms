@@ -24,7 +24,7 @@ actual class PriorityQueue<T> actual constructor(comparator: Comparator<T>?) : M
 
     actual override fun peek(): T? = pq.peek()
 
-    actual override fun size(): Int = pq.size
+    actual override val size: Int get() = pq.size
 
     actual override fun isEmpty(): Boolean = pq.isEmpty()
 
@@ -34,5 +34,5 @@ actual class PriorityQueue<T> actual constructor(comparator: Comparator<T>?) : M
 
     actual override fun iterator(): Iterator<T> = pq.iterator()
 
-    override fun toString(): String = pq.toString()
+    actual override fun toString(): String = pq.toString()
 }

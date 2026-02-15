@@ -21,7 +21,7 @@ class ImmutableViewsTest {
         stack.push(1)
         stack.push(2)
         val view = stack.asReadOnly()
-        assertEquals(2, view.size())
+        assertEquals(2, view.size)
         assertFalse(view.isEmpty())
     }
 
@@ -62,9 +62,9 @@ class ImmutableViewsTest {
         val stack = ArrayStack<Int>()
         stack.push(1)
         val view = stack.asReadOnly()
-        assertEquals(1, view.size())
+        assertEquals(1, view.size)
         stack.push(2)
-        assertEquals(2, view.size())
+        assertEquals(2, view.size)
         assertEquals(2, view.peek())
     }
 
@@ -74,7 +74,7 @@ class ImmutableViewsTest {
         val view = stack.asReadOnly()
         assertTrue(view.isEmpty())
         assertNull(view.peek())
-        assertEquals(0, view.size())
+        assertEquals(0, view.size)
     }
 
     @Test
@@ -92,7 +92,7 @@ class ImmutableViewsTest {
         queue.enqueue(1)
         queue.enqueue(2)
         val view = queue.asReadOnly()
-        assertEquals(2, view.size())
+        assertEquals(2, view.size)
         assertFalse(view.isEmpty())
     }
 
@@ -133,9 +133,9 @@ class ImmutableViewsTest {
         val queue = ArrayQueue<Int>()
         queue.enqueue(1)
         val view = queue.asReadOnly()
-        assertEquals(1, view.size())
+        assertEquals(1, view.size)
         queue.enqueue(2)
-        assertEquals(2, view.size())
+        assertEquals(2, view.size)
     }
 
     @Test
@@ -144,6 +144,6 @@ class ImmutableViewsTest {
         val view = queue.asReadOnly()
         assertTrue(view.isEmpty())
         assertNull(view.peek())
-        assertEquals(0, view.size())
+        assertEquals(0, view.size)
     }
 }

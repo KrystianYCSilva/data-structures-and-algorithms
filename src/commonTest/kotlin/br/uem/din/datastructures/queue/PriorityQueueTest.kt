@@ -10,7 +10,7 @@ class PriorityQueueTest {
         pq.enqueue(30)
         pq.enqueue(10)
         pq.enqueue(20)
-        assertEquals(3, pq.size())
+        assertEquals(3, pq.size)
         assertEquals(10, pq.peek())
         assertEquals(10, pq.dequeue())
         assertEquals(20, pq.dequeue())
@@ -45,7 +45,7 @@ class PriorityQueueTest {
         pq.enqueue(2)
         pq.clear()
         assertTrue(pq.isEmpty())
-        assertEquals(0, pq.size())
+        assertEquals(0, pq.size)
     }
 
     @Test

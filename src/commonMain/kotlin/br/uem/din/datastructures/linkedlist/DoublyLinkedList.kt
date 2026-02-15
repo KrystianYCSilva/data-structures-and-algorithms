@@ -24,13 +24,13 @@ package br.uem.din.datastructures.linkedlist
  * @see LinkedList
  * @see CircularLinkedList
  */
-expect class DoublyLinkedList<T>() : Iterable<T> {
+expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
     /**
      * Número de elementos na lista.
      *
      * Complexidade: O(1).
      */
-    val size: Int
+    override val size: Int
 
     /**
      * Insere um elemento no início da lista.
@@ -39,7 +39,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * @param element o valor a ser inserido.
      */
-    fun addFirst(element: T)
+    override fun addFirst(element: T)
 
     /**
      * Insere um elemento no final da lista.
@@ -48,7 +48,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * @param element o valor a ser inserido.
      */
-    fun addLast(element: T)
+    override fun addLast(element: T)
 
     /**
      * Remove e retorna o primeiro elemento da lista.
@@ -57,7 +57,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeFirst(): T?
+    override fun removeFirst(): T?
 
     /**
      * Remove e retorna o último elemento da lista.
@@ -98,7 +98,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean
+    override fun contains(element: T): Boolean
 
     /**
      * Retorna o índice da primeira ocorrência do valor, ou -1 se não encontrado.
@@ -108,7 +108,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    fun indexOf(element: T): Int
+    override fun indexOf(element: T): Int
 
     /**
      * Remove e retorna o elemento na posição especificada.
@@ -126,7 +126,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * Complexidade: O(1).
      */
-    fun clear()
+    override fun clear()
 
     /**
      * Verifica se a lista está vazia.
@@ -135,7 +135,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean
+    override fun isEmpty(): Boolean
 
     /**
      * Retorna uma cópia dos elementos como [List] imutável do Kotlin stdlib.
@@ -144,7 +144,7 @@ expect class DoublyLinkedList<T>() : Iterable<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    fun toList(): List<T>
+    override fun toList(): List<T>
 
     /**
      * Retorna a representação textual da lista no formato `[v1, v2, ..., vn]`.

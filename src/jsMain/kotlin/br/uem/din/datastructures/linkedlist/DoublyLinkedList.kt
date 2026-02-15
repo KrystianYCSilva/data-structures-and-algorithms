@@ -10,16 +10,16 @@ package br.uem.din.datastructures.linkedlist
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.2 — Linked Lists.
  */
-actual class DoublyLinkedList<T> : Iterable<T> {
+actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var _size = 0
 
-    actual val size: Int get() = _size
+    actual override val size: Int get() = _size
 
-    actual fun addFirst(element: T) {
+    actual override fun addFirst(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -32,7 +32,7 @@ actual class DoublyLinkedList<T> : Iterable<T> {
         _size++
     }
 
-    actual fun addLast(element: T) {
+    actual override fun addLast(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -45,7 +45,7 @@ actual class DoublyLinkedList<T> : Iterable<T> {
         _size++
     }
 
-    actual fun removeFirst(): T? {
+    actual override fun removeFirst(): T? {
         if (isEmpty()) return null
         val value = head!!.value
         if (head == tail) {
@@ -81,14 +81,14 @@ actual class DoublyLinkedList<T> : Iterable<T> {
         nodeAt(index).value = element
     }
 
-    actual fun contains(element: T): Boolean {
+    actual override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
         return false
     }
 
-    actual fun indexOf(element: T): Int {
+    actual override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx

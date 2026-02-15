@@ -26,7 +26,7 @@ actual class ArrayStack<T> : MutableStack<T> {
         return storage[storage.size - 1]
     }
 
-    actual override fun size(): Int = storage.size
+    actual override val size: Int get() = storage.size
 
     actual override fun isEmpty(): Boolean = storage.isEmpty()
 

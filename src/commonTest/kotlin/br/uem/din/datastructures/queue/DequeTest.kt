@@ -64,7 +64,7 @@ class DequeTest {
         deque.enqueue(2)
         deque.clear()
         assertTrue(deque.isEmpty())
-        assertEquals(0, deque.size())
+        assertEquals(0, deque.size)
     }
 
     @Test

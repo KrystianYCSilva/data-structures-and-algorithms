@@ -34,7 +34,7 @@ actual class ArrayQueue<T> : MutableQueue<T> {
         return elements[head] as T
     }
 
-    actual override fun size(): Int = _count
+    actual override val size: Int get() = _count
 
     actual override fun isEmpty(): Boolean = _count == 0
 

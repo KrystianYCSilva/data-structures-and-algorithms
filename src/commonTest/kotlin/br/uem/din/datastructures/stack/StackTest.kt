@@ -10,10 +10,10 @@ class StackTest {
         assertTrue(stack.isEmpty())
         stack.push(1)
         stack.push(2)
-        assertEquals(2, stack.size())
+        assertEquals(2, stack.size)
         assertEquals(2, stack.peek())
         assertEquals(2, stack.pop())
-        assertEquals(1, stack.size())
+        assertEquals(1, stack.size)
         assertEquals(1, stack.pop())
         assertTrue(stack.isEmpty())
     }
@@ -42,7 +42,7 @@ class StackTest {
         stack.push(2)
         stack.clear()
         assertTrue(stack.isEmpty())
-        assertEquals(0, stack.size())
+        assertEquals(0, stack.size)
         assertNull(stack.peek())
     }
 
@@ -82,7 +82,7 @@ class StackTest {
         assertTrue(stack.isEmpty())
         stack.push(10)
         stack.push(20)
-        assertEquals(2, stack.size())
+        assertEquals(2, stack.size)
         assertEquals(20, stack.peek())
         assertEquals(20, stack.pop())
         assertEquals(10, stack.pop())
@@ -105,7 +105,7 @@ class StackTest {
         stack.push(2)
         stack.clear()
         assertTrue(stack.isEmpty())
-        assertEquals(0, stack.size())
+        assertEquals(0, stack.size)
     }
 
     @Test

@@ -26,7 +26,7 @@ package br.uem.din.datastructures.queue
 class Deque<T> : MutableQueue<T> {
     private val storage = mutableListOf<T>()
 
-    override fun size(): Int = storage.size
+    override val size: Int get() = storage.size
 
     override fun isEmpty(): Boolean = storage.isEmpty()
 

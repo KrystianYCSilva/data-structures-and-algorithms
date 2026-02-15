@@ -25,26 +25,26 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
     private var storage: ArrayList<T> = ArrayList()
 
     /** {@inheritDoc} */
-    override fun size(): Int = storage.size
+    override val size: Int get() = storage.size
 
     /** {@inheritDoc} */
     override fun peek(): T? = storage.firstOrNull()
 
     /** {@inheritDoc} */
-    override fun isEmpty(): Boolean = size() == 0
+    override fun isEmpty(): Boolean = size == 0
 
     /** {@inheritDoc} */
     override fun insert(element: T) {
         storage.add(element)
-        siftUp(size() - 1)
+        siftUp(size - 1)
     }
 
     /** {@inheritDoc} */
     override fun remove(): T? {
         if (isEmpty()) return null
-        storage.swap(0, size() - 1)
-        val removed = storage.removeAt(size() - 1)
-        if (size() > 0) {
+        storage.swap(0, size - 1)
+        val removed = storage.removeAt(size - 1)
+        if (size > 0) {
             siftDown(0)
         }
         return removed
@@ -52,12 +52,12 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
 
     /** {@inheritDoc} */
     override fun remove(index: Int): T? {
-        if (index >= size()) return null
-        return if (index == size() - 1) {
-            storage.removeAt(size() - 1)
+        if (index >= size) return null
+        return if (index == size - 1) {
+            storage.removeAt(size - 1)
         } else {
-            storage.swap(index, size() - 1)
-            val removed = storage.removeAt(size() - 1)
+            storage.swap(index, size - 1)
+            val removed = storage.removeAt(size - 1)
             siftDown(index)
             siftUp(index)
             removed
@@ -71,10 +71,10 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
             val left = leftChildIndex(parent)
             val right = rightChildIndex(parent)
             var candidate = parent
-            if (left < size() && storage[left] < storage[candidate]) {
+            if (left < size && storage[left] < storage[candidate]) {
                 candidate = left
             }
-            if (right < size() && storage[right] < storage[candidate]) {
+            if (right < size && storage[right] < storage[candidate]) {
                 candidate = right
             }
             if (candidate == parent) {

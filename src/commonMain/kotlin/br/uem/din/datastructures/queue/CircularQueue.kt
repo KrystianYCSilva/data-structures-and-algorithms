@@ -39,7 +39,7 @@ class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
     val isFull: Boolean
         get() = internalCount == capacity
 
-    override fun size(): Int = internalCount
+    override val size: Int get() = internalCount
 
     override fun isEmpty(): Boolean = internalCount == 0
 

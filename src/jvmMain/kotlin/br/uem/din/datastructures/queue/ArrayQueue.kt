@@ -20,7 +20,7 @@ actual class ArrayQueue<T> : MutableQueue<T> {
 
     actual override fun peek(): T? = deque.peekFirst()
 
-    actual override fun size(): Int = deque.size
+    actual override val size: Int get() = deque.size
 
     actual override fun isEmpty(): Boolean = deque.isEmpty()
 

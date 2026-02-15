@@ -35,7 +35,7 @@ class LinkedStack<T> : MutableStack<T> {
 
     override fun peek(): T? = if (list.isEmpty()) null else list[0]
 
-    override fun size(): Int = list.size
+    override val size: Int get() = list.size
 
     override fun isEmpty(): Boolean = list.isEmpty()
 

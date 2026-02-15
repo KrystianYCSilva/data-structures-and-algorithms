@@ -26,7 +26,7 @@ import br.uem.din.datastructures.queue.MutableQueue
  */
 abstract class AbstractHeap<T> : MutableQueue<T> {
 
-    abstract override fun size(): Int
+    abstract override val size: Int
     abstract override fun peek(): T?
 
     /**

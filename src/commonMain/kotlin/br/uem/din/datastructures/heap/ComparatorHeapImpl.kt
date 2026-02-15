@@ -26,37 +26,37 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
     private var storage: ArrayList<T> = ArrayList()
 
     /** {@inheritDoc} */
-    override fun size(): Int = storage.size
+    override val size: Int get() = storage.size
 
     /** {@inheritDoc} */
     override fun peek(): T? = storage.firstOrNull()
 
     /** {@inheritDoc} */
-    override fun isEmpty(): Boolean = size() == 0
+    override fun isEmpty(): Boolean = size == 0
 
     /** {@inheritDoc} */
     override fun insert(element: T) {
         storage.add(element)
-        siftUp(size() - 1)
+        siftUp(size - 1)
     }
 
     /** {@inheritDoc} */
     override fun remove(): T? {
         if (isEmpty()) return null
-        storage.swap(0, size() - 1)
-        val removed = storage.removeAt(size() - 1)
+        storage.swap(0, size - 1)
+        val removed = storage.removeAt(size - 1)
         siftDown(0)
         return removed
     }
 
     /** {@inheritDoc} */
     override fun remove(index: Int): T? {
-        if (index >= size()) return null
-        return if (index == size() - 1) {
-            storage.removeAt(size() - 1)
+        if (index >= size) return null
+        return if (index == size - 1) {
+            storage.removeAt(size - 1)
         } else {
-            storage.swap(index, size() - 1)
-            val removed = storage.removeAt(size() - 1)
+            storage.swap(index, size - 1)
+            val removed = storage.removeAt(size - 1)
             siftDown(index)
             siftUp(index)
             removed
@@ -70,10 +70,10 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
             val left = leftChildIndex(parent)
             val right = rightChildIndex(parent)
             var candidate = parent
-            if (left < size() && comparator.compare(storage[left], storage[candidate]) < 0) {
+            if (left < size && comparator.compare(storage[left], storage[candidate]) < 0) {
                 candidate = left
             }
-            if (right < size() && comparator.compare(storage[right], storage[candidate]) < 0) {
+            if (right < size && comparator.compare(storage[right], storage[candidate]) < 0) {
                 candidate = right
             }
             if (candidate == parent) {

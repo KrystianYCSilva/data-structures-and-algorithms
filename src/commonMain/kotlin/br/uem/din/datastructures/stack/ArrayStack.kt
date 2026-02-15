@@ -26,7 +26,7 @@ expect class ArrayStack<T>() : MutableStack<T> {
     override fun push(element: T): T
     override fun pop(): T?
     override fun peek(): T?
-    override fun size(): Int
+    override val size: Int
     override fun isEmpty(): Boolean
     override fun contains(element: T): Boolean
     override fun clear()

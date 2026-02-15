@@ -9,10 +9,10 @@ class ArrayQueueTest {
         val queue = ArrayQueue<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
-        assertEquals(2, queue.size())
+        assertEquals(2, queue.size)
         assertEquals(1, queue.peek())
         assertEquals(1, queue.dequeue())
-        assertEquals(1, queue.size())
+        assertEquals(1, queue.size)
         assertEquals(2, queue.dequeue())
         assertTrue(queue.isEmpty())
     }
@@ -40,7 +40,7 @@ class ArrayQueueTest {
         queue.enqueue(2)
         queue.clear()
         assertTrue(queue.isEmpty())
-        assertEquals(0, queue.size())
+        assertEquals(0, queue.size)
     }
 
     @Test

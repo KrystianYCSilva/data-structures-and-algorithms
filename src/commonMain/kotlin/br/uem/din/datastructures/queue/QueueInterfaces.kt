@@ -30,7 +30,7 @@ interface Queue<T> : Iterable<T> {
      *
      * @return a quantidade de elementos.
      */
-    fun size(): Int
+    val size: Int
 
     /**
      * Verifica se a fila está vazia.
