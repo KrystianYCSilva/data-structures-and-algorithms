@@ -5,13 +5,18 @@ import br.uem.din.datastructures.linkedlist.LinkedList
 /**
  * Fila encadeada (Linked Queue) — implementação baseada em lista ligada simplesmente encadeada.
  *
- * Utiliza [LinkedList] como estrutura interna, delegando as operações de inserção (append)
- * e remoção (pop) às extremidades da lista. Não possui limite de capacidade fixa.
+ * Utiliza [LinkedList] como estrutura interna, delegando as operações de inserção e
+ * remoção às extremidades da lista. Não possui limite de capacidade fixa.
+ * Implementa [MutableQueue] com suporte completo a [Iterable].
  *
  * Complexidades:
- * - [enqueue]: O(1)
- * - [dequeue]: O(1)
- * - [peek]: O(1)
+ * | Operação              | Complexidade |
+ * |-----------------------|-------------|
+ * | [enqueue]             | O(1)        |
+ * | [dequeue] / [peek]    | O(1)        |
+ * | [contains]            | O(n)        |
+ * | [clear]               | O(1)        |
+ * | [size] / [isEmpty]    | O(1)        |
  *
  * @param T o tipo dos elementos armazenados na fila.
  *
@@ -20,45 +25,23 @@ import br.uem.din.datastructures.linkedlist.LinkedList
 class LinkedQueue<T> : MutableQueue<T> {
     private val list = LinkedList<T>()
 
-    /**
-     * Insere um elemento no final da fila.
-     *
-     * Complexidade: O(1).
-     *
-     * @param element o elemento a ser inserido.
-     */
     override fun enqueue(element: T) {
-        list.append(element)
+        list.addLast(element)
     }
 
-    /**
-     * Remove e retorna o elemento no início da fila.
-     *
-     * Complexidade: O(1).
-     *
-     * @return o elemento removido, ou `null` se a fila estiver vazia.
-     */
-    override fun dequeue(): T? {
-        return list.pop()
-    }
+    override fun dequeue(): T? = list.removeFirst()
 
-    /**
-     * Retorna o elemento no início da fila sem removê-lo.
-     *
-     * Complexidade: O(1).
-     *
-     * @return o primeiro elemento, ou `null` se a fila estiver vazia.
-     */
-    override fun peek(): T? {
-        return list.nodeAt(0)?.value
-    }
+    override fun peek(): T? = if (list.isEmpty()) null else list[0]
 
-    /** {@inheritDoc} */
     override fun size(): Int = list.size
 
-    /** {@inheritDoc} */
     override fun isEmpty(): Boolean = list.isEmpty()
 
-    /** {@inheritDoc} */
+    override fun contains(element: T): Boolean = list.contains(element)
+
+    override fun clear() = list.clear()
+
+    override fun iterator(): Iterator<T> = list.iterator()
+
     override fun toString(): String = list.toString()
 }

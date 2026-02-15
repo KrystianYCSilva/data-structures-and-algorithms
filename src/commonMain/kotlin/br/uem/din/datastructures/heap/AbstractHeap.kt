@@ -103,4 +103,30 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      * @param index a posição do elemento a ser movido.
      */
     protected abstract fun siftUp(index: Int)
+
+    /**
+     * Verifica se o heap contém o elemento especificado.
+     *
+     * Complexidade: O(n).
+     *
+     * @param element o valor a ser procurado.
+     * @return `true` se encontrado, `false` caso contrário.
+     */
+    abstract override fun contains(element: T): Boolean
+
+    /**
+     * Remove todos os elementos do heap.
+     *
+     * Complexidade: O(1).
+     */
+    abstract override fun clear()
+
+    /**
+     * Retorna um [Iterator] sobre os elementos do heap.
+     *
+     * A ordem de iteração não é garantida como sendo a ordem de prioridade.
+     *
+     * @return iterador sobre os elementos.
+     */
+    abstract override fun iterator(): Iterator<T>
 }

@@ -95,4 +95,10 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
             parent = parentIndex(child)
         }
     }
+
+    override fun contains(element: T): Boolean = storage.contains(element)
+
+    override fun clear() = storage.clear()
+
+    override fun iterator(): Iterator<T> = storage.iterator()
 }

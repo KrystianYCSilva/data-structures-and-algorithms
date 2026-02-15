@@ -4,38 +4,33 @@ package br.uem.din.datastructures.queue
  * Fila de dupla entrada (Double-Ended Queue — Deque).
  *
  * Estrutura de dados que permite inserção e remoção em ambas as extremidades (frente e trás).
- * Implementada internamente com uma [MutableList].
+ * Implementa [MutableQueue] para interoperabilidade com o restante do pacote `queue`.
+ * A operação [enqueue] insere no final e [dequeue] remove da frente (comportamento FIFO padrão).
+ * Implementa [Iterable] para uso com `for`, `map`, `filter`, etc.
  *
  * Complexidades:
- * - [enqueue] (final): O(1) amortizado
- * - [enqueueFront] (início): O(n) — requer deslocamento de elementos
- * - [dequeue] (início): O(n) — requer deslocamento de elementos
- * - [dequeueBack] (final): O(1) amortizado
- * - [peek] / [peekBack]: O(1)
+ * | Operação              | Complexidade     |
+ * |-----------------------|-----------------|
+ * | [enqueue] (final)     | O(1) amortizado |
+ * | [enqueueFront]        | O(n)            |
+ * | [dequeue] (início)    | O(n)            |
+ * | [dequeueBack]         | O(1) amortizado |
+ * | [peek] / [peekBack]   | O(1)            |
+ * | [contains]            | O(n)            |
+ * | [clear]               | O(1)            |
  *
  * @param T o tipo dos elementos armazenados no deque.
  *
  * Referência: Knuth, D. E. "The Art of Computer Programming", Vol. 1, Sec. 2.2.1 — Deques.
  */
-class Deque<T> {
+class Deque<T> : MutableQueue<T> {
     private val storage = mutableListOf<T>()
 
-    /** Número de elementos no deque. */
-    val count: Int
-        get() = storage.size
+    override fun size(): Int = storage.size
 
-    /** Indica se o deque está vazio. */
-    val isEmpty: Boolean
-        get() = storage.isEmpty()
+    override fun isEmpty(): Boolean = storage.isEmpty()
 
-    /**
-     * Insere um elemento no final do deque (rear-enqueue).
-     *
-     * Complexidade: O(1) amortizado.
-     *
-     * @param element o elemento a ser inserido.
-     */
-    fun enqueue(element: T) {
+    override fun enqueue(element: T) {
         storage.add(element)
     }
 
@@ -50,19 +45,9 @@ class Deque<T> {
         storage.add(0, element)
     }
 
-    /**
-     * Remove e retorna o elemento do início do deque (front-dequeue).
-     *
-     * Complexidade: O(n), pois requer deslocamento de todos os elementos.
-     *
-     * @return o elemento removido, ou `null` se o deque estiver vazio.
-     */
-    fun dequeue(): T? {
-        return if (isEmpty) {
-            null
-        } else {
-            storage.removeAt(0)
-        }
+    override fun dequeue(): T? {
+        if (isEmpty()) return null
+        return storage.removeAt(0)
     }
 
     /**
@@ -73,21 +58,11 @@ class Deque<T> {
      * @return o elemento removido, ou `null` se o deque estiver vazio.
      */
     fun dequeueBack(): T? {
-        return if (isEmpty) {
-            null
-        } else {
-            storage.removeAt(storage.size - 1)
-        }
+        if (isEmpty()) return null
+        return storage.removeAt(storage.size - 1)
     }
 
-    /**
-     * Retorna o elemento do início do deque sem removê-lo.
-     *
-     * Complexidade: O(1).
-     *
-     * @return o primeiro elemento, ou `null` se vazio.
-     */
-    fun peek(): T? = storage.firstOrNull()
+    override fun peek(): T? = storage.firstOrNull()
 
     /**
      * Retorna o elemento do final do deque sem removê-lo.
@@ -97,4 +72,12 @@ class Deque<T> {
      * @return o último elemento, ou `null` se vazio.
      */
     fun peekBack(): T? = storage.lastOrNull()
+
+    override fun contains(element: T): Boolean = storage.contains(element)
+
+    override fun clear() = storage.clear()
+
+    override fun iterator(): Iterator<T> = storage.iterator()
+
+    override fun toString(): String = storage.toString()
 }
