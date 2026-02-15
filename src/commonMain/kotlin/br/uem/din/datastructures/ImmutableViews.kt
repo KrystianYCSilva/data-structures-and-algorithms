@@ -46,4 +46,6 @@ fun <T> MutableQueue<T>.asReadOnly(): Queue<T> = object : Queue<T> {
     override fun peek(): T? = this@asReadOnly.peek()
     override fun size(): Int = this@asReadOnly.size()
     override fun isEmpty(): Boolean = this@asReadOnly.isEmpty()
+    override fun contains(element: T): Boolean = this@asReadOnly.contains(element)
+    override fun iterator(): Iterator<T> = this@asReadOnly.iterator()
 }

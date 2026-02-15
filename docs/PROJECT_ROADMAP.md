@@ -6,7 +6,7 @@ description: "Roadmap completo do projeto: estruturas de dados (36), algoritmos 
 
 ## Visão Geral
 
-**Objetivo**: Biblioteca acadêmica em C11 de estruturas de dados, algoritmos clássicos, heurísticas e meta-heurísticas com rigor científico.
+**Objetivo**: Biblioteca acadêmica em Kotlin Multiplatform (JVM/JS/Native) de estruturas de dados, algoritmos clássicos, heurísticas e meta-heurísticas com rigor científico.
 
 **Status Atual**:
 - Fase 1 (Estruturas de Dados): ✅ COMPLETA (36/36)

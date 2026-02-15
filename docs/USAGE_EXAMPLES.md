@@ -1,5 +1,5 @@
 ---
-description: "Exemplos de uso das estruturas de dados e algoritmos da biblioteca, com código C11 funcional."
+description: "Exemplos de uso das estruturas de dados e algoritmos da biblioteca em Kotlin Multiplatform."
 ---
 
 # Exemplos de Uso - Algoritmos e Heurísticas
@@ -37,10 +37,8 @@ fun main() {
 }
 ```
 
-> Exemplos práticos demonstrando a API da biblioteca. Todos compilam com:
-> ```bash
-> gcc -std=c11 -Wall -Wextra -I include -o example example.c src/data_structures/*.c src/algorithms/*.c -lm
-> ```
+> Exemplos práticos demonstrando a API da biblioteca Kotlin Multiplatform.
+> Adicione a dependência no `build.gradle.kts` e importe os pacotes `br.uem.din.datastructures.*`.
 
 ---
 
@@ -48,314 +46,223 @@ fun main() {
 
 ### 1.1 Queue (Fila)
 
-```c
-#include "data_structures/queue.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.queue.ArrayQueue
+import br.uem.din.datastructures.queue.toList
 
-int main(void) {
-    Queue *q = queue_create(sizeof(int), QUEUE_ARRAY, 10, NULL);
+fun main() {
+    val q = ArrayQueue<Int>()
+    listOf(10, 20, 30, 40, 50).forEach { q.enqueue(it) }
 
-    int values[] = {10, 20, 30, 40, 50};
-    for (size_t i = 0; i < 5; i++) {
-        queue_enqueue(q, &values[i]);
-    }
+    val front = q.peek()       // front = 10
 
-    int front;
-    queue_front(q, &front);       // front = 10
+    q.dequeue()                // 10, removido
+    q.dequeue()                // 20, removido
 
-    queue_dequeue(q, &front);     // front = 10, removido
-    queue_dequeue(q, &front);     // front = 20, removido
+    println(q.size())          // 3
+    println(q.contains(30))    // true
+    println(q.toList())        // [30, 40, 50]
 
-    // Tamanho atual: 3
-    size_t size = queue_size(q);  // size = 3
-
-    queue_destroy(q);
-    return 0;
+    for (v in q) print("$v ")  // 30 40 50 (Iterable!)
 }
 ```
 
 ### 1.2 Stack (Pilha)
 
-```c
-#include "data_structures/stack.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.stack.LinkedStack
+import br.uem.din.datastructures.stack.toList
 
-int main(void) {
-    Stack *s = stack_create(sizeof(int), STACK_ARRAY, 10, NULL);
+fun main() {
+    val s = ArrayStack<Int>()
+    s.push(42)
+    s.push(99)
 
-    int val = 42;
-    stack_push(s, &val);
-    val = 99;
-    stack_push(s, &val);
+    println(s.peek())          // 99 (peek sem remover)
+    println(s.pop())           // 99 (removido)
+    println(s.pop())           // 42
 
-    int top;
-    stack_top(s, &top);    // top = 99 (peek sem remover)
-    stack_pop(s, &top);    // top = 99 (removido)
-    stack_pop(s, &top);    // top = 42
-
-    stack_destroy(s);
-    return 0;
+    val linked = LinkedStack<String>()
+    linked.push("a")
+    linked.push("b")
+    println(linked.toList())   // [b, a] (topo para base)
+    println(linked.contains("a")) // true
+    linked.clear()
+    println(linked.isEmpty())  // true
 }
 ```
 
 ### 1.3 LinkedList
 
-```c
-#include "data_structures/linked_list.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.linkedlist.LinkedList
+import br.uem.din.datastructures.linkedlist.DoublyLinkedList
 
-int main(void) {
-    LinkedList *list = list_create(sizeof(int), LIST_DOUBLY, NULL);
+fun main() {
+    val list = DoublyLinkedList<Int>()
+    list.addLast(10)
+    list.addLast(20)
+    list.addFirst(30)          // [30, 10, 20]
 
-    int v1 = 10, v2 = 20, v3 = 30;
-    list_push_back(list, &v1);
-    list_push_back(list, &v2);
-    list_push_front(list, &v3);   // [30, 10, 20]
+    println(list[0])           // 30
+    println(list[1])           // 10
 
-    int out;
-    list_get(list, 0, &out);      // out = 30
-    list_get(list, 1, &out);      // out = 10
+    list.removeAt(0)           // remove 30
+    println(list.toList())     // [10, 20]
 
-    list_remove_at(list, 0, &out); // remove 30
+    println(list.contains(10)) // true
+    println(list.indexOf(20))  // 1
 
-    list_destroy(list);
-    return 0;
+    for (v in list) print("$v ") // 10 20 (Iterable!)
+
+    val singly = LinkedList<String>()
+    singly.addLast("x").addLast("y").addLast("z")
+    singly.reverse()
+    println(singly.toList())   // [z, y, x]
 }
 ```
 
-### 1.4 ArrayList
+### 1.4 DynamicArray (typealias para ArrayList)
 
-```c
-#include "data_structures/array_list.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.array.DynamicArray
 
-int main(void) {
-    ArrayList *arr = arraylist_create(sizeof(double), 16, NULL);
+fun main() {
+    val arr = DynamicArray<Double>()
+    listOf(3.14, 2.71, 1.41, 1.73).forEach { arr.add(it) }
 
-    double vals[] = {3.14, 2.71, 1.41, 1.73};
-    for (size_t i = 0; i < 4; i++) {
-        arraylist_push_back(arr, &vals[i]);
-    }
+    println(arr[2])            // 1.41
 
-    double out;
-    arraylist_get(arr, 2, &out);   // out = 1.41
+    arr.sort()
+    println(arr)               // [1.41, 1.73, 2.71, 3.14]
 
-    arraylist_sort(arr, compare_double);
-
-    // Após sort: [1.41, 1.73, 2.71, 3.14]
-    double target = 2.71;
-    size_t idx;
-    arraylist_binary_search(arr, &target, compare_double, &idx);
-    // idx = 2
-
-    arraylist_destroy(arr);
-    return 0;
+    val idx = arr.binarySearch(2.71)
+    println(idx)               // 2
 }
 ```
 
-### 1.5 HashTable
+### 1.5 HashTable (typealias para HashMap)
 
-```c
-#include "data_structures/hash_table.h"
-#include "data_structures/common.h"
-#include <string.h>
+```kotlin
+fun main() {
+    val ht = hashMapOf<String, Int>()
+    ht["idade"] = 25
+    ht["altura"] = 180
 
-int main(void) {
-    HashTable *ht = hashtable_create(
-        sizeof(char*), sizeof(int), 16,
-        hash_string, compare_string,
-        HASH_CHAINING,
-        destroy_string, NULL
-    );
-
-    char *key1 = strdup("idade");
-    int val1 = 25;
-    hashtable_put(ht, &key1, &val1);
-
-    char *key2 = strdup("altura");
-    int val2 = 180;
-    hashtable_put(ht, &key2, &val2);
-
-    int result;
-    char *search = "idade";
-    hashtable_get(ht, &search, &result);  // result = 25
-
-    bool found = hashtable_contains(ht, &search);  // true
-
-    hashtable_destroy(ht);
-    return 0;
+    println(ht["idade"])          // 25
+    println(ht.containsKey("idade")) // true
 }
 ```
 
 ### 1.6 BST (Binary Search Tree)
 
-```c
-#include "data_structures/bst.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.tree.BinarySearchTree
 
-int main(void) {
-    BST *tree = bst_create(sizeof(int), compare_int, NULL);
+fun main() {
+    val tree = BinarySearchTree<Int>()
+    listOf(50, 30, 70, 20, 40, 60, 80).forEach { tree.insert(it) }
 
-    int vals[] = {50, 30, 70, 20, 40, 60, 80};
-    for (size_t i = 0; i < 7; i++) {
-        bst_insert(tree, &vals[i]);
-    }
-
-    int key = 40;
-    bool found = bst_search(tree, &key);  // true
-
-    int min, max;
-    bst_min(tree, &min);   // min = 20
-    bst_max(tree, &max);   // max = 80
-
-    bst_remove(tree, &key);  // remove 40
-    bst_destroy(tree);
-    return 0;
+    println(tree.contains(40)) // true
+    tree.remove(40)
+    println(tree.contains(40)) // false
 }
 ```
 
 ### 1.7 AVL Tree
 
-```c
-#include "data_structures/avl_tree.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.tree.AVLTree
 
-int main(void) {
-    AVLTree *avl = avl_create(sizeof(int), compare_int, NULL);
+fun main() {
+    val avl = AVLTree<Int>()
+    for (i in 1..100) avl.insert(i)
 
-    for (int i = 1; i <= 100; i++) {
-        avl_insert(avl, &i);
-    }
-    // Árvore auto-balanceada: altura ~7 (log2(100))
-
-    int key = 42;
-    bool found = avl_search(avl, &key);  // true
-
-    avl_remove(avl, &key);
-    // Rebalanceamento automático
-
-    avl_destroy(avl);
-    return 0;
+    println(avl.contains(42))  // true
+    avl.remove(42)
+    println(avl.contains(42))  // false
 }
 ```
 
 ### 1.8 Heap e Priority Queue
 
-```c
-#include "data_structures/heap.h"
-#include "data_structures/priority_queue.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.heap.ComparableHeapImpl
+import br.uem.din.datastructures.queue.PriorityQueue
 
-int main(void) {
-    // Min-Heap
-    Heap *h = heap_create(sizeof(int), 16, HEAP_MIN, compare_int, NULL);
+fun main() {
+    val heap = ComparableHeapImpl<Int>()
+    listOf(42, 15, 88, 3, 57).forEach { heap.insert(it) }
 
-    int vals[] = {42, 15, 88, 3, 57};
-    for (size_t i = 0; i < 5; i++) {
-        heap_insert(h, &vals[i]);
-    }
+    println(heap.peek())       // 3
+    println(heap.remove())     // 3 (removido)
+    println(heap.peek())       // 15
 
-    int min;
-    heap_peek(h, &min);       // min = 3
-    heap_extract(h, &min);    // min = 3 (removido)
-    heap_peek(h, &min);       // min = 15
-
-    heap_destroy(h);
-
-    // Priority Queue (wrapper sobre Heap)
-    PriorityQueue *pq = priority_queue_create(sizeof(int), 16, PQ_MIN, compare_int, NULL);
-
-    int p1 = 100, p2 = 5, p3 = 50;
-    priority_queue_insert(pq, &p1);
-    priority_queue_insert(pq, &p2);
-    priority_queue_insert(pq, &p3);
-
-    int highest;
-    priority_queue_extract(pq, &highest);  // highest = 5 (menor prioridade)
-
-    priority_queue_destroy(pq);
-    return 0;
+    val pq = PriorityQueue<Int>()
+    pq.enqueue(100)
+    pq.enqueue(5)
+    pq.enqueue(50)
+    println(pq.dequeue())      // 5 (menor prioridade = maior prioridade em min-heap)
+    println(pq.contains(100))  // true
+    pq.clear()
 }
 ```
 
 ### 1.9 Graph
 
-```c
-#include "data_structures/graph.h"
-#include "data_structures/common.h"
+```kotlin
+import br.uem.din.datastructures.graph.AdjacencyList
+import br.uem.din.algorithms.graph.BreadthFirstSearch
 
-int main(void) {
-    Graph *g = graph_create(5, GRAPH_UNDIRECTED, GRAPH_ADJACENCY_LIST, true);
+fun main() {
+    val graph = AdjacencyList<String>()
+    val v0 = graph.createVertex("A")
+    val v1 = graph.createVertex("B")
+    val v2 = graph.createVertex("C")
+    val v3 = graph.createVertex("D")
 
-    graph_add_edge(g, 0, 1, 4.0);
-    graph_add_edge(g, 0, 2, 1.0);
-    graph_add_edge(g, 1, 3, 2.0);
-    graph_add_edge(g, 2, 3, 5.0);
-    graph_add_edge(g, 3, 4, 3.0);
+    graph.addDirectedEdge(v0, v1, 4.0)
+    graph.addDirectedEdge(v0, v2, 1.0)
+    graph.addDirectedEdge(v1, v3, 2.0)
+    graph.addDirectedEdge(v2, v3, 5.0)
 
-    bool connected = graph_is_connected(g);  // true
-
-    // BFS a partir do vértice 0
-    size_t *bfs_order = NULL;
-    size_t bfs_count = 0;
-    graph_bfs(g, 0, &bfs_order, &bfs_count);
-    // bfs_order = [0, 1, 2, 3, 4]
-    free(bfs_order);
-
-    graph_destroy(g);
-    return 0;
+    val bfs = BreadthFirstSearch<String>()
+    val order = bfs.bfs(graph, v0)
+    println(order.map { it.data }) // [A, B, C, D]
 }
 ```
 
 ### 1.10 Trie
 
-```c
-#include "data_structures/trie.h"
+```kotlin
+import br.uem.din.datastructures.tree.Trie
 
-int main(void) {
-    Trie *t = trie_create(26);  // alfabeto a-z
+fun main() {
+    val trie = Trie()
+    trie.insert("algorithm")
+    trie.insert("algo")
+    trie.insert("alpha")
+    trie.insert("beta")
 
-    trie_insert(t, "algorithm");
-    trie_insert(t, "algo");
-    trie_insert(t, "alpha");
-    trie_insert(t, "beta");
-
-    bool found = trie_search(t, "algo");          // true
-    bool prefix = trie_starts_with(t, "alg");     // true
-
-    // Autocomplete
-    char **results = NULL;
-    size_t count = 0;
-    trie_autocomplete(t, "al", &results, &count);
-    // results = ["algo", "algorithm", "alpha"], count = 3
-
-    for (size_t i = 0; i < count; i++) free(results[i]);
-    free(results);
-
-    trie_destroy(t);
-    return 0;
+    println(trie.contains("algo"))       // true
+    println(trie.startsWith("alg"))      // true
 }
 ```
 
 ### 1.11 Union-Find
 
-```c
-#include "data_structures/union_find.h"
+```kotlin
+import br.uem.din.datastructures.unionfind.UnionFind
 
-int main(void) {
-    UnionFind *uf = union_find_create(10);
+fun main() {
+    val uf = UnionFind(10)
+    uf.union(0, 1)
+    uf.union(2, 3)
+    uf.union(1, 3)
 
-    union_find_union(uf, 0, 1);
-    union_find_union(uf, 2, 3);
-    union_find_union(uf, 1, 3);  // agora {0,1,2,3} estão conectados
-
-    bool conn = union_find_connected(uf, 0, 3);  // true
-    bool sep  = union_find_connected(uf, 0, 5);  // false
-
-    size_t sets = union_find_count(uf);  // 7 conjuntos restantes
-
-    union_find_destroy(uf);
-    return 0;
+    println(uf.connected(0, 3)) // true
+    println(uf.connected(0, 5)) // false
 }
 ```
 

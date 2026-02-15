@@ -34,5 +34,5 @@ actual class PriorityQueue<T> actual constructor(comparator: Comparator<T>?) : M
 
     actual override fun iterator(): Iterator<T> = pq.iterator()
 
-    override fun toString(): String = pq.toList().sorted().toString()
+    override fun toString(): String = pq.toString()
 }

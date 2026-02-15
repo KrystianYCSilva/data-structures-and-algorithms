@@ -6,7 +6,7 @@ description: "Plano detalhado de implementação: estruturas de dados (3 fases),
 
 ## Overview
 
-Plano detalhado para implementação da biblioteca acadêmica em C11. Organizado em 3 macro-fases:
+Plano detalhado para implementação da biblioteca acadêmica em Kotlin Multiplatform (JVM/JS/Native). Organizado em 3 macro-fases:
 1. **Fase 1**: Estruturas de Dados (14 estruturas) - ✅ COMPLETA
 2. **Fase 2**: Algoritmos Fundamentais (~45 algoritmos) - ✅ COMPLETA
 3. **Fase 3**: Heurísticas e Meta-Heurísticas (12+ algoritmos) - 🔄 EM PROGRESSO (3A ✅, 3B ✅)
@@ -17,8 +17,8 @@ Plano detalhado para implementação da biblioteca acadêmica em C11. Organizado
 
 ### 1A - Estruturas Lineares ✅
 
-- [x] Implementar `common.c` (comparação, cópia, hash, impressão)
-- [x] Configurar framework de testes (`test_macros.h`)
+- [x] Configurar projeto Kotlin Multiplatform (`build.gradle.kts`, targets JVM/JS/Native)
+- [x] Configurar framework de testes (`kotlin.test`)
 - [x] Implementar Queue (array circular + linked)
 - [x] Implementar Stack (array dinâmico + linked)
 - [x] Implementar LinkedList (singly, doubly, circular)
@@ -101,13 +101,12 @@ Plano detalhado para implementação da biblioteca acadêmica em C11. Organizado
 Para cada componente implementado:
 
 ### Correção
-- [x] Todos os testes unitários passam
-- [x] Sem memory leaks (ASan)
-- [x] Sem undefined behavior (UBSan)
+- [x] Todos os testes unitários passam (JVM + JS)
+- [x] Sem erros de compilação em todos os targets
 
 ### Qualidade de Código
-- [x] Compilação sem warnings (-Wall -Wextra)
-- [x] Documentação Doxygen completa
+- [x] Compilação sem erros (warnings de expect/actual são esperados e benignos)
+- [x] Documentação KDoc completa com análise de complexidade
 - [x] Pseudocódigo acadêmico seguido
 
 ### Validação Acadêmica
