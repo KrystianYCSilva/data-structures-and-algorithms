@@ -118,15 +118,15 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return node.value
     }
 
-    actual fun clear() {
+    actual override fun clear() {
         head = null
         tail = null
         _size = 0
     }
 
-    actual fun isEmpty(): Boolean = _size == 0
+    actual override fun isEmpty(): Boolean = _size == 0
 
-    actual fun toList(): List<T> = iterator().asSequence().toList()
+    actual override fun toList(): List<T> = iterator().asSequence().toList()
 
     actual override fun toString(): String {
         if (isEmpty()) return "[]"

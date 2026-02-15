@@ -18,9 +18,9 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private var tail: Node<T>? = null
     private var _size = 0
 
-    actual val size: Int get() = _size
+    actual override val size: Int get() = _size
 
-    actual fun addFirst(element: T) {
+    actual override fun addFirst(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -33,7 +33,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         _size++
     }
 
-    actual fun addLast(element: T) {
+    actual override fun addLast(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -46,7 +46,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         _size++
     }
 
-    actual fun removeFirst(): T? {
+    actual override fun removeFirst(): T? {
         if (isEmpty()) return null
         val value = head!!.value
         if (head == tail) {
@@ -82,14 +82,14 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         nodeAt(index).value = element
     }
 
-    actual fun contains(element: T): Boolean {
+    actual override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
         return false
     }
 
-    actual fun indexOf(element: T): Int {
+    actual override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -119,15 +119,15 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return node.value
     }
 
-    actual fun clear() {
+    actual override fun clear() {
         head = null
         tail = null
         _size = 0
     }
 
-    actual fun isEmpty(): Boolean = _size == 0
+    actual override fun isEmpty(): Boolean = _size == 0
 
-    actual fun toList(): List<T> = iterator().asSequence().toList()
+    actual override fun toList(): List<T> = iterator().asSequence().toList()
 
     actual override fun toString(): String {
         if (isEmpty()) return "[]"
