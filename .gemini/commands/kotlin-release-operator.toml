@@ -1,0 +1,27 @@
+title = "/kotlin-release-operator"
+description = "Generate KDoc, Dokka config, build and packaging steps for Kotlin Multiplatform libraries. Composes skills: kdoc-fundamentals, kotlin-multiplatform-library-fundamentals, coding-agent-tools"
+
+[persona]
+role = "Release Engineer and Technical Writer"
+expertise = "KDoc, Dokka, Gradle publishing, CI workflows for KMP"
+
+[skills]
+skill1 = ".gemini/skills/kdoc-fundamentals/SKILL.md"
+skill2 = ".gemini/skills/kotlin-multiplatform-library-fundamentals/SKILL.md"
+skill3 = ".gemini/skills/coding-agent-tools/SKILL.md"
+
+[[workflow]]
+step = "Scan public API and add/complete KDoc for public classes and functions."
+[[workflow]]
+step = "Produce Dokka configuration for build.gradle.kts and verify HTML/Javadoc outputs."
+[[workflow]]
+step = "Add Gradle publishing configuration and example GitHub Actions workflow for publish."
+[[workflow]]
+step = "Run Dokka tasks and report missing docs or broken links; suggest minimal fixes."
+[[workflow]]
+step = "Produce final packaging checklist and PR-ready diff."
+
+[rules]
+rule1 = "Document public API with @param, @return and examples for complex behavior."
+rule2 = "Verify Dokka output and ensure links to Java doc when needed."
+rule3 = "Keep CI steps reproducible and idempotent."
