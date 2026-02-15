@@ -16,20 +16,27 @@ package br.uem.din.datastructures.linkedlist
  * @see CircularLinkedList
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10 — Elementary Data Structures.
  */
-data class Node<T>(val value: T, var next: Node<T>? = null) {
+data class Node<T>(var value: T, var next: Node<T>? = null) {
     /**
      * Retorna uma representação textual do nó e de todos os nós subsequentes,
      * no formato `valor -> valor -> ... -> últimoValor`.
+     *
+     * Utiliza iteração (não recursão) para evitar [StackOverflowError] em listas longas.
+     * **Atenção:** não deve ser chamado diretamente em nós de [CircularLinkedList],
+     * pois a ausência de terminador causaria loop infinito. Use [CircularLinkedList.toString] em vez disso.
      *
      * Complexidade: O(n), onde n é o número de nós a partir deste.
      *
      * @return representação em cadeia (chain) dos valores dos nós.
      */
     override fun toString(): String {
-        return if (next != null) {
-            "$value -> ${next.toString()}"
-        } else {
-            "$value"
+        val sb = StringBuilder()
+        var current: Node<T>? = this
+        while (current != null) {
+            sb.append(current.value)
+            current = current.next
+            if (current != null) sb.append(" -> ")
         }
+        return sb.toString()
     }
 }

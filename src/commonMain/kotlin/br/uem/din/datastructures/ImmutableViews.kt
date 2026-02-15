@@ -6,50 +6,44 @@ import br.uem.din.datastructures.stack.MutableStack
 import br.uem.din.datastructures.stack.Stack
 
 /**
- * Small immutable/view helpers to allow treating mutable structures as read-only where appropriate.
- * These create lightweight read-only views (no defensive copy) to encourage functional usage patterns.
+ * Funções auxiliares para criar vistas somente-leitura (read-only views) de estruturas mutáveis.
+ *
+ * Seguem o padrão do Kotlin stdlib onde coleções mutáveis podem ser vistas como imutáveis
+ * sem cópia defensiva, incentivando o uso funcional. A vista é live — alterações na estrutura
+ * original são refletidas na vista.
+ *
+ * @see Stack
+ * @see Queue
  */
 
+/**
+ * Cria uma vista somente-leitura desta pilha mutável.
+ *
+ * A vista é live (sem cópia defensiva): alterações na pilha original são refletidas.
+ *
+ * Complexidade: O(1) para criação.
+ *
+ * @return [Stack] somente-leitura delegando a esta instância.
+ */
 fun <T> MutableStack<T>.asReadOnly(): Stack<T> = object : Stack<T> {
     override fun peek(): T? = this@asReadOnly.peek()
     override fun size(): Int = this@asReadOnly.size()
     override fun isEmpty(): Boolean = this@asReadOnly.isEmpty()
+    override fun contains(element: T): Boolean = this@asReadOnly.contains(element)
+    override fun iterator(): Iterator<T> = this@asReadOnly.iterator()
 }
 
+/**
+ * Cria uma vista somente-leitura desta fila mutável.
+ *
+ * A vista é live (sem cópia defensiva): alterações na fila original são refletidas.
+ *
+ * Complexidade: O(1) para criação.
+ *
+ * @return [Queue] somente-leitura delegando a esta instância.
+ */
 fun <T> MutableQueue<T>.asReadOnly(): Queue<T> = object : Queue<T> {
     override fun peek(): T? = this@asReadOnly.peek()
     override fun size(): Int = this@asReadOnly.size()
     override fun isEmpty(): Boolean = this@asReadOnly.isEmpty()
-}
-
-/**
- * Snapshot helpers that produce immutable copies of the current contents.
- * Implemented by temporarily using mutation operations and restoring the original state.
- * Returns List<T?> because stack/queue pop/dequeue return nullable values.
- */
-
-fun <T> MutableStack<T>.snapshot(): List<T?> {
-    val popped = ArrayList<T?>()
-    while (!isEmpty()) {
-        popped.add(pop())
-    }
-    // restore original order
-    for (i in popped.size - 1 downTo 0) {
-        val v = popped[i]
-        @Suppress("UNCHECKED_CAST")
-        push(v as T)
-    }
-    return popped.toList()
-}
-
-fun <T> MutableQueue<T>.snapshot(): List<T?> {
-    val n = size()
-    val list = ArrayList<T?>(n)
-    for (i in 0 until n) {
-        val v = dequeue()
-        list.add(v)
-        @Suppress("UNCHECKED_CAST")
-        enqueue(v as T)
-    }
-    return list.toList()
 }

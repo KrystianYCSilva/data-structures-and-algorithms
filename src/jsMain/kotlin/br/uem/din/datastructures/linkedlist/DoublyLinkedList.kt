@@ -1,11 +1,23 @@
 package br.uem.din.datastructures.linkedlist
 
-actual class DoublyLinkedList<T> {
-    private class Node<T>(val value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
+/**
+ * Implementação JS de [DoublyLinkedList] com nós manuais contendo ponteiros `prev`/`next`.
+ *
+ * Como o ambiente JS não possui uma lista duplamente ligada nativa, esta implementação
+ * gerencia manualmente os nós com referências bidirecionais.
+ *
+ * @param T o tipo dos elementos armazenados na lista.
+ *
+ * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.2 — Linked Lists.
+ */
+actual class DoublyLinkedList<T> : Iterable<T> {
+    private class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
-    private var count = 0
+    private var _size = 0
+
+    actual val size: Int get() = _size
 
     actual fun addFirst(element: T) {
         val newNode = Node(element)
@@ -17,7 +29,7 @@ actual class DoublyLinkedList<T> {
             head?.prev = newNode
             head = newNode
         }
-        count++
+        _size++
     }
 
     actual fun addLast(element: T) {
@@ -30,12 +42,12 @@ actual class DoublyLinkedList<T> {
             newNode.prev = tail
             tail = newNode
         }
-        count++
+        _size++
     }
 
     actual fun removeFirst(): T? {
         if (isEmpty()) return null
-        val value = head?.value
+        val value = head!!.value
         if (head == tail) {
             head = null
             tail = null
@@ -43,13 +55,13 @@ actual class DoublyLinkedList<T> {
             head = head?.next
             head?.prev = null
         }
-        count--
+        _size--
         return value
     }
 
     actual fun removeLast(): T? {
         if (isEmpty()) return null
-        val value = tail?.value
+        val value = tail!!.value
         if (head == tail) {
             head = null
             tail = null
@@ -57,23 +69,90 @@ actual class DoublyLinkedList<T> {
             tail = tail?.prev
             tail?.next = null
         }
-        count--
+        _size--
         return value
     }
 
-    actual fun size(): Int = count
-    actual fun isEmpty(): Boolean = count == 0
+    actual operator fun get(index: Int): T {
+        return nodeAt(index).value
+    }
+
+    actual operator fun set(index: Int, element: T) {
+        nodeAt(index).value = element
+    }
+
+    actual fun contains(element: T): Boolean {
+        for (v in this) {
+            if (v == element) return true
+        }
+        return false
+    }
+
+    actual fun indexOf(element: T): Int {
+        var idx = 0
+        for (v in this) {
+            if (v == element) return idx
+            idx++
+        }
+        return -1
+    }
+
+    actual fun removeAt(index: Int): T {
+        val node = nodeAt(index)
+        when (node) {
+            head -> {
+                head = node.next
+                head?.prev = null
+                if (head == null) tail = null
+            }
+            tail -> {
+                tail = node.prev
+                tail?.next = null
+            }
+            else -> {
+                node.prev?.next = node.next
+                node.next?.prev = node.prev
+            }
+        }
+        _size--
+        return node.value
+    }
+
+    actual fun clear() {
+        head = null
+        tail = null
+        _size = 0
+    }
+
+    actual fun isEmpty(): Boolean = _size == 0
+
+    actual fun toList(): List<T> = iterator().asSequence().toList()
 
     actual override fun toString(): String {
         if (isEmpty()) return "[]"
-        val sb = StringBuilder("[")
-        var current = head
-        while (current != null) {
-            sb.append(current.value)
-            if (current.next != null) sb.append(", ")
-            current = current.next
+        return joinToString(prefix = "[", postfix = "]")
+    }
+
+    actual override fun iterator(): Iterator<T> = object : Iterator<T> {
+        private var current = head
+        override fun hasNext(): Boolean = current != null
+        override fun next(): T {
+            val value = current?.value ?: throw NoSuchElementException()
+            current = current?.next
+            return value
         }
-        sb.append("]")
-        return sb.toString()
+    }
+
+    private fun nodeAt(index: Int): Node<T> {
+        if (index < 0 || index >= _size) throw IndexOutOfBoundsException("Index $index, size $_size")
+        return if (index < _size / 2) {
+            var node = head!!
+            repeat(index) { node = node.next!! }
+            node
+        } else {
+            var node = tail!!
+            repeat(_size - 1 - index) { node = node.prev!! }
+            node
+        }
     }
 }
