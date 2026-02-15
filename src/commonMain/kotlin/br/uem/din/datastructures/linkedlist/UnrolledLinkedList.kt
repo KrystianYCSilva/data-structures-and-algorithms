@@ -16,6 +16,9 @@ package br.uem.din.datastructures.linkedlist
  * | Operação            | Complexidade      |
  * |---------------------|-------------------|
  * | [add]               | O(1) amortizado   |
+ * | [addFirst]          | O(nodeCapacity)   |
+ * | [addLast]           | O(1) amortizado   |
+ * | [removeFirst]       | O(nodeCapacity)   |
  * | [get]               | O(n/nodeCapacity)  |
  * | [removeAt]          | O(n/nodeCapacity)  |
  * | [contains]          | O(n)              |
@@ -41,6 +44,29 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
         var count = 0
 
         fun isFull() = count == nodeCapacity
+
+        fun add(element: T) {
+            elements[count++] = element
+        }
+
+        fun removeAt(index: Int) {
+            for (i in index until count - 1) {
+                elements[i] = elements[i + 1]
+            }
+            elements[--count] = null
+        }
+    }
+
+    private var head: UnrolledNode? = null
+    private var tail: UnrolledNode? = null
+
+    /**
+     * Número total de elementos armazenados na lista.
+     *
+     * Complexidade: O(1).
+     */
+    override var size = 0
+        private set
 
     /**
      * Insere um elemento no início da lista desenrolada.
@@ -92,29 +118,6 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
         if (isEmpty()) return null
         return removeAt(0)
     }
-
-    fun add(element: T) {
-            elements[count++] = element
-        }
-
-        fun removeAt(index: Int) {
-            for (i in index until count - 1) {
-                elements[i] = elements[i + 1]
-            }
-            elements[--count] = null
-        }
-    }
-
-    private var head: UnrolledNode? = null
-    private var tail: UnrolledNode? = null
-
-    /**
-     * Número total de elementos armazenados na lista.
-     *
-     * Complexidade: O(1).
-     */
-    override var size = 0
-        private set
 
     /**
      * Adiciona um elemento ao final da lista.
