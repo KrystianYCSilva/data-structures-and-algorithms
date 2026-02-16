@@ -1,33 +1,49 @@
 ---
-description: System prompt and navigation hints for AI agents; canonical ai-assistant guide relocated into .context for authoritative agent guidance.
+description: System prompt and navigation hints for AI agents operating on this repository.
 ---
 
 # AI Assistant Guide
 
-This file provides guidance for AI agents operating on this repository and points to the primary skills and agents to use.
+## Quick Start
 
-## Purpose
-- Provide the system prompt and navigation hints for agents.
-- List installed skills and agent commands relevant to Kotlin development in this repo.
+1. Leia `AGENTS.md` (root) para comandos de build/test e code style
+2. Leia `.itzamna/kernel.md` para classificacao de tarefas (Reflexo/Deliberado/Profundo)
+3. Leia `.itzamna/memory.md` para estado atual do projeto
 
-## Kotlin Skills & Agents (paths)
+## Key Facts
 
-Skills:
-- .gemini/skills/kotlin-fundamentals/SKILL.md
-- .gemini/skills/kotlin-multiplatform-library-fundamentals/SKILL.md
-- .gemini/skills/kotlin-oo-fundamental/SKILL.md
-- .gemini/skills/kotlin-functional-fundamental/SKILL.md
+- **Linguagem**: Kotlin 2.1.0 Multiplatform (JVM, JS IR, mingwX64)
+- **Dependencias**: ZERO externas — apenas Kotlin stdlib + kotlin.test
+- **Testes**: `kotlin.test` apenas (sem Kotest, sem JUnit)
+- **Linter**: Nenhum configurado; seguir `kotlin.code.style=official`
+- **Build**: `gradlew.bat build` / `gradlew.bat check`
 
-Agent commands (.gemini):
-- .gemini/commands/kotlin-architect.toml
-- .gemini/commands/kotlin-tester.toml
-- .gemini/commands/kotlin-release-operator.toml
+## Where to Put New Code
 
-Agent stubs (.github):
-- .github/agents/kotlin-architect.agent.md
-- .github/agents/kotlin-tester.agent.md
-- .github/agents/kotlin-release-operator.agent.md
+- Algoritmos/DS: `src/commonMain/kotlin/br/uem/din/`
+- Testes: `src/commonTest/kotlin/br/uem/din/`
+- Platform-specific: `src/{jvm,js,native}Main/kotlin/` (apenas para expect/actual)
 
-## How to use
-- Agents should read the skill files listed above when performing Kotlin-related tasks.
-- Prefer .gemini commands for automated runs; consult .github/agents/ for human-invoked workflows.
+## Kotlin Skills & Agents
+
+Skills (.opencode/skills/):
+- kotlin-fundamentals, kotlin-oo-fundamental, kotlin-functional-fundamental
+- kotlin-multiplatform-library-fundamentals, kotest-fundamentals
+
+Agent commands (.gemini/commands/):
+- kotlin-architect.toml — design & scaffold KMP modules
+- kotlin-tester.toml — generate and run tests
+- kotlin-release-operator.toml — packaging, Dokka, release prep
+
+Agent stubs (.github/agents/):
+- kotlin-architect.agent.md, kotlin-tester.agent.md, kotlin-release-operator.agent.md
+
+## Context Hierarchy
+
+```
+AGENTS.md (root)
+  -> GEMINI.md
+  -> .github/copilot-instructions.md
+  -> .context/ai-assistant-guide.md (this file)
+  -> .itzamna/kernel.md (cognitive routing)
+```

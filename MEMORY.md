@@ -14,8 +14,8 @@ description: |
 
 ## Project
 
-- **Nome:** *(preencha)*
-- **Stack:** *(preencha)*
+- **Nome:** algoritmos_otimizacao
+- **Stack:** Kotlin 2.1.0 Multiplatform (JVM/JS/mingwX64), Gradle, kotlin.test
 
 ---
 
@@ -37,17 +37,29 @@ Protocolo:
 
 ## Features Implementadas
 
-*(Adicione features conforme completadas)*
+### Fase 1 — Estruturas de Dados (36/36)
+- **Data:** 2025-02-12
+- **Arquivos:** src/commonMain/kotlin/br/uem/din/datastructures/ (stack, queue, heap, tree, graph, array, linkedlist, hash, spatial, probabilistic, skiplist, unionfind, bitset, set)
+- **Testes:** 308 testes (Fases 1A-1D)
+- **Notas:** Inclui lineares (5), associativas/arvores (5), balanceadas (4), e 22 estruturas adicionais KMP. expect/actual para ArrayStack, BitSet.
 
-<!--
-Formato sugerido:
+### Fase 2 — Algoritmos Fundamentais (~45)
+- **Data:** ~2025 (Waves 1-3)
+- **Arquivos:** src/commonMain/kotlin/br/uem/din/algorithms/ (sorting, graph, searching, string, dp, greedy, numerical, divideconquer, backtracking)
+- **Testes:** 199 testes, 0 failures
+- **Notas:** 10 sorting, 6 searching, 5 graph, 4 string matching, 8 DP, 3 greedy, 5 numerical, 5 D&C, 4 backtracking
 
-### [Nome da Feature]
-- **Data:** YYYY-MM-DD
-- **Arquivos:** principais arquivos criados/modificados
-- **Testes:** X testes, cobertura Y%
-- **Notas:** observacoes relevantes
--->
+### Fase 3A — Heuristicas Classicas (4/4)
+- **Data:** 2026-02-13
+- **Arquivos:** src/commonMain/kotlin/br/uem/din/algorithms/optimization/ (HillClimbing, SimulatedAnnealing, TabuSearch, GeneticAlgorithm + infraestrutura)
+- **Testes:** 91 testes (inclui 32 de infraestrutura/benchmarks)
+- **Notas:** OptSolution/OptResult types, RNG utils, TSP benchmarks (5/10/20 cities), Continuous benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel)
+
+### Fase 3B — Heuristicas Avancadas (4/4)
+- **Data:** 2026-02-13
+- **Arquivos:** ILS, GRASP, PSO, ACO
+- **Testes:** 41 testes
+- **Notas:** Completa population-based e hybrid approaches
 
 ---
 
@@ -55,6 +67,7 @@ Formato sugerido:
 
 | Versao | Data | Descricao |
 |--------|------|-----------|
+| 1.0-SNAPSHOT | ongoing | Versao de desenvolvimento ativa |
 
 ---
 
@@ -67,10 +80,10 @@ Formato sugerido:
 
 ## Metricas Acumuladas
 
-- **LOC total:** -
-- **Testes:** -
-- **Cobertura:** -
+- **LOC total:** ~13.500+ (estimado: 2.660 + 4.410 + 1.507 + 6.000 + 4.500 + 2.500)
+- **Testes:** ~539+ (132 + 117 + 59 + 199 + 91 + 41, parcial — nem todas DS tem testes em commonTest)
+- **Cobertura:** nao medida formalmente
 
 ---
 
-*Ultima atualizacao: -.*
+*Ultima atualizacao: 2026-02-16.*

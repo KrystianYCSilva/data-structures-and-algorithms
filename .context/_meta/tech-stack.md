@@ -1,5 +1,5 @@
 ---
-description: Tech stack and architecture decisions; includes detected tools and important skill/agent paths.
+description: Tech stack and architecture decisions based on actual build.gradle.kts and gradle.properties.
 ---
 
 # Tech Stack & Architecture
@@ -10,54 +10,48 @@ description: Tech stack and architecture decisions; includes detected tools and 
 |--------|------------|--------|
 | Linguagem | Kotlin | 2.1.0 |
 | Framework | Kotlin Multiplatform (KMP) | kotlin-multiplatform plugin |
-| Database | (none detected) | - |
 | Build | Gradle Wrapper | 8.7 |
-| Testes | kotlin.test (common) / Kotest (examples) | kotlin.test / Kotest |
+| Testes | kotlin.test (commonTest, jvmTest, jsTest) | stdlib |
+| JS Test Runner | Karma + ChromeHeadless | via useKarma { useChromeHeadless() } |
+| Publicacao | maven-publish plugin | Gradle built-in |
+
+## Targets
+
+| Target | Config | Notas |
+|--------|--------|-------|
+| JVM | `jvm { withJava() }` | Target principal |
+| JS (IR) | `js(IR) { browser { ... }; nodejs() }` | Browser + Node, Karma para testes |
+| Native | `mingwX64("native")` | Windows 64-bit, sem C-interop |
 
 ## Arquitetura
 
-Kotlin Multiplatform library: common core (src/commonMain) with platform modules for JVM, JS(IR) (browser + nodejs) and native (mingwX64). Modularization pattern: core, jvm, js, native to maximize code reuse and enable platform-specific adaptors.
+Biblioteca KMP com codigo compartilhado em `commonMain` e adaptadores por plataforma via `expect`/`actual`.
+Nao ha modulos Gradle separados — tudo em um unico modulo raiz com source sets por target.
+
+- Group: `br.uem.din`
+- Version: `1.0-SNAPSHOT`
+- Code style: `kotlin.code.style=official` (gradle.properties)
 
 ## Estrutura de diretorios
 
 ```
 src/
-├── commonMain/
-├── jvmMain/
-├── jsMain/
-└── nativeMain/
+  commonMain/kotlin/br/uem/din/    # Codigo principal (DS, algoritmos, heuristicas)
+    datastructures/                  # 36 estruturas (stack, queue, heap, tree, graph, ...)
+    algorithms/                      # ~45 algoritmos (sorting, searching, graph, dp, ...)
+    extensions/                      # Extension functions utilitarias
+  commonTest/kotlin/br/uem/din/    # Testes platform-independent (kotlin.test)
+  jvmMain/kotlin/                   # actual declarations (ArrayStack, BitSet)
+  jsMain/kotlin/                    # actual declarations JS
+  nativeMain/kotlin/                # actual declarations mingwX64
+  jvmTest/kotlin/                   # Testes JVM-specific
+  jsTest/kotlin/                    # Testes JS-specific (Karma)
+docs/                               # ALGORITHM_CATALOG, USAGE_EXAMPLES, PROJECT_ROADMAP
 ```
 
-## Dependencias criticas
+## Dependencias
 
-- kotlinx.coroutines (concurrency & coroutines)
-- kotlinx.serialization (serialization)
-- kotlin.test / Kotest (testing)
-- Dokka (documentation)
-- Optional: Arrow (functional programming), Multik / Kotlin Dataframe (data science)
+**Unica dependencia**: `kotlin("test")` para commonTest, jvmTest, jsTest.
 
-## Relevant Kotlin Skills & Agents
-
-The repository includes the following Kotlin-focused skills and agent commands (use these paths to load guidance or invoke automated commands):
-
-Skills:
-- .gemini/skills/kotlin-fundamentals/SKILL.md
-- .gemini/skills/kotlin-multiplatform-library-fundamentals/SKILL.md
-- .gemini/skills/kotlin-oo-fundamental/SKILL.md
-- .gemini/skills/kotlin-functional-fundamental/SKILL.md
-
-Gemini commands:
-- .gemini/commands/kotlin-architect.toml  # design & scaffold KMP modules
-- .gemini/commands/kotlin-tester.toml     # generate and run Kotest tests
-- .gemini/commands/kotlin-release-operator.toml # Dokka, packaging, CI snippets
-
-GitHub agent stubs:
-- .github/agents/kotlin-architect.agent.md
-- .github/agents/kotlin-tester.agent.md
-- .github/agents/kotlin-release-operator.agent.md
-
-Notes:
-- Kotlin version detected: 2.1.0 (from gradle.properties)
-- Gradle wrapper detected: 8.7 (from gradle/wrapper/gradle-wrapper.properties)
-- Project is configured as Kotlin Multiplatform with JVM, JS(IR) and mingwX64 targets (see build.gradle.kts)
-
+Nao ha dependencias externas (sem kotlinx.coroutines, sem kotlinx.serialization, sem Kotest, sem Dokka configurado).
+Toda implementacao usa apenas Kotlin stdlib.

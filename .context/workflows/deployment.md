@@ -1,12 +1,39 @@
 ---
-description: Deployment and release workflow for artifacts and documentation.
+description: Build, test, and publication workflow based on actual project configuration.
 ---
 
-# Deployment Workflow
+# Build & Publication Workflow
 
-Deployment workflow notes for library artifacts and documentation.
+## Build
 
-- Build: Use Gradle wrapper (gradlew.bat build) to produce artifacts for all targets.
-- Publication: Publish JVM/JS artifacts to Maven repositories via Gradle publishing; include Dokka-generated docs as part of the publication.
-- CI: Separate jobs for build, tests (jvmTest/jsTest), and documentation; only publish on successful release-tagged builds.
-- Rollback: Use artifact versioning and do not overwrite published artifacts; create a follow-up patch/release to correct issues.
+```sh
+gradlew.bat build        # Compila todos os targets (JVM, JS, Native)
+```
+
+Produz artefatos para JVM (JAR), JS (IR) e mingwX64 (klib).
+
+## Test
+
+```sh
+gradlew.bat check        # Todos os testes
+gradlew.bat jvmTest      # Apenas JVM
+gradlew.bat jsTest       # Apenas JS (Karma/ChromeHeadless requerido)
+```
+
+## Publication
+
+O plugin `maven-publish` esta configurado. Publicacao via:
+
+```sh
+gradlew.bat publish
+```
+
+Publica artefatos para repositorios Maven configurados. Atualmente `1.0-SNAPSHOT`.
+
+## CI/CD
+
+Nao ha pipeline CI/CD configurado no repositorio (sem GitHub Actions, sem Jenkinsfile). Build e testes sao executados localmente.
+
+## Rollback
+
+Sem mecanismo formal. Usar versionamento de artefatos e nao sobrescrever versoes publicadas.

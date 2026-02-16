@@ -60,3 +60,21 @@ The repository provides multiple agent memos and CLI-specific guidance. Recommen
 4. .context/ai-assistant-guide.md — authoritative runtime guide for agents
 
 Create or consult AGENTS.md at the repository root for the canonical list of agents and how to invoke them.
+
+---
+
+## Itzamna Protocol
+
+Este projeto utiliza o [Itzamna](https://github.com/KrystianYCSilva/itzamna) como orquestrador cognitivo.
+
+**Antes de executar qualquer tarefa nao-trivial:**
+1. Leia `.itzamna/kernel.md` (classificacao e roteamento)
+2. Leia `.itzamna/memory.md` (estado atual do projeto)
+3. Leia `.context/` (project.md, tech.md, rules.md)
+
+**Ao finalizar tarefas significativas:**
+- Atualize `.itzamna/memory.md` (estado atual, append-only)
+- Para features/releases/hotfixes: proponha update em `MEMORY.md` (root, long-term)
+
+Regras completas: `.itzamna/constitution.md`
+Slash commands: veja `commands/` neste diretorio
