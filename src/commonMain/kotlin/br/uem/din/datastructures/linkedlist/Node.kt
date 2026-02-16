@@ -16,7 +16,7 @@ package br.uem.din.datastructures.linkedlist
  * @see CircularLinkedList
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10 — Elementary Data Structures.
  */
-data class Node<T>(var value: T, var next: Node<T>? = null) {
+internal data class Node<T>(var value: T, var next: Node<T>? = null) {
     /**
      * Retorna uma representação textual do nó e de todos os nós subsequentes,
      * no formato `valor -> valor -> ... -> últimoValor`.

@@ -12,8 +12,8 @@ package br.uem.din.datastructures.queue
  * | Operação              | Complexidade     |
  * |-----------------------|-----------------|
  * | [enqueue] (final)     | O(1) amortizado |
- * | [enqueueFront]        | O(n)            |
- * | [dequeue] (início)    | O(n)            |
+ * | [enqueueFront]        | O(1) amortizado |
+ * | [dequeue] (início)    | O(1) amortizado |
  * | [dequeueBack]         | O(1) amortizado |
  * | [peek] / [peekBack]   | O(1)            |
  * | [contains]            | O(n)            |
@@ -24,7 +24,7 @@ package br.uem.din.datastructures.queue
  * Referência: Knuth, D. E. "The Art of Computer Programming", Vol. 1, Sec. 2.2.1 — Deques.
  */
 class Deque<T> : MutableQueue<T> {
-    private val storage = mutableListOf<T>()
+    private val storage = ArrayDeque<T>()
 
     override val size: Int get() = storage.size
 
@@ -37,17 +37,17 @@ class Deque<T> : MutableQueue<T> {
     /**
      * Insere um elemento no início do deque (front-enqueue).
      *
-     * Complexidade: O(n), pois requer deslocamento de todos os elementos.
+     * Complexidade: O(1) amortizado.
      *
      * @param element o elemento a ser inserido.
      */
     fun enqueueFront(element: T) {
-        storage.add(0, element)
+        storage.addFirst(element)
     }
 
     override fun dequeue(): T? {
         if (isEmpty()) return null
-        return storage.removeAt(0)
+        return storage.removeFirst()
     }
 
     /**
@@ -59,7 +59,7 @@ class Deque<T> : MutableQueue<T> {
      */
     fun dequeueBack(): T? {
         if (isEmpty()) return null
-        return storage.removeAt(storage.size - 1)
+        return storage.removeLast()
     }
 
     override fun peek(): T? = storage.firstOrNull()

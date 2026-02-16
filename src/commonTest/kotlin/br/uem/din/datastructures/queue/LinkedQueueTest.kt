@@ -53,4 +53,34 @@ class LinkedQueueTest {
         queue.enqueue(3)
         assertEquals(listOf(1, 2, 3), queue.toList())
     }
+
+    @Test
+    fun testPeek() {
+        val queue = LinkedQueue<Int>()
+        assertNull(queue.peek())
+        queue.enqueue(10)
+        queue.enqueue(20)
+        assertEquals(10, queue.peek())
+        assertEquals(2, queue.size)
+    }
+
+    @Test
+    fun testIsEmpty() {
+        val queue = LinkedQueue<Int>()
+        assertTrue(queue.isEmpty())
+        queue.enqueue(1)
+        assertFalse(queue.isEmpty())
+        queue.dequeue()
+        assertTrue(queue.isEmpty())
+    }
+
+    @Test
+    fun testToString() {
+        val queue = LinkedQueue<Int>()
+        queue.enqueue(1)
+        queue.enqueue(2)
+        val str = queue.toString()
+        assertTrue(str.contains("1"))
+        assertTrue(str.contains("2"))
+    }
 }

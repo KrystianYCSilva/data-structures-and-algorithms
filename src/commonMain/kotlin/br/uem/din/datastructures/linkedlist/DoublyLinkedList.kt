@@ -66,7 +66,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeLast(): T?
+    override fun removeLast(): T?
 
     /**
      * Retorna o elemento na posição especificada.

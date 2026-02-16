@@ -60,7 +60,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return value
     }
 
-    actual fun removeLast(): T? {
+    actual override fun removeLast(): T? {
         if (isEmpty()) return null
         val value = tail!!.value
         if (head == tail) {

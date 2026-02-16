@@ -149,4 +149,58 @@ class UnrolledLinkedListTest {
         assertEquals("[]", list.toString())
         assertEquals(emptyList(), list.toList())
     }
+
+    @Test
+    fun testAddFirst() {
+        val list = UnrolledLinkedList<Int>(4)
+        list.add(2)
+        list.add(3)
+        list.addFirst(1)
+        assertEquals(3, list.size)
+        assertEquals(1, list[0])
+        assertEquals(2, list[1])
+        assertEquals(3, list[2])
+    }
+
+    @Test
+    fun testAddFirstOnEmpty() {
+        val list = UnrolledLinkedList<Int>(4)
+        list.addFirst(1)
+        assertEquals(1, list.size)
+        assertEquals(1, list[0])
+    }
+
+    @Test
+    fun testRemoveFirst() {
+        val list = UnrolledLinkedList<Int>(4)
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        assertEquals(1, list.removeFirst())
+        assertEquals(2, list.size)
+        assertEquals(2, list[0])
+    }
+
+    @Test
+    fun testRemoveFirstEmpty() {
+        val list = UnrolledLinkedList<Int>()
+        assertNull(list.removeFirst())
+    }
+
+    @Test
+    fun testRemoveLast() {
+        val list = UnrolledLinkedList<Int>(4)
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        assertEquals(3, list.removeLast())
+        assertEquals(2, list.size)
+        assertEquals(listOf(1, 2), list.toList())
+    }
+
+    @Test
+    fun testRemoveLastEmpty() {
+        val list = UnrolledLinkedList<Int>()
+        assertNull(list.removeLast())
+    }
 }

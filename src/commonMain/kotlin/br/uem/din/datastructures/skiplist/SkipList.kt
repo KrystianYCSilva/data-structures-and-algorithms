@@ -12,9 +12,14 @@ import kotlin.random.Random
  * Esta implementação possui comportamento de conjunto (Set): valores duplicados não são inseridos.
  *
  * Complexidades (esperadas, com alta probabilidade):
- * - [insert]: O(log n)
- * - [contains]: O(log n)
- * - Espaço: O(n) esperado
+ * | Operação   | Complexidade |
+ * |------------|-------------|
+ * | [insert]   | O(log n)    |
+ * | [remove]   | O(log n)    |
+ * | [contains] | O(log n)    |
+ * | [isEmpty]  | O(1)        |
+ * | [clear]    | O(1)        |
+ * | Espaço     | O(n)        |
  *
  * @param T o tipo dos elementos, deve implementar [Comparable].
  * @param maxLevel o nível máximo permitido (padrão: 16, suporta até ~2^16 elementos eficientemente).
@@ -23,7 +28,7 @@ import kotlin.random.Random
  * Referência: Pugh, W. "Skip Lists: A Probabilistic Alternative to Balanced Trees" (1990);
  *             Sedgewick, R. & Wayne, K. "Algorithms", Cap. 3.5.
  */
-class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p: Double = 0.5) {
+class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p: Double = 0.5) : Iterable<T> {
 
     /**
      * Nó interno da Skip List, contendo o valor e um array de ponteiros forward
@@ -109,6 +114,99 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
         }
         current = current.forward[0] ?: return false
         return current.value == value
+    }
+
+    /**
+     * Remove um valor da Skip List, mantendo a ordenação.
+     *
+     * Complexidade esperada: O(log n).
+     *
+     * @param value o valor a ser removido.
+     * @return `true` se o valor foi encontrado e removido, `false` caso contrário.
+     */
+    fun remove(value: T): Boolean {
+        val update = arrayOfNulls<Node<T>>(maxLevel + 1)
+        var current = head
+
+        for (i in level downTo 0) {
+            while (current.forward[i] != null && current.forward[i]!!.value!! < value) {
+                current = current.forward[i]!!
+            }
+            update[i] = current
+        }
+
+        val target = current.forward[0]
+        if (target == null || target.value != value) return false
+
+        for (i in 0..level) {
+            if (update[i]?.forward?.get(i) != target) break
+            update[i]!!.forward[i] = target.forward[i]
+        }
+        while (level > 0 && head.forward[level] == null) {
+            level--
+        }
+        size--
+        return true
+    }
+
+    /**
+     * Verifica se a Skip List está vazia.
+     *
+     * Complexidade: O(1).
+     *
+     * @return `true` se não houver elementos, `false` caso contrário.
+     */
+    fun isEmpty(): Boolean = size == 0
+
+    /**
+     * Remove todos os elementos da Skip List.
+     *
+     * Complexidade: O(1).
+     */
+    fun clear() {
+        for (i in 0..maxLevel) {
+            head.forward[i] = null
+        }
+        level = 0
+        size = 0
+    }
+
+    /**
+     * Retorna uma cópia dos elementos ordenados como [List] imutável.
+     *
+     * Complexidade: O(n).
+     *
+     * @return lista imutável contendo todos os elementos em ordem crescente.
+     */
+    fun toList(): List<T> = iterator().asSequence().toList()
+
+    /**
+     * Retorna representação textual da Skip List no formato `[v1, v2, ..., vn]`.
+     *
+     * Complexidade: O(n).
+     *
+     * @return string formatada com os elementos ordenados.
+     */
+    override fun toString(): String {
+        if (isEmpty()) return "[]"
+        return joinToString(prefix = "[", postfix = "]")
+    }
+
+    /**
+     * Retorna um [Iterator] que percorre os elementos da Skip List em ordem crescente.
+     *
+     * Complexidade: O(1) para criação; O(n) para travessia completa.
+     *
+     * @return iterador sobre os elementos ordenados.
+     */
+    override fun iterator(): Iterator<T> = object : Iterator<T> {
+        private var current = head.forward[0]
+        override fun hasNext(): Boolean = current != null
+        override fun next(): T {
+            val value = current?.value ?: throw NoSuchElementException()
+            current = current?.forward?.get(0)
+            return value
+        }
     }
 
     /**

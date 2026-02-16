@@ -31,7 +31,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return list.removeFirst()
     }
 
-    actual fun removeLast(): T? {
+    actual override fun removeLast(): T? {
         if (list.isEmpty()) return null
         return list.removeLast()
     }

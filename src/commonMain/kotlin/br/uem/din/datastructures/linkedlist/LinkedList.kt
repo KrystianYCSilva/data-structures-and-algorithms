@@ -85,8 +85,8 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser inserido.
      */
-    override fun addFirst(value: T) {
-        head = Node(value = value, next = head)
+    override fun addFirst(element: T) {
+        head = Node(value = element, next = head)
         if (tail == null) {
             tail = head
         }
@@ -113,12 +113,12 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser inserido.
      */
-    override fun addLast(value: T) {
+    override fun addLast(element: T) {
         if (isEmpty()) {
-            addFirst(value)
+            addFirst(element)
             return
         }
-        val newNode = Node(value = value)
+        val newNode = Node(value = element)
         tail!!.next = newNode
         tail = newNode
         size++
@@ -132,7 +132,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param index a posição desejada (0-based).
      * @return o [Node] na posição indicada, ou `null` se o índice for inválido.
      */
-    fun nodeAt(index: Int): Node<T>? {
+    internal fun nodeAt(index: Int): Node<T>? {
         if (index < 0) return null
         var currentNode = head
         var currentIndex = 0
@@ -212,7 +212,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param afterNode o nó após o qual o novo nó será inserido.
      * @return o novo [Node] criado.
      */
-    fun insert(value: T, afterNode: Node<T>): Node<T> {
+    internal fun insert(value: T, afterNode: Node<T>): Node<T> {
         if (tail == afterNode) {
             append(value)
             return tail!!
@@ -275,7 +275,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeLast(): T? {
+    override fun removeLast(): T? {
         if (head?.next == null) return removeFirst()
         var prev = head
         var current = head
@@ -321,7 +321,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param node o nó cujo sucessor será removido.
      * @return o valor do nó removido, ou `null` se não houver sucessor.
      */
-    fun removeAfter(node: Node<T>): T? {
+    internal fun removeAfter(node: Node<T>): T? {
         val result = node.next?.value ?: return null
         if (node.next == tail) {
             tail = node

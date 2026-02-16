@@ -55,8 +55,8 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser adicionado.
      */
-    override fun addFirst(value: T) {
-        val newNode = Node(value)
+    override fun addFirst(element: T) {
+        val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
             tail = newNode
@@ -79,8 +79,8 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser adicionado.
      */
-    override fun addLast(value: T) {
-        val newNode = Node(value)
+    override fun addLast(element: T) {
+        val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
             tail = newNode
@@ -146,15 +146,6 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
     }
 
     /**
-     * Remove e retorna o elemento na posição especificada.
-     *
-     * Complexidade: O(n).
-     *
-     * @param index a posição do elemento a ser removido (0-based).
-     * @return o valor removido.
-     * @throws IndexOutOfBoundsException se o índice for inválido.
-     */
-    /**
      * Remove e retorna o primeiro elemento da lista circular.
      *
      * Complexidade: O(1).
@@ -175,20 +166,37 @@ class CircularLinkedList<T> : MutableLinkedList<T> {
         return value
     }
 
+    /**
+     * Remove e retorna o último elemento da lista circular.
+     *
+     * Complexidade: O(n) — requer travessia até o penúltimo nó.
+     *
+     * @return o valor removido, ou `null` se a lista estiver vazia.
+     */
+    override fun removeLast(): T? {
+        if (isEmpty()) return null
+        if (head == tail) return removeFirst()
+        var prev = head
+        repeat(size - 2) { prev = prev?.next }
+        val value = tail!!.value
+        tail = prev
+        tail?.next = head
+        size--
+        return value
+    }
+
+    /**
+     * Remove e retorna o elemento na posição especificada.
+     *
+     * Complexidade: O(n).
+     *
+     * @param index a posição do elemento a ser removido (0-based).
+     * @return o valor removido.
+     * @throws IndexOutOfBoundsException se o índice for inválido.
+     */
     fun removeAt(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
-        if (index == 0) {
-            val value = head!!.value
-            if (head == tail) {
-                head = null
-                tail = null
-            } else {
-                head = head?.next
-                tail?.next = head
-            }
-            size--
-            return value
-        }
+        if (index == 0) return removeFirst()!!
         var prev = head
         repeat(index - 1) { prev = prev?.next }
         val removed = prev?.next!!

@@ -16,7 +16,7 @@ package br.uem.din.datastructures.linkedlist
  *
  * @see MutableLinkedList
  */
-interface ReadOnlyLinkedList<T> : Iterable<T> {
+interface ImmutableLinkedList<T> : Iterable<T> {
     /**
      * Número de elementos na lista.
      *
@@ -66,7 +66,7 @@ interface ReadOnlyLinkedList<T> : Iterable<T> {
 /**
  * Interface mutável para uma Lista Ligada (Linked List).
  *
- * Estende [ReadOnlyLinkedList] adicionando operações de modificação
+ * Estende [ImmutableLinkedList] adicionando operações de modificação
  * ([addFirst], [addLast], [removeFirst], [removeLast], [clear]).
  * Segue o padrão Kotlin de imutável/mutável.
  *
@@ -74,13 +74,13 @@ interface ReadOnlyLinkedList<T> : Iterable<T> {
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.2 — Linked Lists.
  *
- * @see ReadOnlyLinkedList
+ * @see ImmutableLinkedList
  * @see LinkedList
  * @see DoublyLinkedList
  * @see CircularLinkedList
  * @see UnrolledLinkedList
  */
-interface MutableLinkedList<T> : ReadOnlyLinkedList<T> {
+interface MutableLinkedList<T> : ImmutableLinkedList<T> {
     /**
      * Insere um elemento no início da lista.
      *
@@ -107,6 +107,15 @@ interface MutableLinkedList<T> : ReadOnlyLinkedList<T> {
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
     fun removeFirst(): T?
+
+    /**
+     * Remove e retorna o último elemento da lista.
+     *
+     * Complexidade: O(1) para doubly linked; O(n) para singly linked.
+     *
+     * @return o valor removido, ou `null` se a lista estiver vazia.
+     */
+    fun removeLast(): T?
 
     /**
      * Remove todos os elementos da lista.

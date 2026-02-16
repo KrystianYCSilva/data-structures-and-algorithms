@@ -153,4 +153,62 @@ class CircularLinkedListTest {
         assertEquals("[]", list.toString())
         assertEquals(emptyList(), list.toList())
     }
+
+    @Test
+    fun testRemoveFirst() {
+        val list = CircularLinkedList<Int>()
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        assertEquals(1, list.removeFirst())
+        assertEquals(2, list.size)
+        assertEquals("[2, 3]", list.toString())
+    }
+
+    @Test
+    fun testRemoveFirstEmpty() {
+        val list = CircularLinkedList<Int>()
+        assertNull(list.removeFirst())
+    }
+
+    @Test
+    fun testRemoveFirstSingleElement() {
+        val list = CircularLinkedList<Int>()
+        list.add(42)
+        assertEquals(42, list.removeFirst())
+        assertTrue(list.isEmpty())
+    }
+
+    @Test
+    fun testRemoveLast() {
+        val list = CircularLinkedList<Int>()
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        assertEquals(3, list.removeLast())
+        assertEquals(2, list.size)
+        assertEquals("[1, 2]", list.toString())
+    }
+
+    @Test
+    fun testRemoveLastEmpty() {
+        val list = CircularLinkedList<Int>()
+        assertNull(list.removeLast())
+    }
+
+    @Test
+    fun testRemoveLastSingleElement() {
+        val list = CircularLinkedList<Int>()
+        list.add(42)
+        assertEquals(42, list.removeLast())
+        assertTrue(list.isEmpty())
+    }
+
+    @Test
+    fun testAddLast() {
+        val list = CircularLinkedList<Int>()
+        list.addLast(1)
+        list.addLast(2)
+        assertEquals("[1, 2]", list.toString())
+    }
 }

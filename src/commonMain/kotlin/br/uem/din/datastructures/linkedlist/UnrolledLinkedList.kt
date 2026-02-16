@@ -120,6 +120,18 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
     }
 
     /**
+     * Remove e retorna o último elemento da lista desenrolada.
+     *
+     * Complexidade: O(n/nodeCapacity).
+     *
+     * @return o valor removido, ou `null` se a lista estiver vazia.
+     */
+    override fun removeLast(): T? {
+        if (isEmpty()) return null
+        return removeAt(size - 1)
+    }
+
+    /**
      * Adiciona um elemento ao final da lista.
      *
      * Se o último nó estiver cheio, um novo nó é alocado automaticamente.
