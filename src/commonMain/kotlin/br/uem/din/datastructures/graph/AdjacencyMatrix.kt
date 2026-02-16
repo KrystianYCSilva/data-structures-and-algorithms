@@ -22,25 +22,29 @@ class AdjacencyMatrix<T> : Graph<T> {
 
     private val vertices = arrayListOf<Vertex<T>>()
     private val weights = arrayListOf<ArrayList<Double?>>()
+    private val hasEdge = arrayListOf<ArrayList<Boolean>>()
 
     /** {@inheritDoc} */
     override fun createVertex(data: T): Vertex<T> {
         val vertex = Vertex(vertices.count(), data)
         vertices.add(vertex)
-        weights.forEach {
-            it.add(null)
-        }
+        weights.forEach { it.add(null) }
+        hasEdge.forEach { it.add(false) }
         val row = ArrayList<Double?>(vertices.count())
+        val edgeRow = ArrayList<Boolean>(vertices.count())
         repeat(vertices.count()) {
             row.add(null)
+            edgeRow.add(false)
         }
         weights.add(row)
+        hasEdge.add(edgeRow)
         return vertex
     }
 
     /** {@inheritDoc} */
     override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         weights[source.index][destination.index] = weight
+        hasEdge[source.index][destination.index] = true
     }
 
     /** {@inheritDoc} */
@@ -51,9 +55,9 @@ class AdjacencyMatrix<T> : Graph<T> {
 
     /** {@inheritDoc} */
     override fun add(edge: Edge<T>) {
-        when (edge.weight) {
-            null -> addUndirectedEdge(edge.source, edge.destination, null)
-            else -> addDirectedEdge(edge.source, edge.destination, edge.weight)
+        when (edge.type) {
+            EdgeType.DIRECTED -> addDirectedEdge(edge.source, edge.destination, edge.weight)
+            EdgeType.UNDIRECTED -> addUndirectedEdge(edge.source, edge.destination, edge.weight)
         }
     }
 
@@ -61,9 +65,8 @@ class AdjacencyMatrix<T> : Graph<T> {
     override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
         val edges = arrayListOf<Edge<T>>()
         (0 until weights.size).forEach { column ->
-            val weight = weights[source.index][column]
-            if (weight != null) {
-                edges.add(Edge(source, vertices[column], weight))
+            if (hasEdge[source.index][column]) {
+                edges.add(Edge(source, vertices[column], weights[source.index][column]))
             }
         }
         return edges

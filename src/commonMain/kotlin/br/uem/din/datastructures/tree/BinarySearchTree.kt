@@ -23,6 +23,21 @@ class BinarySearchTree<T : Comparable<T>> {
     private var root: BinaryNode<T>? = null
 
     /**
+     * Número de elementos armazenados na árvore.
+     */
+    var size: Int = 0
+        private set
+
+    /**
+     * Verifica se a árvore está vazia.
+     *
+     * Complexidade: O(1).
+     *
+     * @return `true` se a árvore não contiver elementos.
+     */
+    fun isEmpty(): Boolean = size == 0
+
+    /**
      * Insere um valor na árvore, mantendo a propriedade BST.
      *
      * Complexidade: O(h), onde h é a altura da árvore.
@@ -31,6 +46,7 @@ class BinarySearchTree<T : Comparable<T>> {
      */
     fun insert(value: T) {
         root = insert(root, value)
+        size++
     }
 
     /**
@@ -86,7 +102,9 @@ class BinarySearchTree<T : Comparable<T>> {
      * @param value o valor a ser removido.
      */
     fun remove(value: T) {
+        if (!contains(value)) return
         root = remove(root, value)
+        size--
     }
 
     /**
@@ -119,6 +137,19 @@ class BinarySearchTree<T : Comparable<T>> {
             else -> node.rightChild = remove(node.rightChild, value)
         }
         return node
+    }
+
+    /**
+     * Retorna os elementos da árvore em ordem crescente (in-order traversal).
+     *
+     * Complexidade: O(n).
+     *
+     * @return lista com todos os elementos em ordem.
+     */
+    fun inOrder(): List<T> {
+        val result = mutableListOf<T>()
+        root?.traverseInOrder { result.add(it) }
+        return result
     }
 }
 

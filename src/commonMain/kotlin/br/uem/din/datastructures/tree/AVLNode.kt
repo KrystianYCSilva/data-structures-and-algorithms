@@ -11,6 +11,9 @@ package br.uem.din.datastructures.tree
  * a altura da subárvore esquerda e a direita. Em uma árvore AVL válida,
  * este valor é sempre -1, 0 ou 1.
  *
+ * Os percursos clássicos (in-order, pre-order, post-order) são fornecidos como funções de
+ * extensão em [br.uem.din.extensions.TreeTraversalExtensions].
+ *
  * @param T o tipo do valor armazenado no nó.
  * @property value o dado armazenado neste nó.
  *
@@ -37,43 +40,4 @@ class AVLNode<T>(var value: T) {
     /** Fator de balanceamento: leftHeight - rightHeight. Valores fora de [-1, 1] indicam desbalanceamento. */
     val balanceFactor: Int
         get() = leftHeight - rightHeight
-
-    /**
-     * Percurso em-ordem (in-order traversal): esquerda, raiz, direita.
-     *
-     * Complexidade: O(n), onde n é o número de nós na subárvore.
-     *
-     * @param visit função de callback invocada para cada valor visitado.
-     */
-    fun traverseInOrder(visit: (T) -> Unit) {
-        leftChild?.traverseInOrder(visit)
-        visit(value)
-        rightChild?.traverseInOrder(visit)
-    }
-
-    /**
-     * Percurso pré-ordem (pre-order traversal): raiz, esquerda, direita.
-     *
-     * Complexidade: O(n), onde n é o número de nós na subárvore.
-     *
-     * @param visit função de callback invocada para cada valor visitado.
-     */
-    fun traversePreOrder(visit: (T) -> Unit) {
-        visit(value)
-        leftChild?.traversePreOrder(visit)
-        rightChild?.traversePreOrder(visit)
-    }
-
-    /**
-     * Percurso pós-ordem (post-order traversal): esquerda, direita, raiz.
-     *
-     * Complexidade: O(n), onde n é o número de nós na subárvore.
-     *
-     * @param visit função de callback invocada para cada valor visitado.
-     */
-    fun traversePostOrder(visit: (T) -> Unit) {
-        leftChild?.traversePostOrder(visit)
-        rightChild?.traversePostOrder(visit)
-        visit(value)
-    }
 }

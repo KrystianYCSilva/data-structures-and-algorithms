@@ -44,6 +44,8 @@ interface Graph<T> {
     /**
      * Adiciona uma aresta ao grafo com base no objeto [Edge].
      *
+     * O comportamento (direcionada ou não-direcionada) é determinado por [Edge.type].
+     *
      * @param edge a aresta a ser adicionada.
      */
     fun add(edge: Edge<T>)

@@ -42,9 +42,9 @@ class AdjacencyList<T> : Graph<T> {
 
     /** {@inheritDoc} */
     override fun add(edge: Edge<T>) {
-        when (edge.weight) {
-            null -> addUndirectedEdge(edge.source, edge.destination, null)
-            else -> addDirectedEdge(edge.source, edge.destination, edge.weight)
+        when (edge.type) {
+            EdgeType.DIRECTED -> addDirectedEdge(edge.source, edge.destination, edge.weight)
+            EdgeType.UNDIRECTED -> addUndirectedEdge(edge.source, edge.destination, edge.weight)
         }
     }
 

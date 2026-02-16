@@ -128,7 +128,7 @@ class RadixTree {
      *
      * @param key a chave a ser removida.
      */
-    fun delete(key: String) {
+    fun remove(key: String) {
         if (key.isEmpty()) {
             if (root.isTerminal) {
                 root.isTerminal = false
@@ -136,10 +136,15 @@ class RadixTree {
             }
             return
         }
-        delete(root, key)
+        removeRecursive(root, key)
     }
 
-    private fun delete(node: Node, remaining: String): Boolean {
+    @Deprecated("Use remove(key) para consistência com a API do projeto.", replaceWith = ReplaceWith("remove(key)"))
+    fun delete(key: String) {
+        remove(key)
+    }
+
+    private fun removeRecursive(node: Node, remaining: String): Boolean {
         val firstChar = remaining[0]
         val child = node.children[firstChar] ?: return false
         if (!remaining.startsWith(child.label)) return false
@@ -158,7 +163,7 @@ class RadixTree {
             }
             return true
         }
-        val deleted = delete(child, remaining.substring(child.label.length))
+        val deleted = removeRecursive(child, remaining.substring(child.label.length))
         if (deleted && !child.isTerminal && child.children.size == 1) {
             val grandchild = child.children.values.first()
             child.label = child.label + grandchild.label

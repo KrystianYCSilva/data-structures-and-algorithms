@@ -45,7 +45,9 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
         if (isEmpty()) return null
         storage.swap(0, size - 1)
         val removed = storage.removeAt(size - 1)
-        siftDown(0)
+        if (size > 0) {
+            siftDown(0)
+        }
         return removed
     }
 
