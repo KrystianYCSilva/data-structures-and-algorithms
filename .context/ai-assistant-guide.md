@@ -1,0 +1,49 @@
+---
+description: System prompt and navigation hints for AI agents operating on this repository.
+---
+
+# AI Assistant Guide
+
+## Quick Start
+
+1. Leia `AGENTS.md` (root) para comandos de build/test e code style
+2. Leia `.itzamna/kernel.md` para classificacao de tarefas (Reflexo/Deliberado/Profundo)
+3. Leia `.itzamna/memory.md` para estado atual do projeto
+
+## Key Facts
+
+- **Linguagem**: Kotlin 2.1.0 Multiplatform (JVM, JS IR, mingwX64)
+- **Dependencias**: ZERO externas — apenas Kotlin stdlib + kotlin.test
+- **Testes**: `kotlin.test` apenas (sem Kotest, sem JUnit)
+- **Linter**: Nenhum configurado; seguir `kotlin.code.style=official`
+- **Build**: `gradlew.bat build` / `gradlew.bat check`
+
+## Where to Put New Code
+
+- Algoritmos/DS: `src/commonMain/kotlin/br/uem/din/`
+- Testes: `src/commonTest/kotlin/br/uem/din/`
+- Platform-specific: `src/{jvm,js,native}Main/kotlin/` (apenas para expect/actual)
+
+## Kotlin Skills & Agents
+
+Skills (.opencode/skills/):
+- kotlin-fundamentals, kotlin-oo-fundamental, kotlin-functional-fundamental
+- kotlin-multiplatform-library-fundamentals, kotest-fundamentals
+
+Agent commands (.gemini/commands/):
+- kotlin-architect.toml — design & scaffold KMP modules
+- kotlin-tester.toml — generate and run tests
+- kotlin-release-operator.toml — packaging, Dokka, release prep
+
+Agent stubs (.github/agents/):
+- kotlin-architect.agent.md, kotlin-tester.agent.md, kotlin-release-operator.agent.md
+
+## Context Hierarchy
+
+```
+AGENTS.md (root)
+  -> GEMINI.md
+  -> .github/copilot-instructions.md
+  -> .context/ai-assistant-guide.md (this file)
+  -> .itzamna/kernel.md (cognitive routing)
+```
