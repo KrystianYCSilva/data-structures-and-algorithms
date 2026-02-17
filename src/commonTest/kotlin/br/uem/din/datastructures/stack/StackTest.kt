@@ -1,130 +1,132 @@
 package br.uem.din.datastructures.stack
 
+import kotlin.random.Random
 import kotlin.test.*
 
 class StackTest {
 
     @Test
-    fun testArrayStackPushPop() {
-        val stack = arrayStackOf<Int>()
+    fun testArrayStackContractBoundariesAndInvariants() {
+        runContractSuite { arrayStackOf<Int>() }
+    }
+
+    @Test
+    fun testLinkedStackContractBoundariesAndInvariants() {
+        runContractSuite { LinkedStack<Int>() }
+    }
+
+    @Test
+    fun testArrayStackRandomizedAgainstReferenceModel() {
+        runRandomizedSuite(seedOffset = 0) { arrayStackOf<Int>() }
+    }
+
+    @Test
+    fun testLinkedStackRandomizedAgainstReferenceModel() {
+        runRandomizedSuite(seedOffset = 1000) { LinkedStack<Int>() }
+    }
+
+    @Test
+    fun testPushReturnsElementAndSupportsNullOnCommonImplementations() {
+        val stack = LinkedStack<Int?>()
+        assertNull(stack.push(null))
+        assertNull(stack.peek())
+        assertNull(stack.pop())
+    }
+
+    private fun runContractSuite(factory: () -> MutableStack<Int>) {
+        val stack = factory()
+
         assertTrue(stack.isEmpty())
-        stack.push(1)
-        stack.push(2)
-        assertEquals(2, stack.size)
-        assertEquals(2, stack.peek())
-        assertEquals(2, stack.pop())
+        assertEquals(0, stack.size)
+        assertNull(stack.peek())
+        assertNull(stack.pop())
+        assertFalse(stack.contains(1))
+        assertEquals(emptyList(), stack.toList())
+
+        assertEquals(42, stack.push(42))
+        assertFalse(stack.isEmpty())
         assertEquals(1, stack.size)
-        assertEquals(1, stack.pop())
-        assertTrue(stack.isEmpty())
-    }
-
-    @Test
-    fun testArrayStackPopEmpty() {
-        val stack = arrayStackOf<Int>()
+        assertEquals(42, stack.peek())
+        assertEquals(42, stack.pop())
         assertNull(stack.pop())
-        assertNull(stack.peek())
-    }
-
-    @Test
-    fun testArrayStackContains() {
-        val stack = arrayStackOf<String>()
-        stack.push("a")
-        stack.push("b")
-        stack.push("c")
-        assertTrue(stack.contains("b"))
-        assertFalse(stack.contains("z"))
-    }
-
-    @Test
-    fun testArrayStackClear() {
-        val stack = arrayStackOf<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.clear()
         assertTrue(stack.isEmpty())
-        assertEquals(0, stack.size)
-        assertNull(stack.peek())
-    }
 
-    @Test
-    fun testArrayStackIterator() {
-        val stack = arrayStackOf<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.push(3)
-        val collected = mutableListOf<Int>()
-        for (v in stack) collected.add(v)
-        assertEquals(listOf(3, 2, 1), collected)
-    }
+        for (i in 0 until 20_000) {
+            stack.push(i)
+        }
+        assertEquals(20_000, stack.size)
+        assertEquals(19_999, stack.peek())
 
-    @Test
-    fun testArrayStackToList() {
-        val stack = arrayStackOf<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.push(3)
-        assertEquals(listOf(3, 2, 1), stack.toList())
-    }
+        for (i in 19_999 downTo 0) {
+            assertEquals(i, stack.pop())
+        }
 
-    @Test
-    fun testArrayStackIterableExtensions() {
-        val stack = arrayStackOf<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.push(3)
-        assertEquals(6, stack.sumOf { it })
-        assertTrue(stack.any { it == 2 })
-    }
-
-    @Test
-    fun testLinkedStackPushPop() {
-        val stack = LinkedStack<Int>()
         assertTrue(stack.isEmpty())
-        stack.push(10)
-        stack.push(20)
-        assertEquals(2, stack.size)
-        assertEquals(20, stack.peek())
-        assertEquals(20, stack.pop())
-        assertEquals(10, stack.pop())
-        assertNull(stack.pop())
-    }
 
-    @Test
-    fun testLinkedStackContains() {
-        val stack = LinkedStack<String>()
-        stack.push("x")
-        stack.push("y")
-        assertTrue(stack.contains("x"))
-        assertFalse(stack.contains("z"))
-    }
-
-    @Test
-    fun testLinkedStackClear() {
-        val stack = LinkedStack<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.clear()
-        assertTrue(stack.isEmpty())
-        assertEquals(0, stack.size)
-    }
-
-    @Test
-    fun testLinkedStackIterator() {
-        val stack = LinkedStack<Int>()
         stack.push(1)
         stack.push(2)
         stack.push(3)
-        val collected = mutableListOf<Int>()
-        for (v in stack) collected.add(v)
-        assertEquals(listOf(3, 2, 1), collected)
+
+        val alias: MutableStack<Int> = stack
+        val readOnly: Stack<Int> = stack
+        val snapshot = readOnly.toList()
+
+        assertEquals(3, alias.pop())
+        assertEquals(2, readOnly.peek())
+        assertEquals(2, readOnly.size)
+        assertEquals(listOf(3, 2, 1), snapshot)
+
+        val iterator = readOnly.iterator()
+        assertEquals(2, iterator.next())
+        assertEquals(1, iterator.next())
+        assertFalse(iterator.hasNext())
+        assertFailsWith<NoSuchElementException> { iterator.next() }
+
+        alias.clear()
+        assertTrue(readOnly.isEmpty())
+        assertEquals(0, readOnly.size)
+        assertNull(readOnly.peek())
     }
 
-    @Test
-    fun testLinkedStackToList() {
-        val stack = LinkedStack<Int>()
-        stack.push(1)
-        stack.push(2)
-        stack.push(3)
-        assertEquals(listOf(3, 2, 1), stack.toList())
+    private fun runRandomizedSuite(seedOffset: Int, factory: () -> MutableStack<Int>) {
+        repeat(8) { seed ->
+            val random = Random(seed + seedOffset)
+            val stack = factory()
+            val model = mutableListOf<Int>()
+
+            repeat(1_200) {
+                when (random.nextInt(100)) {
+                    in 0..54 -> {
+                        val value = random.nextInt(-1_000, 1_001)
+                        assertEquals(value, stack.push(value))
+                        model.add(value)
+                    }
+
+                    in 55..79 -> {
+                        val expected = if (model.isEmpty()) null else model.removeAt(model.lastIndex)
+                        assertEquals(expected, stack.pop())
+                    }
+
+                    in 80..89 -> {
+                        assertEquals(model.lastOrNull(), stack.peek())
+                    }
+
+                    else -> {
+                        val candidate = random.nextInt(-1_000, 1_001)
+                        assertEquals(model.contains(candidate), stack.contains(candidate))
+                    }
+                }
+
+                assertEquals(model.size, stack.size)
+                assertEquals(model.isEmpty(), stack.isEmpty())
+                assertEquals(model.lastOrNull(), stack.peek())
+                assertEquals(model.asReversed(), stack.toList())
+            }
+
+            while (model.isNotEmpty()) {
+                assertEquals(model.removeAt(model.lastIndex), stack.pop())
+            }
+            assertNull(stack.pop())
+        }
     }
 }

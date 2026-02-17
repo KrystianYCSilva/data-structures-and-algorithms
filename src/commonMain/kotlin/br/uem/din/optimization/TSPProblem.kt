@@ -9,6 +9,9 @@ import kotlin.random.Random
  * Representa uma instância TSP simétrica com distância euclidiana.
  * A solução é uma permutação dos índices das cidades (tour).
  *
+ * Implementa [CostMatrixProblem] para compatibilidade com ACO e outros algoritmos
+ * que operam sobre matrizes de custo.
+ *
  * Referência: Applegate, D. L. et al. "The Traveling Salesman Problem" (2006);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 34 — NP-Completude.
  *
@@ -16,15 +19,19 @@ import kotlin.random.Random
  */
 public class TSPProblem(
     public val cities: List<Pair<Double, Double>>
-) : OptimizationProblem<IntArray> {
+) : CostMatrixProblem {
 
     override val direction: OptimizationDirection = OptimizationDirection.MINIMIZE
 
     private val n: Int = cities.size
 
+    override val size: Int get() = n
+
     private val distanceMatrix: Array<DoubleArray> = Array(n) { i ->
         DoubleArray(n) { j -> euclidean(cities[i], cities[j]) }
     }
+
+    override fun cost(i: Int, j: Int): Double = distanceMatrix[i][j]
 
     override fun evaluate(solution: IntArray): Double {
         var total = 0.0

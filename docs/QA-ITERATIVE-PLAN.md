@@ -316,3 +316,31 @@ Status: `PENDENTE`
 ### Proxima acao de execucao
 
 - Iniciar **Iteracao 1 (Queue hardening completo)**: elevar `ArrayQueue`, `CircularQueue`, `LinkedQueue`, `Deque` para o mesmo nivel de `PriorityQueue` (invariantes, property-based seedado, erros, e interop por target).
+
+## Execucao real - Snapshot 2026-02-17 (iteracao 1 / queue)
+
+### Escopo executado
+
+- Verificacao inicial do `Trie` conforme solicitado: sem ajuste pendente.
+- Harden de interop no pacote `queue`:
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueJvmInteropTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueNativeInteropTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/queue/DequeJvmInteropTest.kt`
+
+Observacao: durante a execucao, os testes comuns de `ArrayQueue`, `CircularQueue`, `LinkedQueue` e `Deque` ja se encontravam no estado reforcado no working tree (sem diff adicional contra HEAD neste momento), com cenarios de invariantes, randomizacao seedada e excecoes.
+
+### Evidencias de validacao desta etapa
+
+- `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.queue.*"` -> PASS
+- `./gradlew.bat jsTest` -> PASS
+- `./gradlew.bat nativeTest` -> PASS
+
+### Atualizacao de status das iteracoes
+
+- **Iteracao 1 (Queue package hardening): RESOLVIDA**
+  - Cobertura comum robusta para `ArrayQueue`, `CircularQueue`, `LinkedQueue`, `Deque`, `PriorityQueue`.
+  - Interop dedicado agora presente para `PriorityQueue` (JVM/JS/Native), `ArrayQueue` (JVM/JS/Native) e `Deque` (JVM).
+
+- **Iteracao 12 (Interop sweep + regressao): segue PENDENTE**
+  - Necessario estender estrategia de interop para outros pacotes (hash, tree, graph, etc.).

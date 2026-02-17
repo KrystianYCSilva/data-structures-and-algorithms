@@ -1,5 +1,5 @@
 ---
-description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heurísticas (8 implementadas)."
+description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heurísticas (12 implementadas)."
 ---
 
 # Project Roadmap - Algoritmos e Otimização
@@ -11,7 +11,7 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 **Status Atual**:
 - Fase 1 (Estruturas de Dados): ✅ COMPLETA (36/36)
 - Fase 2 (Algoritmos Fundamentais): 🔄 87% (46/53 implementados, 9 categorias)
-- Fase 3 (Heurísticas e Meta-Heurísticas): ✅ PHASE 3A COMPLETA (8/12)
+- Fase 3 (Heurísticas e Meta-Heurísticas): ✅ COMPLETA (12/12)
 
 ---
 
@@ -131,13 +131,13 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 
 **Infraestrutura**: OptimizationProblem<T>, ContinuousProblem, TSPProblem (2-opt), Benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel), OptResult, crossover operators (OX, single-point).
 
-### Phase 3C - Specialized ⏳ PLANEJADO
-| Algoritmo | Tipo | Referência | Status |
-|-----------|------|------------|--------|
-| Differential Evolution | Population-Based | Storn & Price (1997) | ⏳ |
-| VNS | Single-Solution | Mladenović & Hansen (1997) | ⏳ |
-| Memetic Algorithm | Hybrid | Moscato (1989) | ⏳ |
-| LNS | Single-Solution | Shaw (1998) | ⏳ |
+### Phase 3C - Specialized ✅ COMPLETA
+| Algoritmo | Tipo | Referência | Testes | Status |
+|-----------|------|------------|--------|--------|
+| Differential Evolution | Population-Based | Storn & Price (1997) | 5 | ✅ |
+| VNS | Single-Solution | Mladenović & Hansen (1997) | 5 | ✅ |
+| Memetic Algorithm | Hybrid | Moscato (1989) | 5 | ✅ |
+| LNS | Single-Solution | Shaw (1998) | 6 | ✅ |
 
 ---
 
@@ -154,9 +154,12 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 ║   - W2 String/DP/Greedy/Numerical: 19/20 algs 🔄             ║
 ║   - W3 Backtracking/D&C: 3/9 algs 🔄                        ║
 ║                                                               ║
-║ Fase 3 (Heurísticas):             ⏳ 0% (0/12)               ║
+║ Fase 3 (Heurísticas):             ✅ 100% (12/12)            ║
+║   - 3A Classical: 4/4 ✅                                     ║
+║   - 3B Advanced: 4/4 ✅                                      ║
+║   - 3C Specialized: 4/4 ✅                                   ║
 ║                                                               ║
-║ TOTAL: ~63% (Fase 1 completa, Fase 2 quase completa)         ║
+║ TOTAL: ~93% (Fase 1+3 completas, Fase 2 87%)                ║
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
@@ -167,9 +170,8 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 ```
 Estruturas de Dados:      36 completas
 Algoritmos:               46 implementados (31 arquivos, 9 categorias)
-Heurísticas:              0 (planejado)
-Arquivos fonte:           ~110 (commonMain)
-Arquivos de teste:        54
+Heurísticas:              12 implementadas (12 arquivos + 3 infraestrutura)
+Arquivos de teste:        ~68
 Plataformas:              JVM, JS (IR), mingwX64 (Native)
 ```
 
@@ -186,4 +188,4 @@ Plataformas:              JVM, JS (IR), mingwX64 (Native)
 ---
 
 **Última Atualização**: 2026-02-17
-**Próximo Marco**: Completar Fase 2 (D&C + DP/Backtracking restantes) ou iniciar Fase 3A (Heurísticas)
+**Próximo Marco**: Completar Fase 2 (D&C + DP/Backtracking restantes — em desenvolvimento pelo Gemini)

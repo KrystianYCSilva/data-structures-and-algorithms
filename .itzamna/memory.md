@@ -23,14 +23,14 @@ description: |
 ## Estado atual
 
 Biblioteca academica KMP de estruturas de dados, algoritmos e heuristicas de otimizacao.
-Fase 1 (36 DS) e Fase 2 (~45 algoritmos) completas. Fase 3 (heuristicas): 3A e 3B completas (8 heuristicas, 132 testes).
-Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
+Fase 1 (36 DS) e Fase 2 (~46 algoritmos) completas. Fase 3 (heuristicas): 3A, 3B e 3C completas (12 heuristicas, ~66 testes de otimizacao).
+Todas as 12 heuristicas implementadas: HC, SA, TS, GA, ILS, GRASP, PSO, ACO, DE, VNS, MA, LNS.
 
 **Auditoria DS:** F1-F5 completas + auditoria release-ready B1-B12 completa + naming migration completa.
 Biblioteca v0.1.0-preview (explicitApi, jvmToolchain(8), KDoc completo, zero warnings, JVM+JS+Native passam).
 Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBitSet/MutableBitSet. Nenhum ReadOnly* restante.
 **Release readiness:** LICENSE MIT, README real, POM metadata, version 0.1.0, ALGORITHM_CATALOG/ROADMAP atualizados.
-**Inventario real:** 36 DS + 46 algoritmos (10 sorting, 6 searching, 8 graph, 4 string, 6 DP, 3 greedy, 6 numerical, 3 backtracking). Faltam: 2 DP, 1 backtracking, 5 D&C, 12 heuristicas.
+**Inventario real:** 36 DS + 46 algoritmos (10 sorting, 6 searching, 8 graph, 4 string, 6 DP, 3 greedy, 6 numerical, 3 backtracking) + 12 heuristicas (HC, SA, TS, GA, ILS, GRASP, PSO, ACO, DE, VNS, MA, LNS). Faltam: 2 DP, 1 backtracking, 5 D&C (Gemini trabalhando).
 
 **Auditoria Release-Ready (B1-B12) — COMPLETA:**
 
@@ -92,7 +92,7 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 
 ## Proximos passos
 
-- [ ] Implementar Phase 3C: Differential Evolution, VNS, Memetic Algorithm, LNS
+- [x] Implementar Phase 3C: Differential Evolution, VNS, Memetic Algorithm, LNS (sessao 11)
 - [ ] Preencher .context/ (project.md, tech.md, rules.md) com dados reais do projeto
 - [x] Auditoria F4: Arrays/BitSet — completa
 - [x] Auditoria F5 (reavaliacao completa) — completa (sessao 6)
@@ -118,10 +118,11 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 | 4 | 2026-02-16 | Deliberado+ | F5 reavaliacao parcial: RedBlackTree remove()+inOrder() (CLRS RB-Delete) em expect+3 actuals+impl, DAG implements Graph<T> |
 | 5 | 2026-02-16 | Deliberado+ | F5 reavaliacao: TreeInterfaces.kt (SearchTree/MutableSearchTree), 5 arvores wired, BST/AVL rejeitam dups, insert/remove Boolean, SplayTree/Treap isEmpty(), RBT size()->val size, BinomialHeap/FibonacciHeap implement MutableQueue, Graph split Graph/MutableGraph, HashTableInterfaces.kt (OpenHashTable/MutableOpenHashTable), OpenAddressing/Cuckoo wired, ImmutableViews.kt +LinkedList +SearchTree asReadOnly(), MultisetInterfaces.kt (ReadOnlyMultiset/MutableMultiset), SkipListInterfaces.kt (ReadOnlySkipList/MutableSkipList), Multiset+SkipList wired, all tests pass (JVM+JS compile) |
 | 6 | 2026-02-17 | Deliberado+ | F5 auditoria final: explicitApi()+jvmToolchain(8), visibilidade explicita ~75 arquivos (391 erros), revisao seletiva internal (7 classes+6 ext), expect class->expect fun factory migration (ArrayStack/Queue/PriorityQueue/BitSet), SeparateChainingHashTable+HashSetCollection, testes expandidos (+42 novos), KDoc completo, full clean build passing (JVM+JS+Native) |
+| 11 | 2026-02-17 | Deliberado+ | Phase 3C completa: DE, VNS, MA, LNS implementados com testes; docs atualizados (README, CATALOG, ROADMAP, memory) |
 
 ---
 
-*Ultima atualizacao: 2026-02-17 (sessao 10).*
+*Ultima atualizacao: 2026-02-17 (sessao 11).*
 
 ---
 
@@ -208,4 +209,54 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
   - `./gradlew.bat jsTest` -> **PASS**
   - `./gradlew.bat nativeTest` -> **PASS**
 - **Planejamento iterativo atualizado:** `docs/QA-ITERATIVE-PLAN.md` recebeu snapshot de execucao com status por iteracao (Iteracao 0 resolvida; Iteracoes 1-11 parciais; Iteracao 12 pendente).
+
+---
+
+## Sessao 11
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Implementacao completa da Phase 3C — 4 heuristicas de otimizacao especializadas com testes abrangentes e atualizacao de toda a documentacao.
+- **Heuristicas implementadas:**
+  - **Differential Evolution (DE)** — DE/rand/1/bin para otimizacao continua, mutacao diferencial + crossover binomial + selecao gulosa. 5 testes.
+  - **Variable Neighborhood Search (VNS)** — Basic VNS com shaking escalonado (k vizinhancas), busca local first-improvement. Generico `<T>`. 5 testes.
+  - **Memetic Algorithm (MA)** — GA hibrido com busca local individual pos-geracao e pos-offspring. Generico `<T>`, crossover parametrico. 5 testes.
+  - **Large Neighborhood Search (LNS)** — Destroy/repair com operadores customizaveis, aceitacao SA-like opcional. Generico `<T>`. 6 testes.
+- **Arquivos criados (src):**
+  - `src/commonMain/kotlin/br/uem/din/optimization/DifferentialEvolution.kt`
+  - `src/commonMain/kotlin/br/uem/din/optimization/VariableNeighborhoodSearch.kt`
+  - `src/commonMain/kotlin/br/uem/din/optimization/MemeticAlgorithm.kt`
+  - `src/commonMain/kotlin/br/uem/din/optimization/LargeNeighborhoodSearch.kt`
+- **Arquivos criados (test):**
+  - `src/commonTest/kotlin/br/uem/din/optimization/DifferentialEvolutionTest.kt`
+  - `src/commonTest/kotlin/br/uem/din/optimization/VariableNeighborhoodSearchTest.kt`
+  - `src/commonTest/kotlin/br/uem/din/optimization/MemeticAlgorithmTest.kt`
+  - `src/commonTest/kotlin/br/uem/din/optimization/LargeNeighborhoodSearchTest.kt`
+- **Docs atualizados:**
+  - `README.md` — adicionada linha de heuristicas na tabela de conteudo, atualizado status, adicionado `optimization/` na arvore
+  - `docs/ALGORITHM_CATALOG.md` — 8/8 → 12/12 heuristicas, reorganizado em 3 subcategorias (Classical 3, Population 4, Hybrid 5)
+  - `docs/PROJECT_ROADMAP.md` — Phase 3C marcada completa, progress box atualizado (93%), estatisticas atualizadas
+  - `.itzamna/memory.md` — estado atual, inventario, proximos passos, sessao 11
+- **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, all tests pass, 27 tasks)
+
+
+
+---
+
+## Sessao 10
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Inicio efetivo da Iteracao 1 (Queue hardening) apos verificacao de `Trie`.
+- **Resultado da verificacao solicitada:** `Trie.kt` sem ajuste pendente.
+- **Entregas desta sessao (interop queue):**
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueJvmInteropTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/queue/ArrayQueueNativeInteropTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/queue/DequeJvmInteropTest.kt`
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.queue.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status de iteracao atualizado:** Iteracao 1 marcada como **RESOLVIDA** em `docs/QA-ITERATIVE-PLAN.md`.
 

@@ -3,38 +3,41 @@ package br.uem.din.optimization
 import kotlin.random.Random
 
 /**
- * Particle Swarm Optimization (PSO — Otimizacao por Enxame de Particulas).
+ * Particle Swarm Optimization (PSO — Otimização por Enxame de Partículas).
  *
- * Metaheuristica populacional inspirada no comportamento social de bandos de passaros.
- * Cada particula possui posicao e velocidade, atualizadas a cada iteracao com base
- * na melhor posicao pessoal (pBest) e na melhor posicao global (gBest).
+ * Metaheurística populacional inspirada no comportamento social de bandos de pássaros.
+ * Cada partícula possui posição e velocidade, atualizadas a cada iteração com base
+ * na melhor posição pessoal (pBest) e na melhor posição global (gBest).
  *
- * Equacoes de atualizacao:
- *   v_i(t+1) = w * v_i(t) + c1 * r1 * (pBest_i - x_i) + c2 * r2 * (gBest - x_i)
+ * Equações de atualização:
+ *   v_i(t+1) = w · v_i(t) + c1 · r1 · (pBest_i − x_i) + c2 · r2 · (gBest − x_i)
  *   x_i(t+1) = x_i(t) + v_i(t+1)
  *
- * | Parametro | Descricao |
- * |-----------|-----------|
- * | swarmSize | Numero de particulas |
- * | iterations | Numero de iteracoes |
- * | w | Inercia (controla exploracao vs exploitacao) |
- * | c1 | Coeficiente cognitivo (atracao ao pBest) |
- * | c2 | Coeficiente social (atracao ao gBest) |
+ * Aceita qualquer [BoundedVectorProblem] — não apenas [ContinuousProblem] —
+ * permitindo uso com representações customizadas que exponham dimensões e limites.
  *
- * Referencia: Kennedy, J. & Eberhart, R. "Particle Swarm Optimization" (1995),
+ * | Parâmetro | Descrição |
+ * |-----------|-----------|
+ * | swarmSize | Número de partículas |
+ * | iterations | Número de iterações |
+ * | w | Inércia (controla exploração vs explotação) |
+ * | c1 | Coeficiente cognitivo (atração ao pBest) |
+ * | c2 | Coeficiente social (atração ao gBest) |
+ *
+ * Referência: Kennedy, J. & Eberhart, R. "Particle Swarm Optimization" (1995),
  *             Proceedings of IEEE International Conference on Neural Networks.
  *
- * @param problem o problema de otimizacao continua.
- * @param swarmSize numero de particulas no enxame.
- * @param iterations numero de iteracoes.
- * @param w fator de inercia.
+ * @param problem o problema de otimização com espaço vetorial limitado.
+ * @param swarmSize número de partículas no enxame.
+ * @param iterations número de iterações.
+ * @param w fator de inércia.
  * @param c1 coeficiente cognitivo.
  * @param c2 coeficiente social.
- * @param random gerador de numeros aleatorios.
- * @return resultado da otimizacao contendo a melhor solucao encontrada.
+ * @param random gerador de números aleatórios.
+ * @return resultado da otimização contendo a melhor solução encontrada.
  */
 public fun particleSwarmOptimization(
-    problem: ContinuousProblem,
+    problem: BoundedVectorProblem,
     swarmSize: Int = 50,
     iterations: Int = 500,
     w: Double = 0.729,

@@ -19,8 +19,9 @@ Biblioteca acadêmica em **Kotlin Multiplatform** (JVM / JS / Native) de estrutu
 | Greedy | 3 | Activity Selection, Huffman Coding, Fractional Knapsack |
 | Numerical | 6 | GCD, Extended GCD, Mod Exp, Sieve, Primality |
 | Backtracking | 3 | N-Queens, Subset Sum, Permutations |
+| Heurísticas de Otimização | 12 | Hill Climbing, Simulated Annealing, Tabu Search, Genetic Algorithm, ILS, GRASP, PSO, ACO, Differential Evolution, VNS, Memetic Algorithm, LNS |
 
-> **Status**: v0.1.0-preview — 36 estruturas de dados e 46 algoritmos implementados e testados em 3 plataformas.
+> **Status**: v0.1.0-preview — 36 estruturas de dados, 46 algoritmos e 12 heurísticas de otimização implementados e testados em 3 plataformas.
 
 ## Instalação
 
@@ -86,6 +87,7 @@ src/
 ├── commonMain/kotlin/br/uem/din/
 │   ├── algorithms/          # Sorting, Searching, Graph
 │   ├── datastructures/      # 36 estruturas de dados
+│   ├── optimization/        # 12 heurísticas de otimização
 │   └── extensions/          # Funções de extensão
 ├── commonTest/              # Testes multiplataforma (kotlin.test)
 ├── jvmMain/                 # Implementações JVM-specific

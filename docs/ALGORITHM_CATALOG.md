@@ -72,7 +72,7 @@ This catalog lists all implemented algorithms and data structures in the library
 
 ---
 
-## Algorithms (46 Implemented + 8 Heuristics)
+## Algorithms (46 Implemented + 12 Heuristics)
 
 ### Sorting (10/10)
 - [x] **Bubble Sort**: O(n^2) — `BubbleSort.kt`
@@ -141,21 +141,25 @@ This catalog lists all implemented algorithms and data structures in the library
 
 ---
 
-## Optimization Heuristics (8/8 Implemented)
+## Optimization Heuristics (12/12 Implemented)
 
 ### Classical Local Search (3/3)
 - [x] **Hill Climbing** (First-Improvement / Best-Improvement): O(k × maxIter) — `HillClimbing.kt`
 - [x] **Simulated Annealing**: O(maxIter × iterPerTemp) — `SimulatedAnnealing.kt`
 - [x] **Tabu Search**: O(maxIter × neighbors) — `TabuSearch.kt`
 
-### Population-Based (2/2)
+### Population-Based (4/4)
 - [x] **Genetic Algorithm** (Tournament, OX crossover, Elitism): O(gen × pop × eval) — `GeneticAlgorithm.kt`
 - [x] **Particle Swarm Optimization**: O(iter × swarm × dim) — `ParticleSwarmOptimization.kt`
+- [x] **Differential Evolution** (DE/rand/1/bin): O(gen × pop × dim) — `DifferentialEvolution.kt`
+- [x] **Memetic Algorithm** (GA + Local Search): O(gen × pop × localSearch) — `MemeticAlgorithm.kt`
 
-### Hybrid / Advanced (3/3)
+### Hybrid / Advanced (5/5)
 - [x] **Iterated Local Search (ILS)**: O(maxIter × localSearch) — `IteratedLocalSearch.kt`
 - [x] **GRASP**: O(maxIter × (construction + localSearch)) — `GRASP.kt`
 - [x] **Ant Colony Optimization (ACO)**: O(iter × ants × n²) — `AntColonyOptimization.kt`
+- [x] **Variable Neighborhood Search (VNS)**: O(maxIter × kMax × localSearch) — `VariableNeighborhoodSearch.kt`
+- [x] **Large Neighborhood Search (LNS)**: O(maxIter × (destroy + repair)) — `LargeNeighborhoodSearch.kt`
 
 ### Infrastructure
 - [x] `OptimizationProblem<T>` — interface genérica para problemas de otimização
@@ -173,9 +177,3 @@ This catalog lists all implemented algorithms and data structures in the library
 - [ ] Karatsuba Multiplication
 - [ ] Maximum Subarray
 - [ ] Quick Select
-
-### Advanced Heuristics
-- [ ] Differential Evolution
-- [ ] VNS (Variable Neighborhood Search)
-- [ ] Memetic Algorithm
-- [ ] LNS (Large Neighborhood Search)

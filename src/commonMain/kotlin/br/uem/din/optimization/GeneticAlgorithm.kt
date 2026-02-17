@@ -160,3 +160,54 @@ public fun orderCrossover(parent1: IntArray, parent2: IntArray, random: Random):
     }
     return child
 }
+
+/**
+ * Crossover uniforme para representações binárias [BooleanArray] (Knapsack, MAX-SAT, etc.).
+ * Cada gene é herdado de um dos pais com probabilidade 50%.
+ *
+ * Referência: Syswerda, G. "Uniform Crossover in Genetic Algorithms" (1989),
+ *             Proceedings of ICGA.
+ */
+public fun uniformCrossover(parent1: BooleanArray, parent2: BooleanArray, random: Random): BooleanArray {
+    val n = parent1.size
+    return BooleanArray(n) { i -> if (random.nextBoolean()) parent1[i] else parent2[i] }
+}
+
+/**
+ * Partially Mapped Crossover (PMX) para representações de permutação [IntArray].
+ * Mantém posições absolutas de um segmento do pai 1 e preenche o restante com
+ * mapeamento do pai 2, preservando a viabilidade da permutação.
+ *
+ * Referência: Goldberg, D. E. & Lingle, R. "Alleles, Loci, and the Traveling
+ *             Salesman Problem" (1985), Proceedings of ICGA.
+ */
+public fun pmxCrossover(parent1: IntArray, parent2: IntArray, random: Random): IntArray {
+    val n = parent1.size
+    val child = IntArray(n) { -1 }
+    var start = random.nextInt(n)
+    var end = random.nextInt(n)
+    if (start > end) { val tmp = start; start = end; end = tmp }
+
+    for (i in start..end) {
+        child[i] = parent1[i]
+    }
+
+    for (i in start..end) {
+        val val2 = parent2[i]
+        if (val2 !in child) {
+            var pos = i
+            while (pos in start..end) {
+                val mapped = child[pos]
+                pos = parent2.indexOf(mapped)
+            }
+            child[pos] = val2
+        }
+    }
+
+    for (i in 0 until n) {
+        if (child[i] == -1) {
+            child[i] = parent2[i]
+        }
+    }
+    return child
+}
