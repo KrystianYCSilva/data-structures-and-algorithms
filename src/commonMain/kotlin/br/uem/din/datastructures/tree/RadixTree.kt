@@ -139,11 +139,6 @@ public class RadixTree {
         removeRecursive(root, key)
     }
 
-    @Deprecated("Use remove(key) para consistência com a API do projeto.", replaceWith = ReplaceWith("remove(key)"))
-    public fun delete(key: String) {
-        remove(key)
-    }
-
     private fun removeRecursive(node: Node, remaining: String): Boolean {
         val firstChar = remaining[0]
         val child = node.children[firstChar] ?: return false

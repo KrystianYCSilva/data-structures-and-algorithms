@@ -72,45 +72,49 @@ This catalog lists all implemented algorithms and data structures in the library
 
 ---
 
-## Algorithms (~15% Implemented)
+## Algorithms (24/24 Implemented)
 
-### Sorting
-- [x] **Bubble Sort**: O(n^2) - `BubbleSort.kt`
-- [x] **Insertion Sort**: O(n^2) - `InsertionSort.kt`
-- [ ] Selection Sort
-- [ ] Shell Sort
-- [ ] Merge Sort
-- [ ] Quick Sort
-- [ ] Heap Sort
-- [ ] Counting Sort
-- [ ] Radix Sort
-- [ ] Bucket Sort
+### Sorting (10/10)
+- [x] **Bubble Sort**: O(n^2) — `BubbleSort.kt`
+- [x] **Insertion Sort**: O(n^2) — `InsertionSort.kt`
+- [x] **Selection Sort**: O(n^2) — `SelectionSort.kt`
+- [x] **Shell Sort**: O(n^(3/2)) — `ShellSort.kt`
+- [x] **Merge Sort**: O(n log n) — `MergeSort.kt`
+- [x] **Quick Sort**: O(n log n) avg — `QuickSort.kt`
+- [x] **Heap Sort**: O(n log n) — `HeapSort.kt`
+- [x] **Counting Sort**: O(n + k) — `CountingSort.kt`
+- [x] **Radix Sort**: O(d(n + k)) — `RadixSort.kt`
+- [x] **Bucket Sort**: O(n + k) avg — `BucketSort.kt`
 
-### Graph
-- [x] **BFS** (Breadth-First Search): O(V+E) - `BreadthFirstSearch.kt`
-- [x] **DFS** (Depth-First Search): O(V+E) - `DepthFirstSearch.kt`
-- [x] **Dijkstra**: O((V+E) log V) - `Dijkstra.kt`
-- [x] **A*** (A-Star): O(E) - `AStar.kt`
-- [ ] Bellman-Ford
-- [ ] Floyd-Warshall
-- [ ] Kruskal
-- [ ] Prim
+### Graph (8/8)
+- [x] **BFS** (Breadth-First Search): O(V+E) — `BreadthFirstSearch.kt`
+- [x] **DFS** (Depth-First Search): O(V+E) — `DepthFirstSearch.kt`
+- [x] **Dijkstra**: O((V+E) log V) — `Dijkstra.kt`
+- [x] **A*** (A-Star): O(E) — `AStar.kt`
+- [x] **Bellman-Ford**: O(V*E) — `BellmanFord.kt`
+- [x] **Floyd-Warshall**: O(V^3) — `FloydWarshall.kt`
+- [x] **Kruskal**: O(E log E) — `Kruskal.kt`
+- [x] **Prim**: O(E log V) — `Prim.kt`
 
-### Searching (Planned)
-- [ ] Linear Search
-- [ ] Binary Search
-- [ ] Interpolation Search
-- [ ] Ternary Search
-- [ ] Jump Search
-- [ ] Exponential Search
+### Searching (6/6)
+- [x] **Linear Search**: O(n) — `LinearSearch.kt`
+- [x] **Binary Search**: O(log n) — `BinarySearch.kt`
+- [x] **Interpolation Search**: O(log log n) avg — `InterpolationSearch.kt`
+- [x] **Ternary Search**: O(log n) — `TernarySearch.kt`
+- [x] **Jump Search**: O(√n) — `JumpSearch.kt`
+- [x] **Exponential Search**: O(log n) — `ExponentialSearch.kt`
 
-### String Matching (Planned)
+---
+
+## Planned (Future Releases)
+
+### String Matching
 - [ ] Naive
 - [ ] KMP
 - [ ] Rabin-Karp
 - [ ] Boyer-Moore
 
-### Dynamic Programming (Planned)
+### Dynamic Programming
 - [ ] Fibonacci
 - [ ] LCS
 - [ ] Knapsack 0/1
@@ -120,42 +124,40 @@ This catalog lists all implemented algorithms and data structures in the library
 - [ ] Matrix Chain Multiplication
 - [ ] Coin Change
 
-### Greedy (Planned)
+### Greedy
 - [ ] Activity Selection
 - [ ] Huffman Coding
 - [ ] Fractional Knapsack
 
-### Numerical (Planned)
+### Numerical
 - [ ] GCD / Extended GCD
 - [ ] Fast Exponentiation
 - [ ] Sieve of Eratosthenes
 - [ ] Primality Test
 
-### Divide & Conquer (Planned)
+### Divide & Conquer
 - [ ] Strassen Matrix Multiplication
 - [ ] Closest Pair of Points
 - [ ] Karatsuba Multiplication
 - [ ] Maximum Subarray
 - [ ] Quick Select
 
-### Backtracking (Planned)
+### Backtracking
 - [ ] N-Queens
 - [ ] Subset Sum
 - [ ] Permutations
 - [ ] Graph Coloring
 
----
-
-## Optimization Heuristics (Planned)
-
-### Classical (Planned)
+### Optimization Heuristics
 - [ ] Hill Climbing
 - [ ] Simulated Annealing
 - [ ] Tabu Search
 - [ ] Genetic Algorithm
-
-### Advanced (Planned)
 - [ ] ILS (Iterated Local Search)
 - [ ] GRASP
 - [ ] PSO (Particle Swarm Optimization)
 - [ ] ACO (Ant Colony Optimization)
+- [ ] Differential Evolution
+- [ ] VNS
+- [ ] Memetic Algorithm
+- [ ] LNS

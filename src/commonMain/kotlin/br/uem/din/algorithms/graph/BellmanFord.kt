@@ -74,3 +74,4 @@ public fun <T> bellmanFord(graph: Graph<T>, source: Vertex<T>): Map<Vertex<T>, D
 
     return distances
 }
+
