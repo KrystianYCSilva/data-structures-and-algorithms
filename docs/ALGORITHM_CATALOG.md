@@ -161,11 +161,25 @@ This catalog lists all implemented algorithms and data structures in the library
 - [x] **Variable Neighborhood Search (VNS)**: O(maxIter × kMax × localSearch) — `VariableNeighborhoodSearch.kt`
 - [x] **Large Neighborhood Search (LNS)**: O(maxIter × (destroy + repair)) — `LargeNeighborhoodSearch.kt`
 
-### Infrastructure
-- [x] `OptimizationProblem<T>` — interface genérica para problemas de otimização
-- [x] `ContinuousProblem` — problemas em espaço real N-dimensional
-- [x] `TSPProblem` — Travelling Salesman Problem com distância euclidiana e vizinhança 2-opt
+### Infrastructure & Problem Types
+- [x] `OptimizationProblem<T>` — interface genérica para qualquer representação de solução
+- [x] `BoundedVectorProblem` — interface para problemas com espaço vetorial real limitado (PSO, DE)
+- [x] `CostMatrixProblem` — interface para problemas com matriz de custos entre pares (ACO)
+- [x] `ContinuousProblem` — espaço real N-dimensional (Benchmarks)
+- [x] `BinaryProblem` — representação BooleanArray com vizinhança bit-flip (Knapsack, SAT)
+- [x] `PermutationProblem` — representação IntArray permutação com vizinhança swap (TSP, Scheduling)
+- [x] `IntegerProblem` — representação IntArray com limites por dimensão (configuração, alocação)
+- [x] `KnapsackProblem` — Mochila 0/1 com penalização por excesso de peso
+- [x] `JobSchedulingProblem` — Escalonamento em máquina única (weighted tardiness)
+- [x] `MaxSatProblem` — MAX-SAT (máximo de cláusulas satisfeitas)
+- [x] `TSPProblem` — Caixeiro Viajante com distância euclidiana e vizinhança 2-opt
 - [x] `Benchmarks` — Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel
+
+### Crossover Operators
+- [x] `singlePointCrossover` — ponto único para DoubleArray (contínuo)
+- [x] `uniformCrossover` — uniforme para BooleanArray (binário)
+- [x] `orderCrossover` (OX) — preserva ordem relativa para IntArray (permutação)
+- [x] `pmxCrossover` (PMX) — partially mapped para IntArray (permutação)
 
 ---
 

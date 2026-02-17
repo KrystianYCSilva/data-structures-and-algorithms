@@ -1,5 +1,6 @@
 package br.uem.din.datastructures.linkedlist
 
+import kotlin.random.Random
 import kotlin.test.*
 
 class DoublyLinkedListTest {
@@ -140,4 +141,88 @@ class DoublyLinkedListTest {
         list.removeFirst()
         assertTrue(list.isEmpty())
     }
+
+    @Test
+    fun testIteratorTerminationAndNoSuchElement() {
+        val list = doublyLinkedListOf<Int>()
+        list.addLast(1)
+        list.addLast(2)
+
+        val iterator = list.iterator()
+        assertEquals(1, iterator.next())
+        assertEquals(2, iterator.next())
+        assertFalse(iterator.hasNext())
+        assertFailsWith<NoSuchElementException> { iterator.next() }
+    }
+
+    @Test
+    fun testRandomizedOperationsAgainstReferenceModel() {
+        repeat(6) { seed ->
+            val random = Random(seed + 4000)
+            val list = doublyLinkedListOf<Int>()
+            val model = mutableListOf<Int>()
+
+            repeat(1_500) {
+                when (random.nextInt(100)) {
+                    in 0..24 -> {
+                        val value = random.nextInt(-1_000, 1_001)
+                        list.addFirst(value)
+                        model.add(0, value)
+                    }
+
+                    in 25..49 -> {
+                        val value = random.nextInt(-1_000, 1_001)
+                        list.addLast(value)
+                        model.add(value)
+                    }
+
+                    in 50..59 -> {
+                        val expected = if (model.isEmpty()) null else model.removeAt(0)
+                        assertEquals(expected, list.removeFirst())
+                    }
+
+                    in 60..69 -> {
+                        val expected = if (model.isEmpty()) null else model.removeAt(model.lastIndex)
+                        assertEquals(expected, list.removeLast())
+                    }
+
+                    in 70..79 -> {
+                        if (model.isNotEmpty()) {
+                            val index = random.nextInt(model.size)
+                            val expected = model.removeAt(index)
+                            assertEquals(expected, list.removeAt(index))
+                        }
+                    }
+
+                    in 80..89 -> {
+                        if (model.isNotEmpty()) {
+                            val index = random.nextInt(model.size)
+                            val value = random.nextInt(-1_000, 1_001)
+                            model[index] = value
+                            list[index] = value
+                            assertEquals(value, list[index])
+                        }
+                    }
+
+                    else -> {
+                        val candidate = random.nextInt(-1_000, 1_001)
+                        assertEquals(model.contains(candidate), list.contains(candidate))
+                        assertEquals(model.indexOf(candidate), list.indexOf(candidate))
+                    }
+                }
+
+                assertEquals(model.size, list.size)
+                assertEquals(model.isEmpty(), list.isEmpty())
+                assertEquals(model, list.toList())
+
+                if (model.isEmpty()) {
+                    assertFailsWith<IndexOutOfBoundsException> { list[0] }
+                } else {
+                    val index = random.nextInt(model.size)
+                    assertEquals(model[index], list[index])
+                }
+            }
+        }
+    }
 }
+

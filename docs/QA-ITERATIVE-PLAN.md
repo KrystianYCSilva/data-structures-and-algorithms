@@ -344,3 +344,40 @@ Observacao: durante a execucao, os testes comuns de `ArrayQueue`, `CircularQueue
 
 - **Iteracao 12 (Interop sweep + regressao): segue PENDENTE**
   - Necessario estender estrategia de interop para outros pacotes (hash, tree, graph, etc.).
+
+## Execucao real - Snapshot 2026-02-17 (iteracao 2 / stack + linkedlist)
+
+### Escopo executado
+
+- Harden de testes no pacote `linkedlist` com foco em invariantes e sequencias randomizadas seedadas:
+  - `src/commonTest/kotlin/br/uem/din/datastructures/linkedlist/CircularLinkedListTest.kt`
+  - `src/commonTest/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedListTest.kt`
+  - `src/commonTest/kotlin/br/uem/din/datastructures/linkedlist/UnrolledLinkedListTest.kt`
+
+- Interop por plataforma adicionado para `ArrayStack`:
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/stack/ArrayStackJvmInteropTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/stack/ArrayStackJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/stack/ArrayStackNativeInteropTest.kt`
+
+- Interop por plataforma adicionado para `DoublyLinkedList`:
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedListJvmInteropTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedListJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedListNativeInteropTest.kt`
+
+- Bug de producao encontrado e corrigido durante testes:
+  - `src/jsMain/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedList.kt`
+  - `src/nativeMain/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedList.kt`
+  - Correcao: iterador agora diferencia fim de iteracao de valor `null`, permitindo elementos nulos validos sem `NoSuchElementException` indevido.
+
+### Evidencias de validacao desta etapa
+
+- `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.*" --tests "br.uem.din.datastructures.linkedlist.*"` -> PASS
+- `./gradlew.bat nativeTest` -> PASS
+- `./gradlew.bat jsTest` -> FAIL fora do escopo da iteracao:
+  - `br.uem.din.optimization.MaxSatProblemTest.testSimulatedAnnealingMaxSat[js, node]`
+
+### Atualizacao de status das iteracoes
+
+- **Iteracao 2 (Stack + LinkedList): RESOLVIDA (com bloqueio externo de suite global JS)**
+  - Escopo de stack/linkedlist validado; falha JS remanescente esta em pacote `optimization`.
+

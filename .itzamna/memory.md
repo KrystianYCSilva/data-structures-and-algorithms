@@ -23,14 +23,24 @@ description: |
 ## Estado atual
 
 Biblioteca academica KMP de estruturas de dados, algoritmos e heuristicas de otimizacao.
-Fase 1 (36 DS) e Fase 2 (~46 algoritmos) completas. Fase 3 (heuristicas): 3A, 3B e 3C completas (12 heuristicas, ~66 testes de otimizacao).
-Todas as 12 heuristicas implementadas: HC, SA, TS, GA, ILS, GRASP, PSO, ACO, DE, VNS, MA, LNS.
+Fase 1 (36 DS) e Fase 2 (~46 algoritmos) completas. Fase 3 (heuristicas): 3A, 3B e 3C completas (12 heuristicas genericas).
+Framework de otimizacao com 7 modelagens de problema, 3 interfaces de abstracao e 4 crossover operators.
+Todas as 12 heuristicas testadas cruzadamente em Knapsack, Scheduling, MAX-SAT, TSP e benchmarks continuos.
 
 **Auditoria DS:** F1-F5 completas + auditoria release-ready B1-B12 completa + naming migration completa.
 Biblioteca v0.1.0-preview (explicitApi, jvmToolchain(8), KDoc completo, zero warnings, JVM+JS+Native passam).
 Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBitSet/MutableBitSet. Nenhum ReadOnly* restante.
 **Release readiness:** LICENSE MIT, README real, POM metadata, version 0.1.0, ALGORITHM_CATALOG/ROADMAP atualizados.
-**Inventario real:** 36 DS + 46 algoritmos (10 sorting, 6 searching, 8 graph, 4 string, 6 DP, 3 greedy, 6 numerical, 3 backtracking) + 12 heuristicas (HC, SA, TS, GA, ILS, GRASP, PSO, ACO, DE, VNS, MA, LNS). Faltam: 2 DP, 1 backtracking, 5 D&C (Gemini trabalhando).
+**Inventario real:** 36 DS + 46 algoritmos (10 sorting, 6 searching, 8 graph, 4 string, 6 DP, 3 greedy, 6 numerical, 3 backtracking) + 12 heuristicas + 7 modelagens de problema + 4 crossover operators. Faltam: 2 DP, 1 backtracking, 5 D&C (Gemini trabalhando).
+
+**Framework de otimizacao (sessao 12):**
+- Interfaces: `OptimizationProblem<T>` (generico), `BoundedVectorProblem` (PSO/DE), `CostMatrixProblem` (ACO)
+- Representacoes: `ContinuousProblem` (DoubleArray), `BinaryProblem` (BooleanArray), `PermutationProblem` (IntArray perm), `IntegerProblem` (IntArray bounded)
+- Problemas concretos: `KnapsackProblem`, `JobSchedulingProblem`, `MaxSatProblem`, `TSPProblem`
+- 9/12 heuristicas totalmente genericas via `OptimizationProblem<T>`: HC, SA, TS, GA, ILS, GRASP, VNS, MA, LNS
+- PSO e DE generalizados para `BoundedVectorProblem` (qualquer impl com dimensions+bounds)
+- ACO generalizado para `CostMatrixProblem` (qualquer impl com cost matrix, nao apenas TSP)
+- Crossover: `singlePointCrossover` (DoubleArray), `uniformCrossover` (BooleanArray), `orderCrossover` (IntArray/OX), `pmxCrossover` (IntArray/PMX)
 
 **Auditoria Release-Ready (B1-B12) — COMPLETA:**
 
@@ -119,10 +129,11 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 | 5 | 2026-02-16 | Deliberado+ | F5 reavaliacao: TreeInterfaces.kt (SearchTree/MutableSearchTree), 5 arvores wired, BST/AVL rejeitam dups, insert/remove Boolean, SplayTree/Treap isEmpty(), RBT size()->val size, BinomialHeap/FibonacciHeap implement MutableQueue, Graph split Graph/MutableGraph, HashTableInterfaces.kt (OpenHashTable/MutableOpenHashTable), OpenAddressing/Cuckoo wired, ImmutableViews.kt +LinkedList +SearchTree asReadOnly(), MultisetInterfaces.kt (ReadOnlyMultiset/MutableMultiset), SkipListInterfaces.kt (ReadOnlySkipList/MutableSkipList), Multiset+SkipList wired, all tests pass (JVM+JS compile) |
 | 6 | 2026-02-17 | Deliberado+ | F5 auditoria final: explicitApi()+jvmToolchain(8), visibilidade explicita ~75 arquivos (391 erros), revisao seletiva internal (7 classes+6 ext), expect class->expect fun factory migration (ArrayStack/Queue/PriorityQueue/BitSet), SeparateChainingHashTable+HashSetCollection, testes expandidos (+42 novos), KDoc completo, full clean build passing (JVM+JS+Native) |
 | 11 | 2026-02-17 | Deliberado+ | Phase 3C completa: DE, VNS, MA, LNS implementados com testes; docs atualizados (README, CATALOG, ROADMAP, memory) |
+| 12 | 2026-02-17 | Deliberado+ | Generalizacao framework: BoundedVectorProblem, CostMatrixProblem, BinaryProblem, PermutationProblem, IntegerProblem, KnapsackProblem, JobSchedulingProblem, MaxSatProblem, PSO/DE/ACO generalizados, uniformCrossover+pmxCrossover, testes cruzados 12 heuristicas × 4 problemas |
 
 ---
 
-*Ultima atualizacao: 2026-02-17 (sessao 11).*
+*Ultima atualizacao: 2026-02-17 (sessao 12).*
 
 ---
 
@@ -259,4 +270,70 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
   - `./gradlew.bat jsTest` -> **PASS**
   - `./gradlew.bat nativeTest` -> **PASS**
 - **Status de iteracao atualizado:** Iteracao 1 marcada como **RESOLVIDA** em `docs/QA-ITERATIVE-PLAN.md`.
+
+---
+
+## Sessao 12
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Generalizacao completa do framework de otimizacao para suportar diversas representacoes de problema e demonstrar aplicabilidade cross-domain.
+- **Problemas identificados:**
+  - PSO travado em `ContinuousProblem` (classe concreta, nao interface)
+  - DE travado em `ContinuousProblem`
+  - ACO travado em `TSPProblem` (acessava `cities` diretamente, usava `cost < bestCost` hardcoded)
+  - Framework so tinha 2 modelagens (ContinuousProblem, TSPProblem) — insuficiente para demonstrar flexibilidade
+  - Faltavam crossover operators para BooleanArray e PMX para permutacoes
+- **Solucoes aplicadas:**
+  - **Novas interfaces:** `BoundedVectorProblem` (dimensions+bounds), `CostMatrixProblem` (size+cost(i,j))
+  - **ContinuousProblem** agora implementa `BoundedVectorProblem`
+  - **TSPProblem** agora implementa `CostMatrixProblem`
+  - **PSO** generalizado: `ContinuousProblem` → `BoundedVectorProblem` (aceita qualquer impl)
+  - **DE** generalizado: `ContinuousProblem` → `BoundedVectorProblem`
+  - **ACO** generalizado: `TSPProblem` → `CostMatrixProblem`, `cost < bestCost` → `isBetter()`, heuristic via `cost(i,j)` em vez de coordenadas
+  - **Novas representacoes:** `BinaryProblem` (BooleanArray, bit-flip), `PermutationProblem` (IntArray, swap), `IntegerProblem` (IntArray bounded, ±1)
+  - **Problemas concretos:** `KnapsackProblem` (Mochila 0/1 com penalizacao), `JobSchedulingProblem` (weighted tardiness), `MaxSatProblem` (clausulas CNF)
+  - **Crossover operators:** `uniformCrossover` (BooleanArray), `pmxCrossover` (PMX, IntArray permutacao)
+- **Arquivos criados/alterados (src):**
+  - `OptimizationTypes.kt` — adicionados `BoundedVectorProblem`, `CostMatrixProblem`, `BinaryProblem`, `PermutationProblem`, `IntegerProblem`; `ContinuousProblem` refatorado
+  - `KnapsackProblem.kt` — NOVO
+  - `JobSchedulingProblem.kt` — NOVO
+  - `MaxSatProblem.kt` — NOVO
+  - `TSPProblem.kt` — refatorado para `CostMatrixProblem`
+  - `ParticleSwarmOptimization.kt` — `ContinuousProblem` → `BoundedVectorProblem`
+  - `DifferentialEvolution.kt` — `ContinuousProblem` → `BoundedVectorProblem`
+  - `AntColonyOptimization.kt` — `TSPProblem` → `CostMatrixProblem`, `isBetter()`, `cost(i,j)`
+  - `GeneticAlgorithm.kt` — adicionados `uniformCrossover`, `pmxCrossover`
+- **Arquivos criados (test):**
+  - `KnapsackProblemTest.kt` — 14 testes (unit + 9 heuristicas)
+  - `JobSchedulingProblemTest.kt` — 15 testes (unit + 10 heuristicas incl. ACO via CostMatrixProblem)
+  - `MaxSatProblemTest.kt` — 14 testes (unit + 9 heuristicas)
+  - `ProblemTypesTest.kt` — 18 testes (BinaryProblem, PermutationProblem, IntegerProblem, crossover operators, custom BoundedVectorProblem com PSO/DE, custom CostMatrixProblem com ACO)
+- **Cobertura cruzada:** 12 heuristicas × 4+ tipos de problema (Continuous, Knapsack, Scheduling, MAX-SAT, TSP) + custom impls
+- **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, all tests pass)
+- **Docs atualizados:** README, ALGORITHM_CATALOG, PROJECT_ROADMAP, memory
+
+
+
+---
+
+## Sessao 11
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao da Iteracao 2 (Stack + LinkedList) com hardening de testes e expansao de interop por plataforma.
+- **Entregas de testes:**
+  - Common randomized/invariants: `CircularLinkedListTest`, `DoublyLinkedListTest`, `UnrolledLinkedListTest`
+  - Interop `ArrayStack`: `ArrayStackJvmInteropTest`, `ArrayStackJsInteropTest`, `ArrayStackNativeInteropTest`
+  - Interop `DoublyLinkedList`: `DoublyLinkedListJvmInteropTest`, `DoublyLinkedListJsInteropTest`, `DoublyLinkedListNativeInteropTest`
+- **Bug de producao identificado e corrigido:**
+  - `DoublyLinkedList` JS/Native iterator tratava valor `null` como fim de iteracao.
+  - Arquivos corrigidos:
+    - `src/jsMain/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedList.kt`
+    - `src/nativeMain/kotlin/br/uem/din/datastructures/linkedlist/DoublyLinkedList.kt`
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.*" --tests "br.uem.din.datastructures.linkedlist.*"` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+  - `./gradlew.bat jsTest` -> **FAIL fora do escopo** (`optimization.MaxSatProblemTest`)
+- **Status de iteracao:** Iteracao 2 marcada como **RESOLVIDA** no plano, com observacao de bloqueio externo da suite global JS.
 

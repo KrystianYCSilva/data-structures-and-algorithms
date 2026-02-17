@@ -20,8 +20,9 @@ Biblioteca acadêmica em **Kotlin Multiplatform** (JVM / JS / Native) de estrutu
 | Numerical | 6 | GCD, Extended GCD, Mod Exp, Sieve, Primality |
 | Backtracking | 3 | N-Queens, Subset Sum, Permutations |
 | Heurísticas de Otimização | 12 | Hill Climbing, Simulated Annealing, Tabu Search, Genetic Algorithm, ILS, GRASP, PSO, ACO, Differential Evolution, VNS, Memetic Algorithm, LNS |
+| Modelagens de Problema | 7 | ContinuousProblem, BinaryProblem, PermutationProblem, IntegerProblem, KnapsackProblem, JobSchedulingProblem, MaxSatProblem |
 
-> **Status**: v0.1.0-preview — 36 estruturas de dados, 46 algoritmos e 12 heurísticas de otimização implementados e testados em 3 plataformas.
+> **Status**: v0.1.0-preview — 36 estruturas de dados, 46 algoritmos, 12 heurísticas e 7 modelagens de problema implementados e testados em 3 plataformas.
 
 ## Instalação
 
@@ -76,6 +77,36 @@ val distances = dijkstra.shortestPath(a)
 // Ordenação
 val array = intArrayOf(5, 3, 8, 1, 2)
 bubbleSort(array)
+```
+
+### Otimização — Qualquer heurística × qualquer problema
+
+```kotlin
+import br.uem.din.optimization.*
+
+// Mochila 0/1 com Simulated Annealing
+val knapsack = KnapsackProblem(
+    weights = intArrayOf(10, 20, 30),
+    values = intArrayOf(60, 100, 120),
+    capacity = 50
+)
+val saResult = simulatedAnnealing(knapsack)
+
+// TSP com Ant Colony Optimization
+val tsp = TSPProblem.random(20)
+val acoResult = antColonyOptimization(tsp)
+
+// MAX-SAT com Genetic Algorithm
+val sat = MaxSatProblem.random3SAT(numVariables = 20, numClauses = 80)
+val gaResult = geneticAlgorithm(sat, crossover = ::uniformCrossover)
+
+// Job Scheduling com VNS
+val scheduling = JobSchedulingProblem.random(15)
+val vnsResult = variableNeighborhoodSearch(scheduling)
+
+// Problema customizado: basta implementar OptimizationProblem<T>
+val custom = BinaryProblem(size = 30, objectiveFunction = { x -> x.count { it }.toDouble() })
+val hcResult = hillClimbing(custom)
 ```
 
 Para mais exemplos, veja [`docs/USAGE_EXAMPLES.md`](docs/USAGE_EXAMPLES.md).

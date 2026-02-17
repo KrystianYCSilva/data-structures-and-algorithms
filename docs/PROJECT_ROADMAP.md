@@ -111,7 +111,7 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 
 ---
 
-## Fase 3 - Heurísticas e Meta-Heurísticas ✅ 3A+3B COMPLETAS
+## Fase 3 - Heurísticas e Meta-Heurísticas ✅ COMPLETA
 
 ### Phase 3A - Classical ✅ COMPLETA
 | Algoritmo | Tipo | Referência | Testes | Status |
@@ -129,7 +129,7 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 | PSO | Population-Based | Kennedy & Eberhart (1995) | 5 | ✅ |
 | ACO | Population-Based | Dorigo (1992) | 4 | ✅ |
 
-**Infraestrutura**: OptimizationProblem<T>, ContinuousProblem, TSPProblem (2-opt), Benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel), OptResult, crossover operators (OX, single-point).
+**Infraestrutura**: OptimizationProblem<T>, BoundedVectorProblem, CostMatrixProblem, ContinuousProblem, BinaryProblem, PermutationProblem, IntegerProblem, KnapsackProblem, JobSchedulingProblem, MaxSatProblem, TSPProblem (2-opt), Benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel), OptResult, crossover operators (singlePoint, uniform, OX, PMX).
 
 ### Phase 3C - Specialized ✅ COMPLETA
 | Algoritmo | Tipo | Referência | Testes | Status |
@@ -170,8 +170,11 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 ```
 Estruturas de Dados:      36 completas
 Algoritmos:               46 implementados (31 arquivos, 9 categorias)
-Heurísticas:              12 implementadas (12 arquivos + 3 infraestrutura)
-Arquivos de teste:        ~68
+Heurísticas:              12 implementadas (12 arquivos)
+Modelagens de Problema:   7 (Continuous, Binary, Permutation, Integer, Knapsack, Scheduling, MaxSAT)
+Interfaces de Abstração:  3 (OptimizationProblem<T>, BoundedVectorProblem, CostMatrixProblem)
+Crossover Operators:      4 (singlePoint, uniform, OX, PMX)
+Arquivos de teste:        ~72
 Plataformas:              JVM, JS (IR), mingwX64 (Native)
 ```
 

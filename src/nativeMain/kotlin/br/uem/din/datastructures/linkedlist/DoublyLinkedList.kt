@@ -74,9 +74,9 @@ private class NativeDoublyLinkedList<T> : IndexedMutableLinkedList<T> {
         private var current = head
         override fun hasNext(): Boolean = current != null
         override fun next(): T {
-            val value = current?.value ?: throw NoSuchElementException()
-            current = current?.next
-            return value
+            val node = current ?: throw NoSuchElementException()
+            current = node.next
+            return node.value
         }
     }
 
@@ -89,3 +89,4 @@ private class NativeDoublyLinkedList<T> : IndexedMutableLinkedList<T> {
         }
     }
 }
+
