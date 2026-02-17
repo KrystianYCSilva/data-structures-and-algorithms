@@ -16,22 +16,17 @@ description: Domain glossary and core concepts specific to this algorithms libra
 - **Probabilisticas**: BloomFilter, SkipList
 - **Outros**: BitSet, UnionFind, Multiset, ParallelArray, Matrix
 
-## Algoritmos
+## Algoritmos (Implementados)
 
-### Implementados
-- **Sorting**: Bubble Sort, Insertion Sort
-- **Graph**: BFS, DFS, Dijkstra, A*
-
-### Planejados
-- **Sorting**: Selection, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
+- **Sorting**: Bubble, Selection, Insertion, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
 - **Searching**: Linear, Binary, Interpolation, Ternary, Jump, Exponential
-- **Graph**: Bellman-Ford, Floyd-Warshall, Kruskal, Prim
+- **Graph**: BFS, DFS, Dijkstra, A*, Bellman-Ford, Floyd-Warshall, Kruskal, Prim
 - **String Matching**: Naive, KMP, Rabin-Karp, Boyer-Moore
-- **Dynamic Programming**: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
+- **Dynamic Programming**: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Coin Change
 - **Greedy**: Activity Selection, Huffman Coding, Fractional Knapsack
-- **Numerical**: GCD, Extended GCD, Fast Exponentiation, Sieve of Eratosthenes, Primality Test
-- **Divide & Conquer**: Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select
-- **Backtracking**: N-Queens, Subset Sum, Permutations, Graph Coloring
+- **Numerical**: GCD, LCM, Extended GCD, Fast Exponentiation, Sieve of Eratosthenes, Primality Test
+- **Divide & Conquer**: Karatsuba, Maximum Subarray (Kadane), Quick Select
+- **Backtracking**: N-Queens, Subset Sum, Permutations
 
 ## Heuristicas e Meta-Heuristicas (Planejadas)
 

@@ -14,8 +14,13 @@ Biblioteca acadêmica em **Kotlin Multiplatform** (JVM / JS / Native) de estrutu
 | Algoritmos de Ordenação | 10 | BubbleSort, InsertionSort, SelectionSort, ShellSort, MergeSort, QuickSort, HeapSort, CountingSort, RadixSort, BucketSort |
 | Algoritmos de Busca | 6 | Linear, Binary, Interpolation, Ternary, Jump, Exponential |
 | Algoritmos de Grafos | 8 | BFS, DFS, Dijkstra, A*, Bellman-Ford, Floyd-Warshall, Kruskal, Prim |
+| String Matching | 4 | Naive, KMP, Rabin-Karp, Boyer-Moore |
+| Dynamic Programming | 6 | Fibonacci, LCS, Knapsack, Edit Distance, LIS, Coin Change |
+| Greedy | 3 | Activity Selection, Huffman Coding, Fractional Knapsack |
+| Numerical | 6 | GCD, Extended GCD, Mod Exp, Sieve, Primality |
+| Backtracking | 3 | N-Queens, Subset Sum, Permutations |
 
-> **Status**: v0.1.0-preview — 36 estruturas de dados e 24 algoritmos implementados e testados em 3 plataformas.
+> **Status**: v0.1.0-preview — 36 estruturas de dados e 46 algoritmos implementados e testados em 3 plataformas.
 
 ## Instalação
 

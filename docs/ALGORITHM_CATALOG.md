@@ -67,12 +67,12 @@ This catalog lists all implemented algorithms and data structures in the library
 | `BloomFilter` | Probabilistic Set | Contains | O(k) |
 | `SkipList` | Probabilistic List | Search/Ins/Del | O(log n) exp. |
 | `BitSet` | Bit Array | Get/Set | O(1) |
-| `UnionFind` | Disjoint Set | Union/Find | O(α(n)) |
+| `UnionFind` | Disjoint Set | Union/Find | O(alpha(n)) |
 | `HashTable` | Hash Map | Get/Put | O(1) am. |
 
 ---
 
-## Algorithms (24/24 Implemented)
+## Algorithms (46 Implemented + 8 Heuristics)
 
 ### Sorting (10/10)
 - [x] **Bubble Sort**: O(n^2) — `BubbleSort.kt`
@@ -101,39 +101,71 @@ This catalog lists all implemented algorithms and data structures in the library
 - [x] **Binary Search**: O(log n) — `BinarySearch.kt`
 - [x] **Interpolation Search**: O(log log n) avg — `InterpolationSearch.kt`
 - [x] **Ternary Search**: O(log n) — `TernarySearch.kt`
-- [x] **Jump Search**: O(√n) — `JumpSearch.kt`
+- [x] **Jump Search**: O(sqrt(n)) — `JumpSearch.kt`
 - [x] **Exponential Search**: O(log n) — `ExponentialSearch.kt`
+
+### String Matching (4/4)
+- [x] **Naive**: O(nm) — `NaiveSearch.kt`
+- [x] **KMP**: O(n+m) — `KMPSearch.kt`
+- [x] **Rabin-Karp**: O(n+m) avg — `RabinKarpSearch.kt`
+- [x] **Boyer-Moore**: O(n/m) best — `BoyerMooreSearch.kt`
+
+### Dynamic Programming (6/8)
+- [x] **Fibonacci**: O(n) — `DynamicProgramming.kt`
+- [x] **LCS**: O(nm) — `DynamicProgramming.kt`
+- [x] **Knapsack 0/1**: O(nW) — `DynamicProgramming.kt`
+- [x] **Edit Distance**: O(nm) — `DynamicProgramming.kt`
+- [x] **LIS**: O(n^2) — `DynamicProgramming.kt`
+- [x] **Coin Change**: O(nS) — `DynamicProgramming.kt`
+- [ ] Rod Cutting
+- [ ] Matrix Chain Multiplication
+
+### Greedy (3/3)
+- [x] **Activity Selection**: O(n) — `GreedyAlgorithms.kt`
+- [x] **Huffman Coding**: O(n log n) — `GreedyAlgorithms.kt`
+- [x] **Fractional Knapsack**: O(n log n) — `GreedyAlgorithms.kt`
+
+### Numerical (6/6)
+- [x] **GCD**: O(log min(a,b)) — `NumericalAlgorithms.kt`
+- [x] **LCM**: O(log min(a,b)) — `NumericalAlgorithms.kt`
+- [x] **Extended GCD**: O(log min(a,b)) — `NumericalAlgorithms.kt`
+- [x] **Modular Exponentiation**: O(log exp) — `NumericalAlgorithms.kt`
+- [x] **Sieve of Eratosthenes**: O(n log log n) — `NumericalAlgorithms.kt`
+- [x] **Primality Test**: O(sqrt(n)) — `NumericalAlgorithms.kt`
+
+### Backtracking (3/4)
+- [x] **N-Queens**: O(n!) — `Backtracking.kt`
+- [x] **Subset Sum**: O(2^n) — `Backtracking.kt`
+- [x] **Permutations**: O(n!) — `Backtracking.kt`
+- [ ] Graph Coloring
+
+---
+
+## Optimization Heuristics (8/8 Implemented)
+
+### Classical Local Search (3/3)
+- [x] **Hill Climbing** (First-Improvement / Best-Improvement): O(k × maxIter) — `HillClimbing.kt`
+- [x] **Simulated Annealing**: O(maxIter × iterPerTemp) — `SimulatedAnnealing.kt`
+- [x] **Tabu Search**: O(maxIter × neighbors) — `TabuSearch.kt`
+
+### Population-Based (2/2)
+- [x] **Genetic Algorithm** (Tournament, OX crossover, Elitism): O(gen × pop × eval) — `GeneticAlgorithm.kt`
+- [x] **Particle Swarm Optimization**: O(iter × swarm × dim) — `ParticleSwarmOptimization.kt`
+
+### Hybrid / Advanced (3/3)
+- [x] **Iterated Local Search (ILS)**: O(maxIter × localSearch) — `IteratedLocalSearch.kt`
+- [x] **GRASP**: O(maxIter × (construction + localSearch)) — `GRASP.kt`
+- [x] **Ant Colony Optimization (ACO)**: O(iter × ants × n²) — `AntColonyOptimization.kt`
+
+### Infrastructure
+- [x] `OptimizationProblem<T>` — interface genérica para problemas de otimização
+- [x] `ContinuousProblem` — problemas em espaço real N-dimensional
+- [x] `TSPProblem` — Travelling Salesman Problem com distância euclidiana e vizinhança 2-opt
+- [x] `Benchmarks` — Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel
 
 ---
 
 ## Planned (Future Releases)
-
-### String Matching
-- [ ] Naive
-- [ ] KMP
-- [ ] Rabin-Karp
-- [ ] Boyer-Moore
-
-### Dynamic Programming
-- [ ] Fibonacci
-- [ ] LCS
-- [ ] Knapsack 0/1
-- [ ] Edit Distance
-- [ ] LIS
-- [ ] Rod Cutting
-- [ ] Matrix Chain Multiplication
-- [ ] Coin Change
-
-### Greedy
-- [ ] Activity Selection
-- [ ] Huffman Coding
-- [ ] Fractional Knapsack
-
-### Numerical
-- [ ] GCD / Extended GCD
-- [ ] Fast Exponentiation
-- [ ] Sieve of Eratosthenes
-- [ ] Primality Test
 
 ### Divide & Conquer
 - [ ] Strassen Matrix Multiplication
@@ -142,22 +174,8 @@ This catalog lists all implemented algorithms and data structures in the library
 - [ ] Maximum Subarray
 - [ ] Quick Select
 
-### Backtracking
-- [ ] N-Queens
-- [ ] Subset Sum
-- [ ] Permutations
-- [ ] Graph Coloring
-
-### Optimization Heuristics
-- [ ] Hill Climbing
-- [ ] Simulated Annealing
-- [ ] Tabu Search
-- [ ] Genetic Algorithm
-- [ ] ILS (Iterated Local Search)
-- [ ] GRASP
-- [ ] PSO (Particle Swarm Optimization)
-- [ ] ACO (Ant Colony Optimization)
+### Advanced Heuristics
 - [ ] Differential Evolution
-- [ ] VNS
+- [ ] VNS (Variable Neighborhood Search)
 - [ ] Memetic Algorithm
-- [ ] LNS
+- [ ] LNS (Large Neighborhood Search)

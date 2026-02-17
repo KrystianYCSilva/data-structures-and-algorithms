@@ -251,3 +251,68 @@ Status: `PENDENTE`
 1. Executar Iteracao 0 (desbloquear `jsTest` em `Trie.kt`).
 2. Fechar Iteracao 1 (Queue completa alem de `PriorityQueue`).
 3. Seguir ordem de risco: Trees -> Graph -> Sorting/Searching.
+
+## Execucao real - Snapshot 2026-02-17 (sessao atual)
+
+### Verificacao inicial solicitada (Trie)
+
+- `Trie.kt` nao requer mais ajuste de `override` (metodos `contains`, `remove`, `collections` ja estao corretos).
+- Bloqueios encontrados durante a varredura inicial nao eram do `Trie`:
+  - `Prim.kt` ainda com API antiga de `PriorityQueue`
+  - `BellmanFord.kt` com `putIfAbsent` (nao-portavel no common)
+- Ajustes aplicados:
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/Prim.kt`
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/BellmanFord.kt`
+
+### Evidencias de build/test
+
+- `./gradlew.bat compileKotlinJvm compileKotlinJs` -> PASS
+- `./gradlew.bat jvmTest` -> PASS
+- `./gradlew.bat jsTest` -> PASS
+- `./gradlew.bat nativeTest` -> PASS
+
+### Estado das iteracoes
+
+- **Iteracao 0 (gate de plataforma e infra QA): RESOLVIDA**
+  - Todos os targets compilam e suites por target executam.
+
+- **Iteracao 1 (Queue package hardening): PARCIAL**
+  - `PriorityQueue`: cobertura forte + interop JVM/JS/Native.
+  - `ArrayQueue`, `CircularQueue`, `LinkedQueue`, `Deque`: possuem testes comuns, mas sem property-based robusto e sem interop dedicado por plataforma.
+
+- **Iteracao 2 (Stack + LinkedList): PARCIAL**
+  - Cobertura comum existente, sem sweep de interop por plataforma.
+
+- **Iteracao 3 (Hash + Set): PARCIAL**
+  - Testes comuns existentes; falta reforco de propriedades/complexidade e interop.
+
+- **Iteracao 4 (Heap family): PARCIAL**
+  - Testes comuns presentes para principais heaps; falta reforco de invariantes amortizados/complexidade e interop.
+
+- **Iteracao 5 (Trees core): PARCIAL**
+  - Ampla cobertura comum; falta sweep de interop e propriedades mais agressivas em cenarios randomizados/adversariais.
+
+- **Iteracao 6 (Trees especializadas): PARCIAL**
+  - Testes comuns presentes para varias estruturas; falta consolidacao de invariantes formais + interop.
+
+- **Iteracao 7 (Graph data structures): PARCIAL**
+  - Testes comuns para `AdjacencyList`, `AdjacencyMatrix`, `DirectedAcyclicGraph`; falta camada interop e propriedades mais amplas.
+
+- **Iteracao 8 (Graph algorithms): PARCIAL**
+  - Testes comuns presentes (`A*`, BFS, DFS, Dijkstra, GraphAlgorithms); falta suite de regressao orientada a complexidade e interop.
+
+- **Iteracao 9 (Searching algorithms): PARCIAL**
+  - `SearchingTest.kt` existe; falta decompor por algoritmo com suites de fronteira/propriedade dedicadas.
+
+- **Iteracao 10 (Sorting algorithms): PARCIAL**
+  - `SortingTest.kt` existe; falta reforco de estabilidade, inputs adversariais e guardas de complexidade por algoritmo.
+
+- **Iteracao 11 (Estruturas restantes e extensoes): PARCIAL**
+  - Cobertura comum boa (BitSet, BloomFilter, SkipList, spatial, UnionFind, Extensions), faltando sweep interop sistematico.
+
+- **Iteracao 12 (Interop sweep + regressao): PENDENTE**
+  - Hoje apenas `datastructures/queue` possui `jvmTest` + `jsTest` + `nativeTest` dedicados.
+
+### Proxima acao de execucao
+
+- Iniciar **Iteracao 1 (Queue hardening completo)**: elevar `ArrayQueue`, `CircularQueue`, `LinkedQueue`, `Deque` para o mesmo nivel de `PriorityQueue` (invariantes, property-based seedado, erros, e interop por target).

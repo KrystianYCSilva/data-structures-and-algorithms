@@ -27,8 +27,10 @@ Fase 1 (36 DS) e Fase 2 (~45 algoritmos) completas. Fase 3 (heuristicas): 3A e 3
 Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
 
 **Auditoria DS:** F1-F5 completas + auditoria release-ready B1-B12 completa + naming migration completa.
-Biblioteca release-ready (explicitApi, jvmToolchain(8), KDoc completo, zero warnings, JVM+JS+Native passam).
+Biblioteca v0.1.0-preview (explicitApi, jvmToolchain(8), KDoc completo, zero warnings, JVM+JS+Native passam).
 Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBitSet/MutableBitSet. Nenhum ReadOnly* restante.
+**Release readiness:** LICENSE MIT, README real, POM metadata, version 0.1.0, ALGORITHM_CATALOG/ROADMAP atualizados.
+**Inventario real:** 36 DS + 46 algoritmos (10 sorting, 6 searching, 8 graph, 4 string, 6 DP, 3 greedy, 6 numerical, 3 backtracking). Faltam: 2 DP, 1 backtracking, 5 D&C, 12 heuristicas.
 
 **Auditoria Release-Ready (B1-B12) — COMPLETA:**
 
@@ -119,7 +121,7 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 
 ---
 
-*Ultima atualizacao: 2026-02-17 (sessao 9).*
+*Ultima atualizacao: 2026-02-17 (sessao 10).*
 
 ---
 
@@ -164,4 +166,46 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 - **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, all tests pass)
 - **Status naming migration:** COMPLETA. Nenhuma referencia a `ReadOnly{DS}` como tipo permanece no codigo-fonte.
 
+---
+
+## Sessao 10
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Auditoria de release-readiness e correcao de todos os bloqueantes para v0.1.0.
+- **Descobertas:**
+  - Build estava quebrado em clean build: `Prim.kt` (PriorityQueue constructor), `BellmanFord.kt` (putIfAbsent JVM-only), `GreedyAlgorithms.kt` (PriorityQueue constructor + size()), `Backtracking.kt` (IntArray.clone() JVM-only)
+  - Inventario real: 46 algoritmos implementados (nao 24), em 31 arquivos. Existiam `greedy/`, `dp/`, `string/`, `numerical/`, `backtracking/` que o cache incremental mascarava
+  - `RadixTree.delete()` com @Deprecated — removido
+- **Correcoes aplicadas:**
+  - `Prim.kt` — `PriorityQueue` constructor → `priorityQueueOf()` factory
+  - `BellmanFord.kt` — `putIfAbsent` → `getOrPut`, removidos comentarios verbosos, removido `predecessors` nao usado
+  - `GreedyAlgorithms.kt` — `PriorityQueue` → `priorityQueueOf()`, `pq.size()` → `pq.size`
+  - `Backtracking.kt` — `IntArray.clone()` → `IntArray.copyOf()` (multiplataforma)
+  - `RadixTree.kt` — removido `@Deprecated delete(key)` method
+  - `LICENSE` — MIT License criado
+  - `README.md` — reescrito com descricao real, badges, instalacao, uso rapido, arquitetura
+  - `build.gradle.kts` — version `1.0-SNAPSHOT` → `0.1.0`, POM metadata (name, description, license, developers, scm)
+  - `ALGORITHM_CATALOG.md` — atualizado para refletir 46 algoritmos reais (antes dizia ~15%)
+  - `PROJECT_ROADMAP.md` — reconciliado com codigo-fonte real (46/53 algoritmos, sem heuristicas)
+- **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, all tests pass)
+
+
+---
+
+## Sessao 9
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Verificacao solicitada do `Trie` e inicio da execucao iterativa do plano QA.
+- **Diagnostico:** `Trie.kt` nao exigia ajuste adicional de `override`; os bloqueios reais eram compatibilidade de API em algoritmos (`Prim.kt` com API antiga de PriorityQueue e `BellmanFord.kt` com `putIfAbsent` nao-portavel no common).
+- **Ajustes aplicados:**
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/Prim.kt`
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/BellmanFord.kt`
+- **Validacao executada:**
+  - `./gradlew.bat compileKotlinJvm compileKotlinJs` -> **PASS**
+  - `./gradlew.bat jvmTest` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Planejamento iterativo atualizado:** `docs/QA-ITERATIVE-PLAN.md` recebeu snapshot de execucao com status por iteracao (Iteracao 0 resolvida; Iteracoes 1-11 parciais; Iteracao 12 pendente).
 

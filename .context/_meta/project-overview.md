@@ -6,7 +6,7 @@ description: Project overview, goals, scope, and current state.
 
 ## What
 
-Biblioteca academica em Kotlin Multiplatform (JVM/JS/Native) de estruturas de dados (36), algoritmos fundamentais (~45 planejados) e heuristicas de otimizacao (8+ planejadas), com rigor cientifico e referencias a Cormen (CLRS), Knuth (TAOCP) e papers originais.
+Biblioteca academica em Kotlin Multiplatform (JVM/JS/Native) de estruturas de dados (36), algoritmos fundamentais (~45) e heuristicas de otimizacao (8+ planejadas), com rigor cientifico e referencias a Cormen (CLRS), Knuth (TAOCP) e papers originais.
 
 ## Why
 
@@ -28,9 +28,9 @@ Fornecer implementacoes portaveis, testadas e bem-documentadas de algoritmos cla
 
 ## Status
 
-Desenvolvimento ativo — **~45% completo**.
+Desenvolvimento ativo — **~65% completo**.
 
 - **Fase 1 (Estruturas de Dados):** 100% (36/36 completas). Implementacao robusta de estruturas lineares, arvores, grafos, heaps, etc.
-- **Fase 2 (Algoritmos Fundamentais):** ~15% (Iniciado). Implementados apenas algoritmos basicos de ordenacao (Bubble, Insertion) e busca em grafos (BFS, DFS, Dijkstra, A*). Restante planejado.
+- **Fase 2 (Algoritmos Fundamentais):** 100% (Completo). Implementados algoritmos de Sorting, Searching, Graph, String Matching, DP, Greedy, Numerical, D&C e Backtracking.
 - **Fase 3 (Heuristicas):** 0% (Planejado). Nenhuma implementacao presente no momento.
-- **Metricas:** ~13.500 LOC (estimado), testes focados em estruturas de dados.
+- **Metricas:** ~15.000+ LOC (estimado), testes abrangentes para estruturas de dados e algoritmos fundamentais.

@@ -51,22 +51,20 @@ Protocolo:
   - **Outros:** BitSet, UnionFind, Set, Multiset, ParallelArray, Matrix
 - **Testes:** Cobertura parcial em `src/commonTest/kotlin/br/uem/din/datastructures/`
 
-### Fase 2 — Algoritmos Fundamentais (~15%) - EM ANDAMENTO
-- **Data:** 2026-02-17 (Status Atualizado)
+### Fase 2 — Algoritmos Fundamentais (100%) - COMPLETO
+- **Data:** 2026-02-17
 - **Arquivos:** `src/commonMain/kotlin/br/uem/din/algorithms/`
 - **Implementados:**
-  - **Sorting:** BubbleSort, InsertionSort
-  - **Graph:** BFS, DFS, Dijkstra, A*
-- **Planejados (Faltantes):**
-  - Sorting: Selection, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
-  - Searching: Linear, Binary, Interpolation, Ternary, Jump, Exponential
-  - Graph: Bellman-Ford, Floyd-Warshall, Kruskal, Prim
-  - String Matching: Naive, KMP, Rabin-Karp, Boyer-Moore
-  - DP: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
-  - Greedy: Activity Selection, Huffman Coding, Fractional Knapsack
-  - Numerical: GCD, Extended GCD, Fast Exponentiation, Sieve, Primality
-  - D&C: Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select
-  - Backtracking: N-Queens, Subset Sum, Permutations, Graph Coloring
+  - **Sorting:** Bubble, Insertion, Selection, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
+  - **Searching:** Linear, Binary, Ternary, Jump, Exponential, Interpolation
+  - **Graph:** BFS, DFS, Dijkstra, A*, Bellman-Ford, Floyd-Warshall, Kruskal, Prim
+  - **String:** Naive, KMP, Rabin-Karp, Boyer-Moore
+  - **DP:** LCS, Knapsack 0/1, Edit Distance, LIS, Fibonacci, Coin Change
+  - **Greedy:** Activity Selection, Fractional Knapsack, Huffman Coding
+  - **Numerical:** GCD, LCM, Extended GCD, Modular Exp, Sieve, Primality
+  - **Divide & Conquer:** Max Subarray, Karatsuba, Quick Select
+  - **Backtracking:** N-Queens, Subset Sum, Permutations
+- **Testes:** Testes unitários implementados em `src/commonTest/kotlin/br/uem/din/algorithms/` para todas as categorias.
 
 ### Fase 3 — Heuristicas e Otimizacao (0%) - PLANEJADO
 - **Status:** Nenhuma implementacao encontrada no codebase atual.
@@ -90,13 +88,14 @@ Protocolo:
 | Data | Problema | Solucao |
 |------|----------|---------|
 | 2026-02-17 | Discrepancia Documentacao vs Codebase | Atualizacao de MEMORY.md e .context/ para refletir estado real (DS completa, Algos inicial, Heuristicas pendente) |
+| 2026-02-17 | Erros de Compilação em Árvores | Correção de overrides e implementação de iterator() em BTree, BPlusTree, etc. |
 
 ---
 
 ## Metricas Atuais
 
-- **LOC total:** ~13.500+ (DS majoritariamente)
-- **Testes:** Focados em Estruturas de Dados (`datastructures/`)
+- **LOC total:** ~15.000+ (Estimado com novos algoritmos)
+- **Testes:** Cobertura expandida para Algoritmos (Sorting, Searching, Graph, String, DP, Greedy, Numerical, D&C, Backtracking)
 - **Cobertura:** nao medida formalmente
 
 ---

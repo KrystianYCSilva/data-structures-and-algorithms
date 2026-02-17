@@ -1,5 +1,5 @@
 ---
-description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 implementados), heurísticas (planejado)."
+description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heurísticas (8 implementadas)."
 ---
 
 # Project Roadmap - Algoritmos e Otimização
@@ -10,8 +10,8 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 imple
 
 **Status Atual**:
 - Fase 1 (Estruturas de Dados): ✅ COMPLETA (36/36)
-- Fase 2 (Algoritmos Fundamentais): 🔄 PARCIAL (24/45 implementados)
-- Fase 3 (Heurísticas e Meta-Heurísticas): ⏳ PLANEJADO
+- Fase 2 (Algoritmos Fundamentais): 🔄 87% (46/53 implementados, 9 categorias)
+- Fase 3 (Heurísticas e Meta-Heurísticas): ✅ PHASE 3A COMPLETA (8/12)
 
 ---
 
@@ -77,9 +77,9 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 imple
 
 ---
 
-## Fase 2 - Algoritmos Fundamentais 🔄 PARCIAL
+## Fase 2 - Algoritmos Fundamentais 🔄 87%
 
-### Wave 1 - Core ✅ IMPLEMENTADO
+### Wave 1 - Core ✅ COMPLETO
 
 | Categoria | Algoritmos | Referência | Status |
 |-----------|-----------|------------|--------|
@@ -87,45 +87,51 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 imple
 | Searching (6) | Linear, Binary, Interpolation, Ternary, Jump, Exponential | Cormen Ch. 2; Knuth Vol 3 | ✅ |
 | Graph (8) | BFS, DFS, Dijkstra, A*, Bellman-Ford, Floyd-Warshall, Kruskal, Prim | Cormen Ch. 22-25 | ✅ |
 
-**Total Wave 1**: 24 algoritmos implementados e testados.
-
-### Wave 2 - Classical ⏳ PLANEJADO
+### Wave 2 - Classical 🔄 PARCIAL
 
 | Categoria | Algoritmos | Referência | Status |
 |-----------|-----------|------------|--------|
-| String Matching (4) | Naive, KMP, Rabin-Karp, Boyer-Moore | Cormen Ch. 32 | ⏳ |
-| Dynamic Programming (8) | Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change | Cormen Ch. 15 | ⏳ |
-| Greedy (3) | Activity Selection, Huffman Coding, Fractional Knapsack | Cormen Ch. 16 | ⏳ |
-| Numerical (5) | GCD, Extended GCD, Fast Exp, Sieve, Primality | Cormen Ch. 31 | ⏳ |
+| String Matching (4/4) | Naive, KMP, Rabin-Karp, Boyer-Moore | Cormen Ch. 32 | ✅ |
+| Dynamic Programming (6/8) | Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Coin Change | Cormen Ch. 15 | 🔄 |
+| Greedy (3/3) | Activity Selection, Huffman Coding, Fractional Knapsack | Cormen Ch. 16 | ✅ |
+| Numerical (6/6) | GCD, LCM, Extended GCD, Mod Exp, Sieve, Primality | Cormen Ch. 31 | ✅ |
 
-### Wave 3 - Advanced ⏳ PLANEJADO
+**Faltantes Wave 2**: Rod Cutting, Matrix Chain Multiplication (DP)
+
+### Wave 3 - Advanced 🔄 PARCIAL
 
 | Categoria | Algoritmos | Referência | Status |
 |-----------|-----------|------------|--------|
-| Divide & Conquer (5) | Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select | Cormen Ch. 4 | ⏳ |
-| Backtracking (4) | N-Queens, Subset Sum, Permutations, Graph Coloring | Cormen Ch. 34 | ⏳ |
+| Backtracking (3/4) | N-Queens, Subset Sum, Permutations | Cormen Ch. 34 | 🔄 |
+| Divide & Conquer (0/5) | — | Cormen Ch. 4 | ⏳ |
+
+**Faltantes Wave 3**: Graph Coloring (Backtracking), Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select (D&C)
+
+**Total Fase 2**: 46 algoritmos implementados de ~53 planejados.
 
 ---
 
-## Fase 3 - Heurísticas e Meta-Heurísticas ⏳ PLANEJADO
+## Fase 3 - Heurísticas e Meta-Heurísticas ✅ 3A+3B COMPLETAS
 
-### Phase 3A - Classical ⏳
-| Algoritmo | Tipo | Referência | Status |
-|-----------|------|------------|--------|
-| Hill Climbing | Local Search | Russell & Norvig (2010) | ⏳ |
-| Simulated Annealing | Single-Solution | Kirkpatrick et al. (1983) | ⏳ |
-| Tabu Search | Single-Solution | Glover (1986) | ⏳ |
-| Genetic Algorithm | Population-Based | Holland (1975) | ⏳ |
+### Phase 3A - Classical ✅ COMPLETA
+| Algoritmo | Tipo | Referência | Testes | Status |
+|-----------|------|------------|--------|--------|
+| Hill Climbing | Local Search | Russell & Norvig (2010) | 4 | ✅ |
+| Simulated Annealing | Single-Solution | Kirkpatrick et al. (1983) | 4 | ✅ |
+| Tabu Search | Single-Solution | Glover (1986) | 4 | ✅ |
+| Genetic Algorithm | Population-Based | Holland (1975) | 5 | ✅ |
 
-### Phase 3B - Advanced ⏳
-| Algoritmo | Tipo | Referência | Status |
-|-----------|------|------------|--------|
-| ILS | Single-Solution | Lourenço et al. (2003) | ⏳ |
-| GRASP | Hybrid | Feo & Resende (1995) | ⏳ |
-| PSO | Population-Based | Kennedy & Eberhart (1995) | ⏳ |
-| ACO | Population-Based | Dorigo (1992) | ⏳ |
+### Phase 3B - Advanced ✅ COMPLETA
+| Algoritmo | Tipo | Referência | Testes | Status |
+|-----------|------|------------|--------|--------|
+| ILS | Single-Solution | Lourenço et al. (2003) | 4 | ✅ |
+| GRASP | Hybrid | Feo & Resende (1995) | 4 | ✅ |
+| PSO | Population-Based | Kennedy & Eberhart (1995) | 5 | ✅ |
+| ACO | Population-Based | Dorigo (1992) | 4 | ✅ |
 
-### Phase 3C - Specialized ⏳
+**Infraestrutura**: OptimizationProblem<T>, ContinuousProblem, TSPProblem (2-opt), Benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel), OptResult, crossover operators (OX, single-point).
+
+### Phase 3C - Specialized ⏳ PLANEJADO
 | Algoritmo | Tipo | Referência | Status |
 |-----------|------|------------|--------|
 | Differential Evolution | Population-Based | Storn & Price (1997) | ⏳ |
@@ -143,14 +149,14 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 imple
 ╠═══════════════════════════════════════════════════════════════╣
 ║ Fase 1 (Estruturas de Dados):    ✅ 100% (36/36)             ║
 ║                                                               ║
-║ Fase 2 (Algoritmos Fundamentais): 🔄 53% (24/45)             ║
+║ Fase 2 (Algoritmos Fundamentais): 🔄 87% (46/53)             ║
 ║   - W1 Sorting/Searching/Graph: 24 algs ✅                   ║
-║   - W2 String/DP/Greedy/Numerical: 20 algs ⏳                ║
-║   - W3 D&C/Backtracking: 9 algs ⏳                           ║
+║   - W2 String/DP/Greedy/Numerical: 19/20 algs 🔄             ║
+║   - W3 Backtracking/D&C: 3/9 algs 🔄                        ║
 ║                                                               ║
 ║ Fase 3 (Heurísticas):             ⏳ 0% (0/12)               ║
 ║                                                               ║
-║ TOTAL: ~46% (Fase 1 completa, Fase 2 parcial)                ║
+║ TOTAL: ~63% (Fase 1 completa, Fase 2 quase completa)         ║
 ╚═══════════════════════════════════════════════════════════════╝
 ```
 
@@ -160,9 +166,9 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (24 imple
 
 ```
 Estruturas de Dados:      36 completas
-Algoritmos:               24 implementados (10 sorting + 6 searching + 8 graph)
+Algoritmos:               46 implementados (31 arquivos, 9 categorias)
 Heurísticas:              0 (planejado)
-Arquivos fonte:           ~102 (commonMain)
+Arquivos fonte:           ~110 (commonMain)
 Arquivos de teste:        54
 Plataformas:              JVM, JS (IR), mingwX64 (Native)
 ```
@@ -180,4 +186,4 @@ Plataformas:              JVM, JS (IR), mingwX64 (Native)
 ---
 
 **Última Atualização**: 2026-02-17
-**Próximo Marco**: Wave 2 (String Matching, DP, Greedy, Numerical) ou Phase 3A (Heurísticas)
+**Próximo Marco**: Completar Fase 2 (D&C + DP/Backtracking restantes) ou iniciar Fase 3A (Heurísticas)
