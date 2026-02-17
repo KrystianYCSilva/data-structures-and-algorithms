@@ -387,3 +387,96 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 - **Validacao final:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, 950+ tests, 0 failures)
 
 
+
+---
+
+## Sessao 13
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao da Iteracao 4 (Heap family) com hardening de testes no padrao de `PriorityQueue`.
+- **Diagnostico inicial:** suites existentes de heap eram majoritariamente deterministicas/basic, sem property-based robusto e sem guarda explicita de envelope de complexidade.
+- **Entregas:**
+  - `src/commonTest/kotlin/br/uem/din/datastructures/heap/HeapHardeningTest.kt` (10 novos testes)
+- **Cobertura adicionada:**
+  - property-based/randomizado contra oracle para `ComparableHeapImpl`, `ComparatorHeapImpl`, `BinomialHeap`, `FibonacciHeap`
+  - boundary/error handling: `remove(-1)` com `IndexOutOfBoundsException`, indice invalido, iterador exaurido com `NoSuchElementException`
+  - null handling em `ComparatorHeapImpl` com comparador nullable
+  - aliasing/mutabilidade via `MutableHeap` e consistencia de `Heap` read-only view
+  - corretude de `merge` para `BinomialHeap` e `FibonacciHeap`
+  - guarda de contrato em `FibonacciHeap.decreaseKey` (rejeita aumento)
+  - envelope de complexidade por contagem de comparacoes O(n log n)
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.heap.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status:** Iteracao 4 marcada como **RESOLVIDA** no plano QA.
+
+---
+
+## Sessao 14
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao da Iteracao 5 (Trees core) com hardening no padrao `PriorityQueue` e adicao de interop JVM para `redBlackTreeOf()`.
+- **Arquivos criados:**
+  - `src/commonTest/kotlin/br/uem/din/datastructures/tree/TreeCoreHardeningTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeJvmInteropTest.kt`
+- **Arquivos ajustados (qualidade de suite):**
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/hash/HashTableJvmInteropTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/set/HashSetCollectionJvmInteropTest.kt`
+- **Cobertura adicionada:**
+  - Search trees (`BST`, `AVL`, `Splay`, `Treap`, `RedBlack`): invariantes de estado, randomizacao seedada, oracle set, iterator contract, `asReadOnly` semantics, envelope de comparacoes O(n log n) para RedBlack.
+  - Trie: invariantes de fronteira, randomizacao seedada com oracle de palavras, prefix closure, `asReadOnly` semantics.
+  - Interop JVM: paridade `redBlackTreeOf()` vs `TreeSet` e teste de fronteira null na API Java (reflexao).
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.tree.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status:** Iteracao 5 marcada como **RESOLVIDA** no plano QA.
+
+---
+
+## Sessao 15
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao da Iteracao 6 (Trees especializadas) com hardening randomizado e validacao cross-platform.
+- **Arquivo criado:**
+  - `src/commonTest/kotlin/br/uem/din/datastructures/tree/SpecializedTreesHardeningTest.kt`
+- **Cobertura adicionada:**
+  - `BTree` e `BPlusTree` contra oracle de conjunto com cenarios randomizados de insercao/remocao/consulta e validacao de ordenacao.
+  - `BPlusTree.rangeSearch` validado em cenarios randomizados.
+  - Contrato de iteradores (`NoSuchElementException` apos exaustao) para `BTree`/`BPlusTree`.
+  - `FenwickTree` contra oracle `LongArray` (prefix/range/point/update) com verificacoes de fronteira e excecoes.
+  - `SegmentTree` contra oracle para update pontual/query de intervalo e validacao de `rangeUpdate` por query pontual.
+  - `RadixTree` contra oracle `MutableSet<String>` em operacoes randomizadas de `insert/remove/search/prefixSearch`.
+  - `CartesianTree` com propriedades formais randomizadas: `inOrder == entrada`, min-heap valido e raiz minima.
+  - Validacao de construtores invalidos em `BTree`/`BPlusTree`.
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.tree.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status:** Iteracao 6 marcada como **RESOLVIDA** no plano QA.
+
+---
+
+## Sessao 16
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao da Iteracao 7 (Graph data structures) com hardening randomizado cross-platform.
+- **Arquivo criado:**
+  - `src/commonTest/kotlin/br/uem/din/datastructures/graph/GraphStructuresHardeningTest.kt`
+- **Cobertura adicionada:**
+  - Paridade `AdjacencyList` vs `AdjacencyMatrix` com oracle de arestas/pesos (incluindo `null`), validando `edges()` e `weight()` em checkpoints completos.
+  - Semantica de view somente-leitura via `asReadOnly()` para grafos (snapshot + live view).
+  - DAG: validacao randomizada de aciclicidade, consistencia de ordenacao topologica e shortest path contra oracle independente.
+  - Cenarios de erro: rejeicao de ciclo em DAG e `UnsupportedOperationException` em aresta nao-direcionada.
+- **Ajuste de suite:**
+  - Gerador randomizado de arestas nao-direcionadas passou a ignorar self-loop (`v -> v`) para evitar paralelismo legitimo de `AdjacencyList` contra modelo de aresta unica.
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.graph.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status:** Iteracao 7 marcada como **RESOLVIDA** no plano QA.

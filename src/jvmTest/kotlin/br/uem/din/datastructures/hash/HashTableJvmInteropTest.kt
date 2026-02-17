@@ -9,7 +9,7 @@ class HashTableJvmInteropTest {
     @Test
     fun testTypealiasBacksJavaHashMapOnJvm() {
         val table = HashTable<String, Int>()
-        assertTrue(table is JavaHashMap<*, *>)
+        assertEquals("java.util.HashMap", table::class.java.name)
 
         table["a"] = 1
         val javaMap: JavaHashMap<String, Int> = table
@@ -71,3 +71,4 @@ class HashTableJvmInteropTest {
         }
     }
 }
+

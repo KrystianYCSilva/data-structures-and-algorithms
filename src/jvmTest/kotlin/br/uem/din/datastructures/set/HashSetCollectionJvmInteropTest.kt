@@ -9,7 +9,7 @@ class HashSetCollectionJvmInteropTest {
     @Test
     fun testTypealiasBacksJavaHashSetOnJvm() {
         val set = HashSetCollection<Int>()
-        assertTrue(set is JavaHashSet<*>)
+        assertEquals("java.util.HashSet", set::class.java.name)
 
         set.add(1)
         val javaSet: JavaHashSet<Int> = set
@@ -67,3 +67,4 @@ class HashSetCollectionJvmInteropTest {
         }
     }
 }
+

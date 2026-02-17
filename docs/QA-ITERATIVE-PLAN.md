@@ -404,3 +404,91 @@ Observacao: durante a execucao, os testes comuns de `ArrayQueue`, `CircularQueue
   - `./gradlew.bat jvmTest --tests "br.uem.din.optimization.MaxSatProblemTest"` -> PASS
   - `./gradlew.bat nativeTest` -> PASS
 
+
+## Atualizacao - 2026-02-17 (iteracao 4 / heap)
+
+- Verificacao de estado: Iteracao 4 nao estava no mesmo nivel de hardening de `PriorityQueue` (faltavam cenarios property-based e guardas de complexidade dedicados).
+- Entrega aplicada:
+  - `src/commonTest/kotlin/br/uem/din/datastructures/heap/HeapHardeningTest.kt`
+- Cobertura adicionada (10 testes):
+  - property-based/randomizado para `ComparableHeapImpl`, `ComparatorHeapImpl`, `BinomialHeap` e `FibonacciHeap` com oracle em lista
+  - boundary/error handling (`remove(-1)` com excecao, indice invalido, iterador exaurido)
+  - null handling em `ComparatorHeapImpl` com comparador custom
+  - verificacao de alias mutavel (`MutableHeap`) e vista somente-leitura (`Heap`)
+  - merge correctness (`BinomialHeap.merge`, `FibonacciHeap.merge`)
+  - `decreaseKey` guard (`IllegalArgumentException` em aumento de chave)
+  - envelope de complexidade por contagem de comparacoes O(n log n)
+- Validacao executada:
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.heap.*"` -> PASS
+  - `./gradlew.bat jsTest` -> PASS
+  - `./gradlew.bat nativeTest` -> PASS
+- Status de iteracao:
+  - **Iteracao 4 (Heap family): RESOLVIDA**
+
+## Atualizacao - 2026-02-17 (iteracao 5 / trees core)
+
+- Escopo executado: `BinarySearchTree`, `AVLTree`, `SplayTree`, `Treap`, `RedBlackTree`, `Trie`.
+- Entregas:
+  - `src/commonTest/kotlin/br/uem/din/datastructures/tree/TreeCoreHardeningTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeJvmInteropTest.kt`
+- Cobertura adicionada (trees core):
+  - invariantes de estado (vazio, elemento unico, colecao grande)
+  - sequencias randomizadas seedadas com oracle (`MutableSet` para SearchTree, `MutableSet<List<Char>>` para Trie)
+  - verificacoes de `size`, `isEmpty`, `inOrder`, `iterator`, semantica de duplicatas
+  - `asReadOnly()` para `SearchTree` e `ImmutableTrie` (snapshot estavel + view live)
+  - contrato de iterador (`hasNext` e `NoSuchElementException` apos exaustao)
+  - guarda de complexidade para `RedBlackTree` por contagem de comparacoes (envelope O(n log n))
+- Interop JVM adicionado:
+  - paridade comportamental `redBlackTreeOf()` vs `java.util.TreeSet` com operacoes randomizadas
+  - fronteira Java: rejeicao de `null` via reflexao (`InvocationTargetException` com causa `NullPointerException`)
+- Ajuste complementar (limpeza de warnings jvmTest):
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/hash/HashTableJvmInteropTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/set/HashSetCollectionJvmInteropTest.kt`
+  - substituido `is` always-true por verificacao de classe runtime (`java.util.HashMap`/`java.util.HashSet`)
+- Validacao executada:
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.tree.*"` -> PASS
+  - `./gradlew.bat jsTest` -> PASS
+  - `./gradlew.bat nativeTest` -> PASS
+- Status de iteracao:
+  - **Iteracao 5 (Trees core): RESOLVIDA**
+
+## Atualizacao - 2026-02-17 (iteracao 6 / trees especializadas)
+
+- Escopo executado: `BTree`, `BPlusTree`, `FenwickTree`, `SegmentTree`, `RadixTree`, `CartesianTree`.
+- Entrega:
+  - `src/commonTest/kotlin/br/uem/din/datastructures/tree/SpecializedTreesHardeningTest.kt`
+- Cobertura adicionada (9 testes):
+  - `BTree` randomizado contra oracle `MutableSet` (insert/remove/contains/inOrder/iterator)
+  - `BPlusTree` randomizado contra oracle `MutableSet` + validacao de `rangeSearch`
+  - contrato de iterador para `BTree`/`BPlusTree` (terminacao + `NoSuchElementException`)
+  - `FenwickTree` randomizado contra oracle `LongArray` (update/prefix/range/point) + validacao de fronteiras com excecoes
+  - `SegmentTree` randomizado contra oracle para updates pontuais/queries de intervalo + cenarios de `rangeUpdate` validados por query pontual
+  - `RadixTree` randomizado contra oracle `MutableSet<String>` (insert/remove/search/prefixSearch)
+  - `CartesianTree` randomizado (inOrder == input, min-heap valido, raiz minima)
+  - parametros invalidos em construcao (`BTree(minimumDegree=1)`, `BPlusTree(order=2)`) com excecoes esperadas
+- Validacao executada:
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.tree.*"` -> PASS
+  - `./gradlew.bat jsTest` -> PASS
+  - `./gradlew.bat nativeTest` -> PASS
+- Status de iteracao:
+  - **Iteracao 6 (Trees especializadas): RESOLVIDA**
+
+## Atualizacao - 2026-02-17 (iteracao 7 / graph data structures)
+
+- Escopo executado: `AdjacencyList`, `AdjacencyMatrix`, `DirectedAcyclicGraph`.
+- Entrega:
+  - `src/commonTest/kotlin/br/uem/din/datastructures/graph/GraphStructuresHardeningTest.kt`
+- Cobertura adicionada:
+  - paridade randomizada `AdjacencyList` vs `AdjacencyMatrix` com oracle de arestas (direcionadas/nao-direcionadas) e pesos (incluindo `null`)
+  - verificacao de `edges()` e `weight()` para todos os pares de vertices em checkpoints
+  - semantica `asReadOnly()` para grafo (snapshot estavel + view live)
+  - DAG randomizado: invariantes de aciclicidade, validacao formal da ordenacao topologica e shortest-path contra oracle
+  - validacao de rejeicao de ciclo em DAG e `UnsupportedOperationException` para aresta nao-direcionada
+- Ajuste no teste durante execucao:
+  - caso `addUndirectedEdge(v, v)` removido do gerador randomizado por gerar paralelismo legitimo em `AdjacencyList` (self-loop duplicado), nao equivalente ao modelo de aresta unica.
+- Validacao executada:
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.graph.*"` -> PASS
+  - `./gradlew.bat jsTest` -> PASS
+  - `./gradlew.bat nativeTest` -> PASS
+- Status de iteracao:
+  - **Iteracao 7 (Graph data structures): RESOLVIDA**
