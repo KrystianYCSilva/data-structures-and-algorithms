@@ -28,7 +28,7 @@ package br.uem.din.datastructures.tree
  *             Halim, S. & Halim, F. "Competitive Programming 3", Cap. 2.4.4;
  *             Cormen, T. H. et al. "Introduction to Algorithms" — exercícios sobre BIT.
  */
-public class FenwickTree(private val size: Int) {
+public class FenwickTree(private val size: Int) : MutableFenwickTree {
 
     private val tree: LongArray = LongArray(size + 1)
 
@@ -42,7 +42,7 @@ public class FenwickTree(private val size: Int) {
      *
      * @param values o array de valores iniciais (0-indexed).
      */
-    public fun build(values: LongArray) {
+    public override fun build(values: LongArray) {
         require(values.size == size) { "O tamanho do array deve ser igual a $size." }
         for (i in values.indices) {
             tree[i + 1] = values[i]
@@ -67,7 +67,7 @@ public class FenwickTree(private val size: Int) {
      * @param index o índice do elemento a ser atualizado (0-indexed).
      * @param delta o valor a ser adicionado.
      */
-    public fun update(index: Int, delta: Long) {
+    public override fun update(index: Int, delta: Long) {
         require(index in 0 until size) { "Índice fora do intervalo válido [0, ${size - 1}]." }
         var i = index + 1
         while (i <= size) {
@@ -87,7 +87,7 @@ public class FenwickTree(private val size: Int) {
      * @param index o índice final do prefixo (0-indexed, inclusive).
      * @return a soma dos elementos de 0 a [index].
      */
-    public fun prefixSum(index: Int): Long {
+    public override fun prefixSum(index: Int): Long {
         require(index in 0 until size) { "Índice fora do intervalo válido [0, ${size - 1}]." }
         var sum = 0L
         var i = index + 1
@@ -109,7 +109,7 @@ public class FenwickTree(private val size: Int) {
      * @param right índice direito do intervalo (0-indexed, inclusive).
      * @return a soma dos elementos no intervalo.
      */
-    public fun rangeSum(left: Int, right: Int): Long {
+    public override fun rangeSum(left: Int, right: Int): Long {
         require(left in 0 until size && right in 0 until size && left <= right) {
             "Índices fora do intervalo válido [0, ${size - 1}]."
         }
@@ -126,7 +126,7 @@ public class FenwickTree(private val size: Int) {
      * @param index o índice do elemento (0-indexed).
      * @return o valor na posição [index].
      */
-    public fun pointQuery(index: Int): Long {
+    public override fun pointQuery(index: Int): Long {
         return rangeSum(index, index)
     }
 }

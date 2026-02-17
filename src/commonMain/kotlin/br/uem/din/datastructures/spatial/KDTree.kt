@@ -28,7 +28,7 @@ import kotlin.math.sqrt
  *             Friedman, J. H., Bentley, J. L. & Finkel, R. A. "An Algorithm for Finding
  *             Best Matches in Logarithmic Expected Time" (1977).
  */
-public class KDTree(private val k: Int) {
+public class KDTree(private val k: Int) : MutableKDTree {
 
     init {
         require(k >= 1) { "O número de dimensões deve ser pelo menos 1." }
@@ -50,7 +50,7 @@ public class KDTree(private val k: Int) {
     private var root: Node? = null
 
     /** Número de pontos armazenados na KD-Tree. */
-    public var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -60,7 +60,7 @@ public class KDTree(private val k: Int) {
      *
      * @return `true` se a árvore não contiver pontos.
      */
-    public fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Insere um ponto na KD-Tree.
@@ -73,7 +73,7 @@ public class KDTree(private val k: Int) {
      * @param point as coordenadas do ponto (array de tamanho [k]).
      * @throws IllegalArgumentException se o tamanho do array não for igual a [k].
      */
-    public fun insert(point: DoubleArray) {
+    public override fun insert(point: DoubleArray) {
         require(point.size == k) { "O ponto deve ter exatamente $k dimensões." }
         root = insert(root, point, 0)
         size++
@@ -88,7 +88,7 @@ public class KDTree(private val k: Int) {
      * @return `true` se o ponto existir na árvore.
      * @throws IllegalArgumentException se o tamanho do array não for igual a [k].
      */
-    public fun contains(point: DoubleArray): Boolean {
+    public override fun contains(point: DoubleArray): Boolean {
         require(point.size == k) { "O ponto deve ter exatamente $k dimensões." }
         return contains(root, point, 0)
     }
@@ -107,7 +107,7 @@ public class KDTree(private val k: Int) {
      * @return as coordenadas do vizinho mais próximo, ou `null` se a árvore estiver vazia.
      * @throws IllegalArgumentException se o tamanho do array não for igual a [k].
      */
-    public fun nearestNeighbor(target: DoubleArray): DoubleArray? {
+    public override fun nearestNeighbor(target: DoubleArray): DoubleArray? {
         require(target.size == k) { "O ponto alvo deve ter exatamente $k dimensões." }
         if (root == null) return null
         val best = nearestNeighbor(root!!, target, 0, root!!.point, distanceSquared(target, root!!.point))
@@ -130,7 +130,7 @@ public class KDTree(private val k: Int) {
      * @return lista de pontos dentro da região.
      * @throws IllegalArgumentException se os tamanhos dos arrays não forem iguais a [k].
      */
-    public fun rangeSearch(lowerBound: DoubleArray, upperBound: DoubleArray): List<DoubleArray> {
+    public override fun rangeSearch(lowerBound: DoubleArray, upperBound: DoubleArray): List<DoubleArray> {
         require(lowerBound.size == k) { "O limite inferior deve ter exatamente $k dimensões." }
         require(upperBound.size == k) { "O limite superior deve ter exatamente $k dimensões." }
         val results = mutableListOf<DoubleArray>()

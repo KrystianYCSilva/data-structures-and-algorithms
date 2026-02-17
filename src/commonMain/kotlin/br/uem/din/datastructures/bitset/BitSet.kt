@@ -4,14 +4,61 @@ package br.uem.din.datastructures.bitset
  * Cria uma nova instância de BitSet com a capacidade inicial especificada.
  *
  * @param size a capacidade inicial em bits (padrão: 64). O BitSet pode crescer além deste valor.
- * @return uma instância da interface [BitSet].
+ * @return uma instância da interface [MutableBitSet].
  */
-public expect fun bitSetOf(size: Int = 64): BitSet
+public expect fun bitSetOf(size: Int = 64): MutableBitSet
 
 /**
- * Interface para Bit Array (BitSet) — array compacto de bits.
+ * Interface somente-leitura para Bit Array (BitSet).
  *
- * Cada bit ocupa apenas 1 bit de memória.
+ * Define operações de consulta: leitura de bits, tamanho, cardinalidade e iteração.
+ * Segue o padrão Kotlin stdlib de separar interfaces imutáveis e mutáveis.
+ *
+ * @see MutableBitSet
+ */
+public interface ImmutableBitSet : Iterable<Int> {
+
+    /**
+     * Retorna o valor do bit no índice especificado.
+     *
+     * Complexidade: O(1).
+     *
+     * @param index o índice do bit (0-based). Deve ser >= 0.
+     * @return `true` se o bit estiver ligado, `false` caso contrário.
+     * @throws IllegalArgumentException se [index] for negativo.
+     */
+    public operator fun get(index: Int): Boolean
+
+    /**
+     * Retorna o número de bits de espaço efetivamente alocado.
+     */
+    public fun size(): Int
+
+    /**
+     * Retorna o "tamanho lógico": índice do bit mais alto ligado + 1.
+     */
+    public fun length(): Int
+
+    /**
+     * Retorna `true` se nenhum bit estiver ligado.
+     */
+    public fun isEmpty(): Boolean
+
+    /**
+     * Retorna o número de bits ligados (population count / popcount).
+     */
+    public fun cardinality(): Int
+
+    /**
+     * Retorna o índice do próximo bit ligado a partir de [fromIndex].
+     */
+    public fun nextSetBit(fromIndex: Int): Int
+}
+
+/**
+ * Interface mutável para Bit Array (BitSet) — array compacto de bits.
+ *
+ * Estende [ImmutableBitSet] adicionando operações de modificação: set, clear e operações bit-a-bit.
  *
  * Implementação multiplataforma via [bitSetOf]:
  * - **JVM**: delega para [java.util.BitSet]
@@ -19,8 +66,9 @@ public expect fun bitSetOf(size: Int = 64): BitSet
  * - **Native**: implementação manual usando [LongArray]
  *
  * @see bitSetOf
+ * @see ImmutableBitSet
  */
-public interface BitSet : Iterable<Int> {
+public interface MutableBitSet : ImmutableBitSet {
 
     /**
      * Define o bit no índice especificado como `true`.
@@ -61,62 +109,26 @@ public interface BitSet : Iterable<Int> {
     public fun clear()
 
     /**
-     * Retorna o valor do bit no índice especificado.
-     *
-     * Complexidade: O(1).
-     *
-     * @param index o índice do bit (0-based). Deve ser >= 0.
-     * @return `true` se o bit estiver ligado, `false` caso contrário.
-     * @throws IllegalArgumentException se [index] for negativo.
-     */
-    public operator fun get(index: Int): Boolean
-
-    /**
-     * Retorna o número de bits de espaço efetivamente alocado.
-     */
-    public fun size(): Int
-
-    /**
-     * Retorna o "tamanho lógico": índice do bit mais alto ligado + 1.
-     */
-    public fun length(): Int
-
-    /**
-     * Retorna `true` se nenhum bit estiver ligado.
-     */
-    public fun isEmpty(): Boolean
-
-    /**
-     * Retorna o número de bits ligados (population count / popcount).
-     */
-    public fun cardinality(): Int
-
-    /**
-     * Retorna o índice do próximo bit ligado a partir de [fromIndex].
-     */
-    public fun nextSetBit(fromIndex: Int): Int
-
-    /**
      * Realiza a operação AND bit-a-bit com outro BitSet.
      * Modifica este BitSet in-place.
      */
-    public fun and(other: BitSet)
+    public fun and(other: MutableBitSet)
 
     /**
      * Realiza a operação OR bit-a-bit com outro BitSet.
      * Modifica este BitSet in-place.
      */
-    public fun or(other: BitSet)
+    public fun or(other: MutableBitSet)
 
     /**
      * Realiza a operação XOR bit-a-bit com outro BitSet.
      * Modifica este BitSet in-place.
      */
-    public fun xor(other: BitSet)
+    public fun xor(other: MutableBitSet)
 
     /**
      * Realiza a operação AND-NOT bit-a-bit com outro BitSet.
      * Modifica este BitSet in-place.
      */
-    public fun andNot(other: BitSet)
+    public fun andNot(other: MutableBitSet)
 }

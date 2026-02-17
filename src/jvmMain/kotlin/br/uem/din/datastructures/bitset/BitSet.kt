@@ -5,14 +5,14 @@ import java.util.BitSet as JavaBitSet
 /**
  * Cria uma instância JVM de BitSet.
  */
-public actual fun bitSetOf(size: Int): BitSet {
+public actual fun bitSetOf(size: Int): MutableBitSet {
     return JvmBitSet(size)
 }
 
 /**
  * Implementação JVM do [BitSet], delegando para [java.util.BitSet].
  */
-private class JvmBitSet(size: Int) : BitSet {
+private class JvmBitSet(size: Int) : MutableBitSet {
     private val bitSet = JavaBitSet(size)
 
     override fun set(index: Int) {
@@ -59,7 +59,7 @@ private class JvmBitSet(size: Int) : BitSet {
         return bitSet.nextSetBit(fromIndex)
     }
 
-    override fun and(other: BitSet) {
+    override fun and(other: MutableBitSet) {
         if (other is JvmBitSet) {
             bitSet.and(other.bitSet)
         } else {
@@ -74,7 +74,7 @@ private class JvmBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun or(other: BitSet) {
+    override fun or(other: MutableBitSet) {
         if (other is JvmBitSet) {
             bitSet.or(other.bitSet)
         } else {
@@ -82,7 +82,7 @@ private class JvmBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun xor(other: BitSet) {
+    override fun xor(other: MutableBitSet) {
         if (other is JvmBitSet) {
             bitSet.xor(other.bitSet)
         } else {
@@ -90,7 +90,7 @@ private class JvmBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun andNot(other: BitSet) {
+    override fun andNot(other: MutableBitSet) {
         if (other is JvmBitSet) {
             bitSet.andNot(other.bitSet)
         } else {

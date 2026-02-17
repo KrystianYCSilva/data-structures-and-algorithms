@@ -20,4 +20,5 @@ private class JvmRedBlackTree<T : Comparable<T>> : MutableSearchTree<T> {
     override fun inOrder(): List<T> = set.toList()
     override val size: Int get() = set.size
     override fun isEmpty(): Boolean = set.isEmpty()
+    override fun iterator(): Iterator<T> = set.iterator()
 }

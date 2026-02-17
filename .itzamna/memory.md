@@ -26,21 +26,38 @@ Biblioteca academica KMP de estruturas de dados, algoritmos e heuristicas de oti
 Fase 1 (36 DS) e Fase 2 (~45 algoritmos) completas. Fase 3 (heuristicas): 3A e 3B completas (8 heuristicas, 132 testes).
 Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
 
-**Auditoria DS:** F1-F5 completas. Biblioteca release-ready (explicitApi, jvmToolchain(8), KDoc completo).
+**Auditoria DS:** F1-F5 completas + auditoria release-ready B1-B12 completa + naming migration completa.
+Biblioteca release-ready (explicitApi, jvmToolchain(8), KDoc completo, zero warnings, JVM+JS+Native passam).
+Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBitSet/MutableBitSet. Nenhum ReadOnly* restante.
 
-**Reavaliacao F5 — Progresso:**
-- SearchTree interface hierarchy: `SearchTree<T>` / `MutableSearchTree<T>` criados (TreeInterfaces.kt)
-- 5 arvores (BST, AVL, SplayTree, Treap, RedBlackTree) agora implementam `MutableSearchTree<T>`
-- BST/AVL agora rejeitam duplicatas; insert/remove retornam Boolean em todas as arvores
-- RedBlackTree: `fun size()` migrado para `val size` (propriedade); expect+3 actuals atualizados
-- SplayTree/Treap: `isEmpty()` adicionado
-- BinomialHeap/FibonacciHeap: agora implementam `MutableQueue<T>`
-- Graph interface split: `Graph<T>` (read-only) / `MutableGraph<T>` (mutable) — AdjacencyList, AdjacencyMatrix, DAG atualizados
-- Hash table interfaces: `OpenHashTable<K,V>` / `MutableOpenHashTable<K,V>` criados (HashTableInterfaces.kt)
-- OpenAddressingHashTable e CuckooHashTable implementam `MutableOpenHashTable`
-- ImmutableViews.kt: `asReadOnly()` adicionado para MutableLinkedList e MutableSearchTree
-- Parametro `value` renomeado para `element` em todas as arvores de busca
-- Todos os testes atualizados e passando (JVM + JS compilam)
+**Auditoria Release-Ready (B1-B12) — COMPLETA:**
+
+**B1 (Warnings + Factory Migration):**
+- Zero warnings em JVM/JS/Native
+- RedBlackTree e DoublyLinkedList migrados de expect class para expect fun factory
+- IndexedMutableLinkedList<T> sub-interface criada
+
+**B2 (Iterable Wiring):**
+- SearchTree<T> extends Iterable<T>; iterator() em todas as 7 arvores (BST, AVL, Splay, Treap, RBT, BTree, BPlusTree)
+- BTree e BPlusTree agora implementam MutableSearchTree<T> (contains, isEmpty, insert->Boolean, remove->Boolean, iterator)
+- ReadOnlyMultiset<T> extends Iterable<T>; Multiset implementa iterator() via sequence/yield
+- OpenHashTable<K,V> extends Iterable<Pair<K,V>>; entries()/keys()/values() em interface
+- 3 hash tables (OpenAddressing, Cuckoo, SeparateChaining) implementam entries()+iterator()
+
+**B3 (Interfaces Trie/BitSet/BloomFilter/UnionFind):**
+- ReadOnlyTrie<Key>/MutableTrie<Key> (TrieInterfaces.kt); Trie implementa MutableTrie
+- ReadOnlyBitSet/BitSet split (BitSet.kt); ReadOnlyBitSet com get/size/length/isEmpty/cardinality/nextSetBit
+- ReadOnlyBloomFilter/MutableBloomFilter (BloomFilterInterfaces.kt); BloomFilter implementa MutableBloomFilter
+- ReadOnlyUnionFind/MutableUnionFind (UnionFindInterfaces.kt); UnionFind implementa MutableUnionFind
+
+**B4 (Interfaces SegmentTree/FenwickTree/RadixTree/CartesianTree):**
+- ReadOnlySegmentTree<T>/MutableSegmentTree<T> (SegmentTreeInterfaces.kt)
+- ReadOnlyFenwickTree/MutableFenwickTree (FenwickTreeInterfaces.kt)
+- ReadOnlyRadixTree/MutableRadixTree (RadixTreeInterfaces.kt)
+- ReadOnlyCartesianTree<T>/MutableCartesianTree<T> (CartesianTreeInterfaces.kt)
+- Todas as 4 classes concretas wired aos interfaces mutaveis
+
+**B5-B12:** QuadTree/KDTree/Matrix/ParallelArray/Heap interfaces, ImmutableViews, Extensions, Tests, JVM interop, naming normalization, final compile — todos completados
 
 ---
 
@@ -63,6 +80,11 @@ Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
 | 2026-02-17 | HashSetCollection typealias (nao Set) | Evitar conflito com kotlin.collections.Set; typealias para HashSet nativo da plataforma |
 | 2026-02-17 | Revisao seletiva de visibilidade (internal) | Conforme Kotlin API Guidelines: BinaryNode, AVLNode, TrieNode, RedBlackTreeImpl, AbstractHeap, ComparableHeapImpl, ComparatorHeapImpl -> internal; TreeTraversalExtensions -> internal (cascade) |
 | 2026-02-17 | expect class -> expect fun factory pattern | ArrayStack, ArrayQueue, PriorityQueue, BitSet migrados de expect class para expect fun + interface; APIs usam arrayStackOf(), arrayQueueOf(), priorityQueueOf(), bitSetOf() |
+| 2026-02-17 | BTree/BPlusTree -> MutableSearchTree | search() renomeado para contains(), insert/remove retornam Boolean, iterator() adicionado |
+| 2026-02-17 | ReadOnlyBitSet interface criada | BitSet split em ReadOnlyBitSet (leitura) + BitSet (mutavel); bitwise ops ficam em BitSet |
+| 2026-02-17 | Iterable em hash tables e multiset | OpenHashTable<K,V> extends Iterable<Pair<K,V>> com entries()/keys()/values(); ReadOnlyMultiset<T> extends Iterable<T> |
+| 2026-02-17 | 8 novos pares de interfaces ReadOnly/Mutable | Trie, BloomFilter, UnionFind, SegmentTree, FenwickTree, RadixTree, CartesianTree + ReadOnlyBitSet |
+| 2026-02-17 | ReadOnly* -> Immutable* naming migration | Kotlin stdlib pattern: Immutable* onde ha conflito com classe concreta, bare noun (Heap) onde nao ha; BitSet -> ImmutableBitSet/MutableBitSet |
 
 ---
 
@@ -79,6 +101,8 @@ Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
 - [x] KDoc pt-BR completo em RedBlackTreeImpl + 3 actuals + HashTable.kt traduzido
 - [x] Revisao seletiva: 7 classes + 6 extensoes migrados para internal (nodes, impl, abstract heap)
 - [x] expect class -> expect fun factory migration corrigida (consumidores + testes atualizados)
+- [x] Auditoria release-ready B1-B12 completa (sessao 8): Iterable wiring, Mutable/Immutable split para 17 estruturas, BTree/BPlusTree -> MutableSearchTree, hash table iteration, full 3-platform build+test pass
+- [x] Naming convention migration completa (sessao 9): ReadOnly* -> Immutable* (14 pares), ReadOnlyHeap -> Heap (bare noun), BitSet split -> ImmutableBitSet/MutableBitSet, ImmutableViews.kt + test files atualizados, full 3-platform check pass
 
 ---
 
@@ -95,4 +119,49 @@ Fase 3C (Differential Evolution, VNS, Memetic Algorithm, LNS) em planejamento.
 
 ---
 
-*Ultima atualizacao: 2026-02-17 (sessao 6).*
+*Ultima atualizacao: 2026-02-17 (sessao 9).*
+
+---
+
+## Sessao 7
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** QA hardening para `PriorityQueue` (min-heap) com foco em invariantes, boundary tests, property-based/randomized checks, envelope de complexidade por contagem de comparacoes, e interop por plataforma.
+- **Arquivos alterados:**
+  - `src/commonTest/kotlin/br/uem/din/datastructures/queue/PriorityQueueTest.kt`
+  - `src/jvmTest/kotlin/br/uem/din/datastructures/queue/PriorityQueueJvmInteropTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/queue/PriorityQueueJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/queue/PriorityQueueNativeInteropTest.kt`
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.datastructures.queue.PriorityQueueTest" --tests "br.uem.din.datastructures.queue.PriorityQueueJvmInteropTest"` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+  - `./gradlew.bat jsTest` -> **BLOCKED (erro preexistente fora do escopo):** `Trie.kt` com membros faltando `override` (`contains`, `remove`, `collections`).
+
+
+---
+
+## Sessao 8
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Planejamento QA iterativo para cobertura completa da biblioteca KMP, replicando o rigor aplicado em `PriorityQueue` para todos os pacotes/classes.
+- **Entregavel:** `docs/QA-ITERATIVE-PLAN.md` com 13 iteracoes (gate + 12 etapas), DoD, protocolo de testes (invariantes, property-based seedado, interop JVM/JS/Native, envelope de complexidade) e priorizacao por gaps.
+- **Baseline capturado:** 80 arquivos de producao (`commonMain`) e 50 arquivos de teste (`commonTest` + plataformas), com cobertura de interop dedicada atualmente concentrada em `datastructures/queue`.
+- **Observacao de bloqueio:** `jsTest` global segue bloqueado por erros preexistentes em `Trie.kt` (membros sem `override`) e foi tratado como Iteracao 0 do plano.
+
+---
+
+## Sessao 9
+
+- **Data:** 2026-02-17
+- **Nivel:** Deliberado+
+- **Resumo:** Finalizacao da naming convention migration. Completou rename de `ReadOnly*` → `Immutable*` em `ImmutableViews.kt` (import `ReadOnlyUnionFind` → `ImmutableUnionFind`, 8 pares de funcoes/value classes renomeados, BitSet → MutableBitSet). Corrigiu type references em `SkipListTest.kt` e `MultisetTest.kt`. Full 3-platform `check` passou (JVM+JS+Native, 27 tasks, 0 failures).
+- **Arquivos alterados:**
+  - `src/commonMain/kotlin/br/uem/din/datastructures/ImmutableViews.kt` — rename completo
+  - `src/commonTest/kotlin/br/uem/din/datastructures/skiplist/SkipListTest.kt` — `ReadOnlySkipList` → `ImmutableSkipList`
+  - `src/commonTest/kotlin/br/uem/din/datastructures/set/MultisetTest.kt` — `ReadOnlyMultiset` → `ImmutableMultiset`
+- **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (JVM+JS+Native, all tests pass)
+- **Status naming migration:** COMPLETA. Nenhuma referencia a `ReadOnly{DS}` como tipo permanece no codigo-fonte.
+
+

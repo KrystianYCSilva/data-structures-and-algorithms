@@ -24,7 +24,7 @@ import br.uem.din.datastructures.queue.MutableQueue
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort;
  *             Williams, J. W. J. "Algorithm 232 — Heapsort" (1964).
  */
-internal abstract class AbstractHeap<T> : MutableQueue<T> {
+internal abstract class AbstractHeap<T> : MutableQueue<T>, MutableHeap<T> {
 
     public abstract override val size: Int
     public abstract override fun peek(): T?
@@ -36,7 +36,7 @@ internal abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @param element o elemento a ser inserido.
      */
-    public abstract fun insert(element: T)
+    public abstract override fun insert(element: T)
 
     /**
      * Insere um elemento no heap (delega para [insert]).
@@ -74,7 +74,7 @@ internal abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @return o elemento removido, ou `null` se vazio.
      */
-    public abstract fun remove(): T?
+    public abstract override fun remove(): T?
 
     /**
      * Remove e retorna o elemento na posição especificada do heap.
@@ -84,7 +84,7 @@ internal abstract class AbstractHeap<T> : MutableQueue<T> {
      * @param index a posição do elemento a ser removido.
      * @return o elemento removido, ou `null` se o índice for inválido.
      */
-    public abstract fun remove(index: Int): T?
+    public abstract override fun remove(index: Int): T?
 
     /**
      * Move um elemento para baixo no heap até restaurar a propriedade heap (heapify-down).

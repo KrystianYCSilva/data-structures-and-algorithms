@@ -1,4 +1,8 @@
+@file:JvmName("MutableListExtensions")
+
 package br.uem.din.extensions
+
+import kotlin.jvm.JvmName
 
 /**
  * Troca os elementos nas posições [index1] e [index2] desta lista mutável.

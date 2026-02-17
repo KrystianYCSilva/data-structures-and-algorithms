@@ -232,6 +232,11 @@ public class CuckooHashTable<K : Any, V>(initialCapacity: Int = 16) : MutableOpe
      *
      * @return string formatada com os pares chave-valor.
      */
+    public override fun entries(): List<Pair<K, V>> =
+        collectAllEntries().map { it.key to it.value }
+
+    public override fun iterator(): Iterator<Pair<K, V>> = entries().iterator()
+
     public override fun toString(): String {
         val entries = collectAllEntries()
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }

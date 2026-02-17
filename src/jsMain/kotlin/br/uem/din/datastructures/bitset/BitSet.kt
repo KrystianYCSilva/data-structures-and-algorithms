@@ -6,14 +6,14 @@ import kotlin.math.min
 /**
  * Cria uma instância JS de BitSet.
  */
-public actual fun bitSetOf(size: Int): BitSet {
+public actual fun bitSetOf(size: Int): MutableBitSet {
     return JsBitSet(size)
 }
 
 /**
  * Implementação JS do [BitSet] usando [IntArray].
  */
-private class JsBitSet(size: Int) : BitSet {
+private class JsBitSet(size: Int) : MutableBitSet {
     private var bits = IntArray((size + 31) / 32)
 
     override fun set(index: Int) {
@@ -93,7 +93,7 @@ private class JsBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun and(other: BitSet) {
+    override fun and(other: MutableBitSet) {
         if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(bits.size, other.bits.size)
         for (i in 0 until commonWords) {
@@ -104,7 +104,7 @@ private class JsBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun or(other: BitSet) {
+    override fun or(other: MutableBitSet) {
         if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.bits.size > bits.size) {
             bits = bits.copyOf(other.bits.size)
@@ -114,7 +114,7 @@ private class JsBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun xor(other: BitSet) {
+    override fun xor(other: MutableBitSet) {
         if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.bits.size > bits.size) {
             bits = bits.copyOf(other.bits.size)
@@ -124,7 +124,7 @@ private class JsBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun andNot(other: BitSet) {
+    override fun andNot(other: MutableBitSet) {
         if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(bits.size, other.bits.size)
         for (i in 0 until commonWords) {

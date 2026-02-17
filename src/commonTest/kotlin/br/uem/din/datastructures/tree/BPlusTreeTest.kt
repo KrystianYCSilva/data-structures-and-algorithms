@@ -10,10 +10,10 @@ class BPlusTreeTest {
         tree.insert(10)
         tree.insert(20)
         tree.insert(5)
-        assertTrue(tree.search(10))
-        assertTrue(tree.search(20))
-        assertTrue(tree.search(5))
-        assertFalse(tree.search(99))
+        assertTrue(tree.contains(10))
+        assertTrue(tree.contains(20))
+        assertTrue(tree.contains(5))
+        assertFalse(tree.contains(99))
     }
 
     @Test
@@ -44,7 +44,7 @@ class BPlusTreeTest {
         tree.insert(20)
         tree.insert(5)
         tree.remove(10)
-        assertFalse(tree.search(10))
+        assertFalse(tree.contains(10))
         assertEquals(2, tree.size)
     }
 

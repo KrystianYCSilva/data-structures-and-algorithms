@@ -28,7 +28,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 18 — B-Trees;
  *             Knuth, D. E. "The Art of Computer Programming", Vol. 3, Seção 6.2.4.
  */
-public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
+public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) : MutableSearchTree<T> {
 
     init {
         require(minimumDegree >= 2) { "O grau mínimo deve ser >= 2." }
@@ -44,30 +44,39 @@ public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
     /**
      * Número de chaves armazenadas na árvore.
      */
-    public var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
-     * Busca uma chave na árvore B.
+     * Verifica se a árvore está vazia.
+     *
+     * Complexidade: O(1).
+     *
+     * @return `true` se a árvore não contiver elementos.
+     */
+    public override fun isEmpty(): Boolean = size == 0
+
+    /**
+     * Verifica se a árvore contém o elemento especificado.
      *
      * Percorre a árvore de cima para baixo, realizando busca linear nas chaves
      * de cada nó para determinar qual filho visitar.
      *
      * Complexidade: O(t · log_t(n)).
      *
-     * @param value a chave a ser procurada.
-     * @return `true` se a chave existir na árvore, `false` caso contrário.
+     * @param element o elemento a ser procurado.
+     * @return `true` se o elemento existir na árvore, `false` caso contrário.
      */
-    public fun search(value: T): Boolean = search(root, value)
+    public override fun contains(element: T): Boolean = contains(root, element)
 
-    private fun search(node: Node<T>, value: T): Boolean {
+    private fun contains(node: Node<T>, element: T): Boolean {
         var i = 0
-        while (i < node.keys.size && value > node.keys[i]) {
+        while (i < node.keys.size && element > node.keys[i]) {
             i++
         }
-        if (i < node.keys.size && value == node.keys[i]) return true
+        if (i < node.keys.size && element == node.keys[i]) return true
         if (node.leaf) return false
-        return search(node.children[i], value)
+        return contains(node.children[i], element)
     }
 
     /**
@@ -79,20 +88,23 @@ public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * Complexidade: O(t · log_t(n)).
      *
-     * @param value a chave a ser inserida.
+     * @param element o elemento a ser inserido.
+     * @return `true` se o elemento foi inserido, `false` se já existia.
      */
-    public fun insert(value: T) {
+    public override fun insert(element: T): Boolean {
+        if (contains(element)) return false
         val r = root
         if (r.keys.size == 2 * minimumDegree - 1) {
             val s = Node<T>(leaf = false)
             s.children.add(r)
             splitChild(s, 0)
             root = s
-            insertNonFull(s, value)
+            insertNonFull(s, element)
         } else {
-            insertNonFull(r, value)
+            insertNonFull(r, element)
         }
         size++
+        return true
     }
 
     /**
@@ -168,15 +180,17 @@ public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * Complexidade: O(t · log_t(n)).
      *
-     * @param value a chave a ser removida.
+     * @param element o elemento a ser removido.
+     * @return `true` se o elemento foi removido, `false` se não existia.
      */
-    public fun remove(value: T) {
-        if (!search(value)) return
-        remove(root, value)
+    public override fun remove(element: T): Boolean {
+        if (!contains(element)) return false
+        remove(root, element)
         if (root.keys.isEmpty() && !root.leaf) {
             root = root.children[0]
         }
         size--
+        return true
     }
 
     private fun remove(node: Node<T>, value: T) {
@@ -351,11 +365,16 @@ public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * @return lista com todos os elementos em ordem.
      */
-    public fun inOrder(): List<T> {
+    public override fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         inOrder(root, result)
         return result
     }
+
+    /**
+     * Retorna um iterador sobre os elementos da árvore em ordem crescente.
+     */
+    public override fun iterator(): Iterator<T> = inOrder().iterator()
 
     private fun inOrder(node: Node<T>, result: MutableList<T>) {
         for (i in node.keys.indices) {

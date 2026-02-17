@@ -118,6 +118,26 @@ public interface MutableLinkedList<T> : ImmutableLinkedList<T> {
     public fun removeLast(): T?
 
     /**
+     * Remove todos os elementos da lista.
+     *
+     * Complexidade: O(1).
+     */
+    public fun clear()
+}
+
+/**
+ * Interface mutável para lista ligada com acesso indexado.
+ *
+ * Estende [MutableLinkedList] com operações de acesso por índice: [get], [set] e [removeAt].
+ * Utilizada por implementações que suportam travessia bidirecional eficiente
+ * (e.g., lista duplamente ligada).
+ *
+ * @param T o tipo dos elementos armazenados na lista.
+ *
+ * @see MutableLinkedList
+ */
+public interface IndexedMutableLinkedList<T> : MutableLinkedList<T> {
+    /**
      * Retorna o elemento na posição especificada.
      *
      * Complexidade: O(n).
@@ -149,11 +169,4 @@ public interface MutableLinkedList<T> : ImmutableLinkedList<T> {
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
     public fun removeAt(index: Int): T
-
-    /**
-     * Remove todos os elementos da lista.
-     *
-     * Complexidade: O(1).
-     */
-    public fun clear()
 }

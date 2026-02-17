@@ -10,7 +10,7 @@ package br.uem.din.datastructures.tree
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 12 — Binary Search Trees.
  */
-public interface SearchTree<T : Comparable<T>> {
+public interface SearchTree<T : Comparable<T>> : Iterable<T> {
     /**
      * Verifica se a árvore contém o elemento especificado.
      *

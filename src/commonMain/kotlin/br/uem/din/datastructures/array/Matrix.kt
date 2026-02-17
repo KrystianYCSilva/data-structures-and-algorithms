@@ -23,7 +23,7 @@ package br.uem.din.datastructures.array
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 4 (Strassen),
  *             Cap. 25 (Floyd-Warshall).
  */
-public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: Int, col: Int) -> T) : Iterable<T> {
+public class Matrix<T>(public override val rows: Int, public override val cols: Int, init: (row: Int, col: Int) -> T) : MutableMatrix<T> {
 
     private val data: MutableList<T>
 
@@ -43,7 +43,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      *
      * @throws IndexOutOfBoundsException se os índices forem inválidos.
      */
-    public operator fun get(row: Int, col: Int): T {
+    public override operator fun get(row: Int, col: Int): T {
         checkBounds(row, col)
         return data[row * cols + col]
     }
@@ -55,7 +55,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      *
      * @throws IndexOutOfBoundsException se os índices forem inválidos.
      */
-    public operator fun set(row: Int, col: Int, value: T) {
+    public override operator fun set(row: Int, col: Int, value: T) {
         checkBounds(row, col)
         data[row * cols + col] = value
     }
@@ -69,7 +69,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      * @return lista com os elementos da linha.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    public fun getRow(row: Int): List<T> {
+    public override fun getRow(row: Int): List<T> {
         if (row < 0 || row >= rows) throw IndexOutOfBoundsException("Row: $row, Rows: $rows")
         val start = row * cols
         return data.subList(start, start + cols).toList()
@@ -84,7 +84,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      * @return lista com os elementos da coluna.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    public fun getColumn(col: Int): List<T> {
+    public override fun getColumn(col: Int): List<T> {
         if (col < 0 || col >= cols) throw IndexOutOfBoundsException("Col: $col, Cols: $cols")
         return List(rows) { row -> data[row * cols + col] }
     }
@@ -96,7 +96,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      *
      * @return nova [Matrix] com dimensões [cols] × [rows].
      */
-    public fun transpose(): Matrix<T> {
+    public override fun transpose(): Matrix<T> {
         return Matrix(cols, rows) { r, c -> this[c, r] }
     }
 
@@ -130,7 +130,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      *
      * Complexidade: O(1).
      */
-    public val size: Int get() = rows * cols
+    public override val size: Int get() = rows * cols
 
     /**
      * Verifica se a matriz contém o elemento especificado.
@@ -140,7 +140,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    public fun contains(element: T): Boolean = data.contains(element)
+    public override fun contains(element: T): Boolean = data.contains(element)
 
     /**
      * Uma matriz nunca está vazia (dimensões devem ser > 0).
@@ -158,7 +158,7 @@ public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: I
      *
      * @return lista com todos os elementos.
      */
-    public fun toList(): List<T> = data.toList()
+    public override fun toList(): List<T> = data.toList()
 
     /**
      * Retorna todos os elementos como lista de listas (cada sub-lista é uma linha).

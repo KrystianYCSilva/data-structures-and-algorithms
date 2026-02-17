@@ -32,7 +32,7 @@ public class QuadTree(
     private val boundary: Rectangle,
     private val nodeCapacity: Int = 4,
     private val maxDepth: Int = 20
-) {
+) : MutableQuadTree {
 
     /**
      * Ponto em espaço bidimensional.
@@ -97,7 +97,7 @@ public class QuadTree(
     private var depth: Int = 0
 
     /** Número total de pontos armazenados nesta quadtree e suas subárvores. */
-    public var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -112,7 +112,7 @@ public class QuadTree(
      * @param point o ponto a ser inserido.
      * @return `true` se o ponto foi inserido com sucesso, `false` se estiver fora dos limites.
      */
-    public fun insert(point: Point): Boolean {
+    public override fun insert(point: Point): Boolean {
         if (!boundary.containsPoint(point)) return false
 
         if (!divided && (points.size < nodeCapacity || depth >= maxDepth)) {
@@ -143,7 +143,7 @@ public class QuadTree(
      * @param range o retângulo que define a região de busca.
      * @return uma lista de todos os pontos encontrados dentro da região.
      */
-    public fun query(range: Rectangle): List<Point> {
+    public override fun query(range: Rectangle): List<Point> {
         val found = mutableListOf<Point>()
         query(range, found)
         return found
@@ -157,7 +157,7 @@ public class QuadTree(
      * @param point o ponto a ser procurado.
      * @return `true` se o ponto existir na quadtree.
      */
-    public fun contains(point: Point): Boolean {
+    public override fun contains(point: Point): Boolean {
         if (!boundary.containsPoint(point)) return false
 
         for (p in points) {
@@ -181,7 +181,7 @@ public class QuadTree(
      *
      * @return uma lista de todos os pontos.
      */
-    public fun allPoints(): List<Point> {
+    public override fun allPoints(): List<Point> {
         val result = mutableListOf<Point>()
         collectAll(result)
         return result

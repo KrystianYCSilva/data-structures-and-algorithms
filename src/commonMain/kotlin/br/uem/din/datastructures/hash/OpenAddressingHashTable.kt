@@ -207,6 +207,11 @@ public class OpenAddressingHashTable<K : Any, V>(
      *
      * @return string formatada com os pares chave-valor.
      */
+    public override fun entries(): List<Pair<K, V>> =
+        table.filterIsInstance<Entry.Occupied<K, V>>().map { it.key to it.value }
+
+    public override fun iterator(): Iterator<Pair<K, V>> = entries().iterator()
+
     public override fun toString(): String {
         val entries = table.filterIsInstance<Entry.Occupied<K, V>>()
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }

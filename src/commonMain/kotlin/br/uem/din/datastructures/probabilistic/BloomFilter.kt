@@ -1,6 +1,6 @@
 package br.uem.din.datastructures.probabilistic
 
-import br.uem.din.datastructures.bitset.BitSet
+import br.uem.din.datastructures.bitset.MutableBitSet
 import br.uem.din.datastructures.bitset.bitSetOf
 import kotlin.math.ln
 import kotlin.math.ceil
@@ -34,11 +34,11 @@ import kotlin.math.abs
  * Referência: Bloom, B. H. "Space/Time Trade-offs in Hash Coding with Allowable Errors" (1970);
  *             Kirsch, A. & Mitzenmacher, M. "Less Hashing, Same Performance" (2006).
  */
-public class BloomFilter(private val expectedInsertions: Int, private val falsePositiveProbability: Double = 0.01) {
+public class BloomFilter(private val expectedInsertions: Int, private val falsePositiveProbability: Double = 0.01) : MutableBloomFilter {
 
     private val bitSetSize: Int
     private val numHashFunctions: Int
-    private val bitSet: BitSet
+    private val bitSet: MutableBitSet
 
     init {
         bitSetSize = ceil((-expectedInsertions * ln(falsePositiveProbability)) / (ln(2.0).pow(2))).toInt()
@@ -53,7 +53,7 @@ public class BloomFilter(private val expectedInsertions: Int, private val falseP
      *
      * @param element a string a ser adicionada ao filtro.
      */
-    public fun add(element: String) {
+    public override fun add(element: String) {
         val hash1 = element.hashCode()
         val hash2 = hash2(element)
         
@@ -75,7 +75,7 @@ public class BloomFilter(private val expectedInsertions: Int, private val falseP
      * @param element a string a ser verificada.
      * @return `true` se o elemento possivelmente pertence ao conjunto, `false` se definitivamente não.
      */
-    public fun contains(element: String): Boolean {
+    public override fun contains(element: String): Boolean {
         val hash1 = element.hashCode()
         val hash2 = hash2(element)
         
@@ -110,12 +110,12 @@ public class BloomFilter(private val expectedInsertions: Int, private val falseP
      *
      * @return o número de bits no filtro.
      */
-    public fun size(): Int = bitSetSize
+    public override fun size(): Int = bitSetSize
 
     /**
      * Retorna o número de funções de hash utilizadas (k).
      *
      * @return a quantidade de funções de hash.
      */
-    public fun countHashFunctions(): Int = numHashFunctions
+    public override fun countHashFunctions(): Int = numHashFunctions
 }

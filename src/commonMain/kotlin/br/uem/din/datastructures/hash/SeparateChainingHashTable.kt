@@ -154,6 +154,11 @@ public class SeparateChainingHashTable<K : Any, V>(
      *
      * @return string formatada com os pares chave-valor.
      */
+    public override fun entries(): List<Pair<K, V>> =
+        buckets.filterNotNull().flatten().map { it.key to it.value }
+
+    public override fun iterator(): Iterator<Pair<K, V>> = entries().iterator()
+
     public override fun toString(): String {
         val entries = buckets.filterNotNull().flatten()
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }

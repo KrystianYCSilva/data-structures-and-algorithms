@@ -17,4 +17,5 @@ private class JsRedBlackTree<T : Comparable<T>> : MutableSearchTree<T> {
     override fun inOrder(): List<T> = impl.inOrder()
     override val size: Int get() = impl.size()
     override fun isEmpty(): Boolean = impl.isEmpty()
+    override fun iterator(): Iterator<T> = impl.iterator()
 }

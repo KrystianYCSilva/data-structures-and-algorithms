@@ -1,4 +1,8 @@
+@file:JvmName("Stacks")
+
 package br.uem.din.datastructures.stack
+
+import kotlin.jvm.JvmName
 
 /**
  * Interface somente-leitura para uma Pilha (Stack — LIFO).

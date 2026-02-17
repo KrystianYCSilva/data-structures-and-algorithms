@@ -12,7 +12,7 @@ package br.uem.din.datastructures.skiplist
  *
  * @see MutableSkipList
  */
-public interface ReadOnlySkipList<T : Comparable<T>> : Iterable<T> {
+public interface ImmutableSkipList<T : Comparable<T>> : Iterable<T> {
     /**
      * Número de elementos armazenados.
      */
@@ -44,15 +44,15 @@ public interface ReadOnlySkipList<T : Comparable<T>> : Iterable<T> {
 /**
  * Interface mutável para uma Skip List.
  *
- * Estende [ReadOnlySkipList] adicionando operações de modificação: inserção, remoção e limpeza.
+ * Estende [ImmutableSkipList] adicionando operações de modificação: inserção, remoção e limpeza.
  *
  * @param T o tipo dos elementos, deve implementar [Comparable].
  *
  * Referência: Pugh, W. "Skip Lists: A Probabilistic Alternative to Balanced Trees" (1990).
  *
- * @see ReadOnlySkipList
+ * @see ImmutableSkipList
  */
-public interface MutableSkipList<T : Comparable<T>> : ReadOnlySkipList<T> {
+public interface MutableSkipList<T : Comparable<T>> : ImmutableSkipList<T> {
     /**
      * Insere um elemento, mantendo a ordenação.
      *

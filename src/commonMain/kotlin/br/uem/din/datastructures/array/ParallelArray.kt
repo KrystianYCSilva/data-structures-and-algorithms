@@ -31,7 +31,7 @@ package br.uem.din.datastructures.array
  * Referência: Drepper, U. "What Every Programmer Should Know About Memory" (2007);
  *             padrão SoA amplamente discutido em otimização de cache para Data-Oriented Design.
  */
-public class ParallelArray(vararg columnNames: String) {
+public class ParallelArray(vararg columnNames: String) : MutableParallelArray {
 
     private val columnIndex: Map<String, Int>
     private val columns: Array<MutableList<Any?>>
@@ -39,19 +39,19 @@ public class ParallelArray(vararg columnNames: String) {
     /**
      * Número de registros (linhas) armazenados.
      */
-    public var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
      * Número de colunas definidas.
      */
-    public val columnCount: Int
+    public override val columnCount: Int
         get() = columns.size
 
     /**
      * Nomes das colunas na ordem de definição.
      */
-    public val columnNames: List<String>
+    public override val columnNames: List<String>
 
     init {
         require(columnNames.toSet().size == columnNames.size) {
@@ -72,7 +72,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @param values os valores da nova linha, na mesma ordem das colunas.
      * @throws IllegalArgumentException se o número de valores não corresponder ao de colunas.
      */
-    public fun addRow(vararg values: Any?) {
+    public override fun addRow(vararg values: Any?) {
         require(values.size == columns.size) {
             "Expected ${columns.size} values, got ${values.size}"
         }
@@ -93,7 +93,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @throws IndexOutOfBoundsException se o índice da linha for inválido.
      * @throws IllegalArgumentException se a coluna não existir.
      */
-    public fun get(row: Int, column: String): Any? {
+    public override fun get(row: Int, column: String): Any? {
         checkRow(row)
         val colIdx = requireColumn(column)
         return columns[colIdx][row]
@@ -109,7 +109,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @return o valor armazenado na célula.
      * @throws IndexOutOfBoundsException se os índices forem inválidos.
      */
-    public fun get(row: Int, colIndex: Int): Any? {
+    public override fun get(row: Int, colIndex: Int): Any? {
         checkRow(row)
         if (colIndex < 0 || colIndex >= columns.size)
             throw IndexOutOfBoundsException("Column index: $colIndex, Columns: ${columns.size}")
@@ -125,7 +125,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @return lista com todos os valores da coluna.
      * @throws IllegalArgumentException se a coluna não existir.
      */
-    public fun getColumn(column: String): List<Any?> {
+    public override fun getColumn(column: String): List<Any?> {
         val colIdx = requireColumn(column)
         return columns[colIdx].toList()
     }
@@ -139,7 +139,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @return lista com todos os valores da linha, na ordem das colunas.
      * @throws IndexOutOfBoundsException se o índice da linha for inválido.
      */
-    public fun getRow(row: Int): List<Any?> {
+    public override fun getRow(row: Int): List<Any?> {
         checkRow(row)
         return columns.map { it[row] }
     }
@@ -155,7 +155,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @throws IndexOutOfBoundsException se o índice da linha for inválido.
      * @throws IllegalArgumentException se a coluna não existir.
      */
-    public fun set(row: Int, column: String, value: Any?) {
+    public override fun set(row: Int, column: String, value: Any?) {
         checkRow(row)
         val colIdx = requireColumn(column)
         columns[colIdx][row] = value
@@ -169,7 +169,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @param row o índice da linha a ser removida (0-based).
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    public fun removeAt(row: Int) {
+    public override fun removeAt(row: Int) {
         checkRow(row)
         for (col in columns) {
             col.removeAt(row)
@@ -184,14 +184,14 @@ public class ParallelArray(vararg columnNames: String) {
      *
      * @return `true` se o array não contiver linhas.
      */
-    public fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Remove todas as linhas do array paralelo.
      *
      * Complexidade: O(k) onde k é o número de colunas.
      */
-    public fun clear() {
+    public override fun clear() {
         for (col in columns) {
             col.clear()
         }
@@ -206,7 +206,7 @@ public class ParallelArray(vararg columnNames: String) {
      * @param value o valor a ser procurado.
      * @return `true` se o valor existir em alguma célula.
      */
-    public fun contains(value: Any?): Boolean {
+    public override fun contains(value: Any?): Boolean {
         for (col in columns) {
             if (col.contains(value)) return true
         }

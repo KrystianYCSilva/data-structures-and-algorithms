@@ -10,10 +10,10 @@ class BTreeTest {
         tree.insert(10)
         tree.insert(20)
         tree.insert(5)
-        assertTrue(tree.search(10))
-        assertTrue(tree.search(20))
-        assertTrue(tree.search(5))
-        assertFalse(tree.search(99))
+        assertTrue(tree.contains(10))
+        assertTrue(tree.contains(20))
+        assertTrue(tree.contains(5))
+        assertFalse(tree.contains(99))
     }
 
     @Test
@@ -44,7 +44,7 @@ class BTreeTest {
         tree.insert(20)
         tree.insert(5)
         tree.remove(10)
-        assertFalse(tree.search(10))
+        assertFalse(tree.contains(10))
         assertEquals(2, tree.size)
     }
 
@@ -91,9 +91,9 @@ class BTreeTest {
         tree.insert(1)
         tree.insert(2)
         tree.insert(3)
-        assertTrue(tree.search(1))
-        assertTrue(tree.search(2))
-        assertTrue(tree.search(3))
+        assertTrue(tree.contains(1))
+        assertTrue(tree.contains(2))
+        assertTrue(tree.contains(3))
         assertEquals(listOf(1, 2, 3), tree.inOrder())
     }
 }

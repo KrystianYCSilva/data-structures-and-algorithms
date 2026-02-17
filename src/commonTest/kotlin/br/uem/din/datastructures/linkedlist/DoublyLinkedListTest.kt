@@ -6,7 +6,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testAddFirstAndLast() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addFirst(1)
         list.addLast(2)
         assertEquals(2, list.size)
@@ -15,7 +15,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testRemoveFirstAndLast() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addFirst(1)
         list.addLast(2)
         list.addLast(3)
@@ -27,14 +27,14 @@ class DoublyLinkedListTest {
 
     @Test
     fun testRemoveFromEmpty() {
-        val list = DoublyLinkedList<String>()
+        val list = doublyLinkedListOf<String>()
         assertNull(list.removeFirst())
         assertNull(list.removeLast())
     }
 
     @Test
     fun testGetAndSet() {
-        val list = DoublyLinkedList<String>()
+        val list = doublyLinkedListOf<String>()
         list.addLast("a")
         list.addLast("b")
         list.addLast("c")
@@ -47,7 +47,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testGetOutOfBoundsThrows() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(1)
         assertFailsWith<IndexOutOfBoundsException> { list[1] }
         assertFailsWith<IndexOutOfBoundsException> { list[-1] }
@@ -55,7 +55,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testContains() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(10)
         list.addLast(20)
         list.addLast(30)
@@ -65,7 +65,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testIndexOf() {
-        val list = DoublyLinkedList<String>()
+        val list = doublyLinkedListOf<String>()
         list.addLast("x")
         list.addLast("y")
         list.addLast("z")
@@ -76,7 +76,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testRemoveAt() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(1)
         list.addLast(2)
         list.addLast(3)
@@ -91,7 +91,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testClear() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(1)
         list.addLast(2)
         list.clear()
@@ -102,7 +102,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testToList() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(1)
         list.addLast(2)
         list.addLast(3)
@@ -111,7 +111,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testIterator() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(10)
         list.addLast(20)
         list.addLast(30)
@@ -122,7 +122,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testIterableExtensions() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         list.addLast(1)
         list.addLast(2)
         list.addLast(3)
@@ -133,7 +133,7 @@ class DoublyLinkedListTest {
 
     @Test
     fun testIsEmpty() {
-        val list = DoublyLinkedList<Int>()
+        val list = doublyLinkedListOf<Int>()
         assertTrue(list.isEmpty())
         list.addFirst(1)
         assertFalse(list.isEmpty())

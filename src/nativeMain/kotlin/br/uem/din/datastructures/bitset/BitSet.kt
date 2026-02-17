@@ -6,14 +6,14 @@ import kotlin.math.min
 /**
  * Cria uma instância Native de BitSet.
  */
-public actual fun bitSetOf(size: Int): BitSet {
+public actual fun bitSetOf(size: Int): MutableBitSet {
     return NativeBitSet(size)
 }
 
 /**
  * Implementação Native do [BitSet] usando [LongArray].
  */
-private class NativeBitSet(size: Int) : BitSet {
+private class NativeBitSet(size: Int) : MutableBitSet {
     private var words = LongArray((size + 63) / 64)
 
     override fun set(index: Int) {
@@ -91,7 +91,7 @@ private class NativeBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun and(other: BitSet) {
+    override fun and(other: MutableBitSet) {
         if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(words.size, other.words.size)
         for (i in 0 until commonWords) {
@@ -102,7 +102,7 @@ private class NativeBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun or(other: BitSet) {
+    override fun or(other: MutableBitSet) {
         if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.words.size > words.size) {
             words = words.copyOf(other.words.size)
@@ -112,7 +112,7 @@ private class NativeBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun xor(other: BitSet) {
+    override fun xor(other: MutableBitSet) {
         if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.words.size > words.size) {
             words = words.copyOf(other.words.size)
@@ -122,7 +122,7 @@ private class NativeBitSet(size: Int) : BitSet {
         }
     }
 
-    override fun andNot(other: BitSet) {
+    override fun andNot(other: MutableBitSet) {
         if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(words.size, other.words.size)
         for (i in 0 until commonWords) {

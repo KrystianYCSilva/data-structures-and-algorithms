@@ -155,7 +155,7 @@ class MultisetTest {
     fun testReadOnlyMultisetView() {
         val ms: MutableMultiset<String> = Multiset()
         ms.add("x", 2)
-        val readOnly: ReadOnlyMultiset<String> = ms
+        val readOnly: ImmutableMultiset<String> = ms
         assertEquals(2, readOnly.size)
         assertEquals(2, readOnly.count("x"))
         assertTrue(readOnly.contains("x"))

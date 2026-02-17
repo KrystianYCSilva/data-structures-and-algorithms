@@ -253,6 +253,11 @@ internal class RedBlackTreeImpl<T : Comparable<T>> {
     }
 
     /**
+     * Retorna um iterador sobre os elementos da árvore em ordem crescente.
+     */
+    public fun iterator(): Iterator<T> = inOrder().iterator()
+
+    /**
      * Retorna o número de elementos armazenados na árvore.
      *
      * Complexidade: O(1).

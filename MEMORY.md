@@ -37,29 +37,43 @@ Protocolo:
 
 ## Features Implementadas
 
-### Fase 1 — Estruturas de Dados (36/36)
+### Fase 1 — Estruturas de Dados (36/36) - COMPLETO
 - **Data:** 2025-02-12
-- **Arquivos:** src/commonMain/kotlin/br/uem/din/datastructures/ (stack, queue, heap, tree, graph, array, linkedlist, hash, spatial, probabilistic, skiplist, unionfind, bitset, set)
-- **Testes:** 308 testes (Fases 1A-1D)
-- **Notas:** Inclui lineares (5), associativas/arvores (5), balanceadas (4), e 22 estruturas adicionais KMP. expect/actual para ArrayStack, BitSet.
+- **Arquivos:** `src/commonMain/kotlin/br/uem/din/datastructures/`
+- **Categorias:**
+  - **Lineares:** Stack (Array/Linked), Queue (Array/Linked/Circular/Deque), LinkedList (Singly/Doubly/Circular/Unrolled), DynamicArray
+  - **Arvores:** BST, AVL, RB, Splay, Treap, Cartesian, B-Tree, B+Tree, Radix, Suffix, Trie
+  - **Range Query:** SegmentTree, FenwickTree
+  - **Heaps:** Binary (Min/Max), Binomial, Fibonacci, PriorityQueue
+  - **Grafos:** Graph (AdjList/AdjMatrix), DAG, Vertex, Edge
+  - **Spatial:** KDTree, QuadTree
+  - **Probabilisticas:** BloomFilter, SkipList
+  - **Outros:** BitSet, UnionFind, Set, Multiset, ParallelArray, Matrix
+- **Testes:** Cobertura parcial em `src/commonTest/kotlin/br/uem/din/datastructures/`
 
-### Fase 2 — Algoritmos Fundamentais (~45)
-- **Data:** ~2025 (Waves 1-3)
-- **Arquivos:** src/commonMain/kotlin/br/uem/din/algorithms/ (sorting, graph, searching, string, dp, greedy, numerical, divideconquer, backtracking)
-- **Testes:** 199 testes, 0 failures
-- **Notas:** 10 sorting, 6 searching, 5 graph, 4 string matching, 8 DP, 3 greedy, 5 numerical, 5 D&C, 4 backtracking
+### Fase 2 — Algoritmos Fundamentais (~15%) - EM ANDAMENTO
+- **Data:** 2026-02-17 (Status Atualizado)
+- **Arquivos:** `src/commonMain/kotlin/br/uem/din/algorithms/`
+- **Implementados:**
+  - **Sorting:** BubbleSort, InsertionSort
+  - **Graph:** BFS, DFS, Dijkstra, A*
+- **Planejados (Faltantes):**
+  - Sorting: Selection, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
+  - Searching: Linear, Binary, Interpolation, Ternary, Jump, Exponential
+  - Graph: Bellman-Ford, Floyd-Warshall, Kruskal, Prim
+  - String Matching: Naive, KMP, Rabin-Karp, Boyer-Moore
+  - DP: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
+  - Greedy: Activity Selection, Huffman Coding, Fractional Knapsack
+  - Numerical: GCD, Extended GCD, Fast Exponentiation, Sieve, Primality
+  - D&C: Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select
+  - Backtracking: N-Queens, Subset Sum, Permutations, Graph Coloring
 
-### Fase 3A — Heuristicas Classicas (4/4)
-- **Data:** 2026-02-13
-- **Arquivos:** src/commonMain/kotlin/br/uem/din/algorithms/optimization/ (HillClimbing, SimulatedAnnealing, TabuSearch, GeneticAlgorithm + infraestrutura)
-- **Testes:** 91 testes (inclui 32 de infraestrutura/benchmarks)
-- **Notas:** OptSolution/OptResult types, RNG utils, TSP benchmarks (5/10/20 cities), Continuous benchmarks (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel)
-
-### Fase 3B — Heuristicas Avancadas (4/4)
-- **Data:** 2026-02-13
-- **Arquivos:** ILS, GRASP, PSO, ACO
-- **Testes:** 41 testes
-- **Notas:** Completa population-based e hybrid approaches
+### Fase 3 — Heuristicas e Otimizacao (0%) - PLANEJADO
+- **Status:** Nenhuma implementacao encontrada no codebase atual.
+- **Planejados:**
+  - Classicas: Hill Climbing, Simulated Annealing, Tabu Search, Genetic Algorithm
+  - Avancadas: ILS, GRASP, PSO, ACO
+  - Benchmarks: TSP, Continuous Functions (Sphere, Rastrigin, etc.)
 
 ---
 
@@ -75,15 +89,16 @@ Protocolo:
 
 | Data | Problema | Solucao |
 |------|----------|---------|
+| 2026-02-17 | Discrepancia Documentacao vs Codebase | Atualizacao de MEMORY.md e .context/ para refletir estado real (DS completa, Algos inicial, Heuristicas pendente) |
 
 ---
 
-## Metricas Acumuladas
+## Metricas Atuais
 
-- **LOC total:** ~13.500+ (estimado: 2.660 + 4.410 + 1.507 + 6.000 + 4.500 + 2.500)
-- **Testes:** ~539+ (132 + 117 + 59 + 199 + 91 + 41, parcial — nem todas DS tem testes em commonTest)
+- **LOC total:** ~13.500+ (DS majoritariamente)
+- **Testes:** Focados em Estruturas de Dados (`datastructures/`)
 - **Cobertura:** nao medida formalmente
 
 ---
 
-*Ultima atualizacao: 2026-02-16.*
+*Ultima atualizacao: 2026-02-17.*

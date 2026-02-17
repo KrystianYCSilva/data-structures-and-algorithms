@@ -128,6 +128,20 @@ public class Multiset<T> : MutableMultiset<T> {
     }
 
     /**
+     * Retorna um iterador sobre todos os elementos do multiset, incluindo duplicatas.
+     *
+     * A ordem de iteração corresponde à ordem de [distinctElements], repetindo cada
+     * elemento de acordo com sua multiplicidade.
+     *
+     * Complexidade: O(n), onde n é o [size] total.
+     */
+    public override fun iterator(): Iterator<T> = iterator {
+        for ((element, count) in counts) {
+            repeat(count) { yield(element) }
+        }
+    }
+
+    /**
      * Retorna representação textual do multiset no formato `{elemento×contagem, ...}`.
      *
      * @return string formatada com os elementos e suas multiplicidades.

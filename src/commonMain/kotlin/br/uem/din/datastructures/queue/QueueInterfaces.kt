@@ -1,4 +1,8 @@
+@file:JvmName("Queues")
+
 package br.uem.din.datastructures.queue
+
+import kotlin.jvm.JvmName
 
 /**
  * Interface somente-leitura para uma Fila (Queue — FIFO).

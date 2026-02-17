@@ -16,26 +16,31 @@ description: Domain glossary and core concepts specific to this algorithms libra
 - **Probabilisticas**: BloomFilter, SkipList
 - **Outros**: BitSet, UnionFind, Multiset, ParallelArray, Matrix
 
-## Algoritmos (~45 implementados)
+## Algoritmos
 
-- **Sorting** (10): Bubble, Selection, Insertion, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
-- **Searching** (6): Linear, Binary, Interpolation, Ternary, Jump, Exponential
-- **Graph** (5+): Dijkstra, Bellman-Ford, Floyd-Warshall, Kruskal, Prim, BFS, DFS, A*
-- **String Matching** (4): Naive, KMP, Rabin-Karp, Boyer-Moore
-- **Dynamic Programming** (8): Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
-- **Greedy** (3): Activity Selection, Huffman Coding, Fractional Knapsack
-- **Numerical** (5): GCD, Extended GCD, Fast Exponentiation, Sieve of Eratosthenes, Primality Test
-- **Divide & Conquer** (5): Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select
-- **Backtracking** (4): N-Queens, Subset Sum, Permutations, Graph Coloring
+### Implementados
+- **Sorting**: Bubble Sort, Insertion Sort
+- **Graph**: BFS, DFS, Dijkstra, A*
 
-## Heuristicas e Meta-Heuristicas (8 implementadas)
+### Planejados
+- **Sorting**: Selection, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
+- **Searching**: Linear, Binary, Interpolation, Ternary, Jump, Exponential
+- **Graph**: Bellman-Ford, Floyd-Warshall, Kruskal, Prim
+- **String Matching**: Naive, KMP, Rabin-Karp, Boyer-Moore
+- **Dynamic Programming**: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
+- **Greedy**: Activity Selection, Huffman Coding, Fractional Knapsack
+- **Numerical**: GCD, Extended GCD, Fast Exponentiation, Sieve of Eratosthenes, Primality Test
+- **Divide & Conquer**: Strassen, Closest Pair, Karatsuba, Max Subarray, Quick Select
+- **Backtracking**: N-Queens, Subset Sum, Permutations, Graph Coloring
+
+## Heuristicas e Meta-Heuristicas (Planejadas)
 
 - **Single-Solution**: Hill Climbing, Simulated Annealing, Tabu Search, ILS (Iterated Local Search)
 - **Population-Based**: Genetic Algorithm, PSO (Particle Swarm Optimization), ACO (Ant Colony Optimization)
 - **Hybrid**: GRASP (Greedy Randomized Adaptive Search Procedure)
 - **Planejadas (3C)**: Differential Evolution, VNS, Memetic Algorithm, LNS
 
-## Tipos de Infraestrutura de Otimizacao
+## Tipos de Infraestrutura de Otimizacao (Planejados)
 
 - **OptSolution**: Representacao de uma solucao candidata
 - **OptResult**: Resultado de execucao de uma heurisitca (solucao + metricas)

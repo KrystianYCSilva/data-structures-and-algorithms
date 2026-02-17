@@ -13,7 +13,7 @@ package br.uem.din.datastructures.hash
  *
  * @see MutableOpenHashTable
  */
-public interface OpenHashTable<K : Any, V> {
+public interface OpenHashTable<K : Any, V> : Iterable<Pair<K, V>> {
     /**
      * Número de pares chave-valor armazenados na tabela.
      */
@@ -41,6 +41,27 @@ public interface OpenHashTable<K : Any, V> {
      * @return `true` se existir, `false` caso contrário.
      */
     public fun contains(key: K): Boolean
+
+    /**
+     * Retorna todos os pares chave-valor armazenados na tabela.
+     *
+     * @return lista de pares (chave, valor).
+     */
+    public fun entries(): List<Pair<K, V>>
+
+    /**
+     * Retorna todas as chaves armazenadas na tabela.
+     *
+     * @return lista de chaves.
+     */
+    public fun keys(): List<K> = entries().map { it.first }
+
+    /**
+     * Retorna todos os valores armazenados na tabela.
+     *
+     * @return lista de valores.
+     */
+    public fun values(): List<V> = entries().map { it.second }
 }
 
 /**

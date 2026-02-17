@@ -181,6 +181,11 @@ public class Treap<T : Comparable<T>> : MutableSearchTree<T> {
         return result
     }
 
+    /**
+     * Retorna um iterador sobre os elementos da Treap em ordem crescente.
+     */
+    public override fun iterator(): Iterator<T> = inOrder().iterator()
+
     private fun inOrder(node: Node<T>?, result: MutableList<T>) {
         node ?: return
         inOrder(node.left, result)

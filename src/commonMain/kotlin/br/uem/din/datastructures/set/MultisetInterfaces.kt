@@ -12,7 +12,7 @@ package br.uem.din.datastructures.set
  *
  * @see MutableMultiset
  */
-public interface ReadOnlyMultiset<T> {
+public interface ImmutableMultiset<T> : Iterable<T> {
     /**
      * Número total de elementos, incluindo duplicatas.
      */
@@ -57,15 +57,15 @@ public interface ReadOnlyMultiset<T> {
 /**
  * Interface mutável para um Multiset (Bag).
  *
- * Estende [ReadOnlyMultiset] adicionando operações de modificação: adição, remoção e limpeza.
+ * Estende [ImmutableMultiset] adicionando operações de modificação: adição, remoção e limpeza.
  *
  * @param T o tipo dos elementos armazenados.
  *
  * Referência: Blizard, W. D. "Multiset Theory" (1989), Notre Dame Journal of Formal Logic, 30(1).
  *
- * @see ReadOnlyMultiset
+ * @see ImmutableMultiset
  */
-public interface MutableMultiset<T> : ReadOnlyMultiset<T> {
+public interface MutableMultiset<T> : ImmutableMultiset<T> {
     /**
      * Adiciona uma ou mais ocorrências de um elemento.
      *

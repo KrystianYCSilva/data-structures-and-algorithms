@@ -25,7 +25,7 @@ package br.uem.din.datastructures.unionfind
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 21 — Data Structures for Disjoint Sets.
  */
-public class UnionFind(public val size: Int) {
+public class UnionFind(public override val size: Int) : MutableUnionFind {
     private val parent = IntArray(size) { it }
     private val rank = IntArray(size) { 0 }
     private var count = size
@@ -33,7 +33,7 @@ public class UnionFind(public val size: Int) {
     /**
      * Retorna o número de conjuntos disjuntos atualmente mantidos.
      */
-    public val numberOfSets: Int
+    public override val numberOfSets: Int
         get() = count
 
     /**
@@ -46,7 +46,7 @@ public class UnionFind(public val size: Int) {
      * @return o índice do representante do conjunto.
      * @throws IllegalArgumentException se [i] estiver fora dos limites.
      */
-    public fun find(i: Int): Int {
+    public override fun find(i: Int): Int {
         if (i < 0 || i >= size) throw IllegalArgumentException("Index out of bounds: $i")
         if (parent[i] != i) {
             parent[i] = find(parent[i])
@@ -65,7 +65,7 @@ public class UnionFind(public val size: Int) {
      * @param j o índice do segundo elemento.
      * @throws IllegalArgumentException se [i] ou [j] estiverem fora dos limites.
      */
-    public fun union(i: Int, j: Int) {
+    public override fun union(i: Int, j: Int) {
         val rootI = find(i)
         val rootJ = find(j)
 
@@ -90,7 +90,7 @@ public class UnionFind(public val size: Int) {
      * @return `true` se ambos estão no mesmo conjunto, `false` caso contrário.
      * @throws IllegalArgumentException se [i] ou [j] estiverem fora dos limites.
      */
-    public fun connected(i: Int, j: Int): Boolean {
+    public override fun connected(i: Int, j: Int): Boolean {
         return find(i) == find(j)
     }
 }

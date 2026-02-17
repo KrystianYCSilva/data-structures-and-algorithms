@@ -150,7 +150,7 @@ class SkipListTest {
         sl.insert(5)
         sl.insert(3)
         sl.insert(7)
-        val readOnly: ReadOnlySkipList<Int> = sl
+        val readOnly: ImmutableSkipList<Int> = sl
         assertEquals(3, readOnly.size)
         assertTrue(readOnly.contains(5))
         assertEquals(listOf(3, 5, 7), readOnly.toList())

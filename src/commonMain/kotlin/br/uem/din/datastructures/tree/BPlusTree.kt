@@ -28,7 +28,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 18;
  *             Ramakrishnan, R. & Gehrke, J. "Database Management Systems", Cap. 10.
  */
-public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
+public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) : MutableSearchTree<T> {
 
     init {
         require(order >= 3) { "A ordem deve ser >= 3." }
@@ -51,23 +51,32 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
     /**
      * Número de chaves armazenadas na árvore.
      */
-    public var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
-     * Busca uma chave na árvore B+.
+     * Verifica se a árvore está vazia.
+     *
+     * Complexidade: O(1).
+     *
+     * @return `true` se a árvore não contiver elementos.
+     */
+    public override fun isEmpty(): Boolean = size == 0
+
+    /**
+     * Verifica se a árvore contém o elemento especificado.
      *
      * Navega pelos nós internos até encontrar a folha apropriada e verifica
-     * se a chave está presente.
+     * se o elemento está presente.
      *
      * Complexidade: O(log_M(n)).
      *
-     * @param value a chave a ser procurada.
-     * @return `true` se a chave existir na árvore, `false` caso contrário.
+     * @param element o elemento a ser procurado.
+     * @return `true` se o elemento existir na árvore, `false` caso contrário.
      */
-    public fun search(value: T): Boolean {
-        val leaf = findLeaf(root, value)
-        return leaf.keys.contains(value)
+    public override fun contains(element: T): Boolean {
+        val leaf = findLeaf(root, element)
+        return leaf.keys.contains(element)
     }
 
     /**
@@ -104,10 +113,12 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * Complexidade: O(log_M(n)).
      *
-     * @param value a chave a ser inserida.
+     * @param element o elemento a ser inserido.
+     * @return `true` se o elemento foi inserido, `false` se já existia.
      */
-    public fun insert(value: T) {
-        val result = insert(root, value)
+    public override fun insert(element: T): Boolean {
+        if (contains(element)) return false
+        val result = insertInternal(root, element)
         if (result != null) {
             val newRoot = InternalNode<T>()
             newRoot.keys.add(result.first)
@@ -116,6 +127,7 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
             root = newRoot
         }
         size++
+        return true
     }
 
     /**
@@ -126,13 +138,9 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      * @param value a chave a ser inserida.
      * @return par (chave, novo nó) em caso de split, ou `null`.
      */
-    private fun insert(node: BPlusNode<T>, value: T): Pair<T, BPlusNode<T>>? {
+    private fun insertInternal(node: BPlusNode<T>, value: T): Pair<T, BPlusNode<T>>? {
         if (node is LeafNode<T>) {
             val pos = node.keys.indexOfFirst { it >= value }
-            if (pos >= 0 && pos < node.keys.size && node.keys[pos] == value) {
-                size--
-                return null
-            }
             if (pos < 0) node.keys.add(value) else node.keys.add(pos, value)
             return if (node.keys.size >= order) splitLeaf(node) else null
         }
@@ -144,7 +152,7 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
                 break
             }
         }
-        val result = insert(internal.children[childIndex], value)
+        val result = insertInternal(internal.children[childIndex], value)
         if (result != null) {
             internal.keys.add(childIndex, result.first)
             internal.children.add(childIndex + 1, result.second)
@@ -211,11 +219,12 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * Complexidade: O(log_M(n)).
      *
-     * @param value a chave a ser removida.
+     * @param element o elemento a ser removido.
+     * @return `true` se o elemento foi removido, `false` se não existia.
      */
-    public fun remove(value: T) {
-        if (!search(value)) return
-        remove(root, value, null, -1)
+    public override fun remove(element: T): Boolean {
+        if (!contains(element)) return false
+        removeInternal(root, element, null, -1)
         if (root is InternalNode<T>) {
             val internal = root as InternalNode<T>
             if (internal.keys.isEmpty()) {
@@ -223,9 +232,10 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
             }
         }
         size--
+        return true
     }
 
-    private fun remove(node: BPlusNode<T>, value: T, parent: InternalNode<T>?, parentIndex: Int) {
+    private fun removeInternal(node: BPlusNode<T>, value: T, parent: InternalNode<T>?, parentIndex: Int) {
         if (node is LeafNode<T>) {
             node.keys.remove(value)
             if (parent != null && node.keys.size < minLeafKeys()) {
@@ -241,7 +251,7 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
                 break
             }
         }
-        remove(internal.children[childIndex], value, internal, childIndex)
+        removeInternal(internal.children[childIndex], value, internal, childIndex)
         if (parent != null && internal.keys.size < minInternalKeys()) {
             rebalanceInternal(parent, parentIndex)
         }
@@ -360,7 +370,7 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * @return lista com todos os elementos em ordem.
      */
-    public fun inOrder(): List<T> {
+    public override fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         var leaf = findLeftmostLeaf(root)
         while (leaf != null) {
@@ -369,6 +379,11 @@ public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
         }
         return result
     }
+
+    /**
+     * Retorna um iterador sobre os elementos da árvore em ordem crescente.
+     */
+    public override fun iterator(): Iterator<T> = inOrder().iterator()
 
     private fun findLeftmostLeaf(node: BPlusNode<T>): LeafNode<T>? {
         var current = node

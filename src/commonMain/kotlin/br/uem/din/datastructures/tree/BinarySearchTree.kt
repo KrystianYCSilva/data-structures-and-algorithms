@@ -144,6 +144,11 @@ public class BinarySearchTree<T : Comparable<T>> : MutableSearchTree<T> {
         root?.traverseInOrder { result.add(it) }
         return result
     }
+
+    /**
+     * Retorna um iterador sobre os elementos da árvore em ordem crescente.
+     */
+    public override fun iterator(): Iterator<T> = inOrder().iterator()
 }
 
 /**
