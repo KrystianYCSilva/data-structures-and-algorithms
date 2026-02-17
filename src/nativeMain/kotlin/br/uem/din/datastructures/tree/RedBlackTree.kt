@@ -1,10 +1,20 @@
 package br.uem.din.datastructures.tree
 
-actual class RedBlackTree<T : Comparable<T>> {
+/**
+ * Implementação Native (mingwX64) da Árvore Rubro-Negra.
+ *
+ * Delega todas as operações para [RedBlackTreeImpl], implementação
+ * manual CLRS em Kotlin puro.
+ */
+public actual fun <T : Comparable<T>> redBlackTreeOf(): MutableSearchTree<T> = NativeRedBlackTree()
+
+private class NativeRedBlackTree<T : Comparable<T>> : MutableSearchTree<T> {
     private val impl = RedBlackTreeImpl<T>()
 
-    actual fun insert(value: T): Boolean = impl.insert(value)
-    actual fun contains(value: T): Boolean = impl.contains(value)
-    actual fun size(): Int = impl.size()
-    actual fun isEmpty(): Boolean = impl.isEmpty()
+    override fun insert(element: T): Boolean = impl.insert(element)
+    override fun remove(element: T): Boolean = impl.remove(element)
+    override fun contains(element: T): Boolean = impl.contains(element)
+    override fun inOrder(): List<T> = impl.inOrder()
+    override val size: Int get() = impl.size()
+    override fun isEmpty(): Boolean = impl.isEmpty()
 }

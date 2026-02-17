@@ -10,16 +10,16 @@ package br.uem.din.datastructures.linkedlist
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.2 — Linked Lists.
  */
-actual class DoublyLinkedList<T> : MutableLinkedList<T> {
+public actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private class Node<T>(var value: T, var prev: Node<T>? = null, var next: Node<T>? = null)
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
     private var _size = 0
 
-    actual override val size: Int get() = _size
+    public actual override val size: Int get() = _size
 
-    actual override fun addFirst(element: T) {
+    public actual override fun addFirst(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -32,7 +32,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         _size++
     }
 
-    actual override fun addLast(element: T) {
+    public actual override fun addLast(element: T) {
         val newNode = Node(element)
         if (isEmpty()) {
             head = newNode
@@ -45,7 +45,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         _size++
     }
 
-    actual override fun removeFirst(): T? {
+    public actual override fun removeFirst(): T? {
         if (isEmpty()) return null
         val value = head!!.value
         if (head == tail) {
@@ -59,7 +59,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return value
     }
 
-    actual override fun removeLast(): T? {
+    public actual override fun removeLast(): T? {
         if (isEmpty()) return null
         val value = tail!!.value
         if (head == tail) {
@@ -73,22 +73,22 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return value
     }
 
-    actual operator fun get(index: Int): T {
+    public actual operator fun get(index: Int): T {
         return nodeAt(index).value
     }
 
-    actual operator fun set(index: Int, element: T) {
+    public actual operator fun set(index: Int, element: T) {
         nodeAt(index).value = element
     }
 
-    actual override fun contains(element: T): Boolean {
+    public actual override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
         return false
     }
 
-    actual override fun indexOf(element: T): Int {
+    public actual override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -97,7 +97,7 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return -1
     }
 
-    actual fun removeAt(index: Int): T {
+    public actual fun removeAt(index: Int): T {
         val node = nodeAt(index)
         when (node) {
             head -> {
@@ -118,22 +118,22 @@ actual class DoublyLinkedList<T> : MutableLinkedList<T> {
         return node.value
     }
 
-    actual override fun clear() {
+    public actual override fun clear() {
         head = null
         tail = null
         _size = 0
     }
 
-    actual override fun isEmpty(): Boolean = _size == 0
+    public actual override fun isEmpty(): Boolean = _size == 0
 
-    actual override fun toList(): List<T> = iterator().asSequence().toList()
+    public actual override fun toList(): List<T> = iterator().asSequence().toList()
 
-    actual override fun toString(): String {
+    public actual override fun toString(): String {
         if (isEmpty()) return "[]"
         return joinToString(prefix = "[", postfix = "]")
     }
 
-    actual override fun iterator(): Iterator<T> = object : Iterator<T> {
+    public actual override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var current = head
         override fun hasNext(): Boolean = current != null
         override fun next(): T {

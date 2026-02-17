@@ -20,7 +20,7 @@ package br.uem.din.algorithms.sorting
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 2.1 — Insertion Sort;
  *             Knuth, D. E. "The Art of Computer Programming", Vol. 3, Sec. 5.2.1 — Sorting by Insertion.
  */
-fun <T : Comparable<T>> insertionSort(list: MutableList<T>) {
+public fun <T : Comparable<T>> insertionSort(list: MutableList<T>) {
     for (i in 1 until list.size) {
         val key = list[i]
         var j = i - 1

@@ -3,7 +3,7 @@ package br.uem.din.algorithms.graph
 import br.uem.din.datastructures.graph.Graph
 import br.uem.din.datastructures.graph.Vertex
 import br.uem.din.datastructures.queue.MutableQueue
-import br.uem.din.datastructures.queue.ArrayQueue
+import br.uem.din.datastructures.queue.arrayQueueOf
 
 /**
  * Busca em largura (Breadth-First Search — BFS).
@@ -19,7 +19,7 @@ import br.uem.din.datastructures.queue.ArrayQueue
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.2 — Breadth-First Search.
  */
-class BreadthFirstSearch<T> {
+public class BreadthFirstSearch<T> {
 
     /**
      * Executa a busca em largura a partir do vértice [source].
@@ -32,8 +32,8 @@ class BreadthFirstSearch<T> {
      * @param source o vértice de origem da busca.
      * @return lista de vértices na ordem de visitação (BFS order).
      */
-    fun search(graph: Graph<T>, source: Vertex<T>): ArrayList<Vertex<T>> {
-        val queue: MutableQueue<Vertex<T>> = ArrayQueue()
+    public fun search(graph: Graph<T>, source: Vertex<T>): ArrayList<Vertex<T>> {
+        val queue: MutableQueue<Vertex<T>> = arrayQueueOf()
         val enqueued = mutableSetOf<Vertex<T>>()
         val visited = ArrayList<Vertex<T>>()
 

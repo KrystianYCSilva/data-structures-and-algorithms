@@ -1,9 +1,9 @@
 package br.uem.din.datastructures.stack
 
 /**
- * Implementação de [MutableStack] baseada em array, com delegação a plataformas nativas
- * via `expect`/`actual`.
+ * Cria uma nova instância de Pilha baseada em Array (Array Stack).
  *
+ * Implementação:
  * - **JVM**: delega a [java.util.ArrayDeque]
  * - **JS/Native**: utiliza [ArrayList] como armazenamento interno
  *
@@ -22,14 +22,4 @@ package br.uem.din.datastructures.stack
  *
  * @see LinkedStack
  */
-expect class ArrayStack<T>() : MutableStack<T> {
-    override fun push(element: T): T
-    override fun pop(): T?
-    override fun peek(): T?
-    override val size: Int
-    override fun isEmpty(): Boolean
-    override fun contains(element: T): Boolean
-    override fun clear()
-    override fun iterator(): Iterator<T>
-    override fun toString(): String
-}
+public expect fun <T> arrayStackOf(): MutableStack<T>

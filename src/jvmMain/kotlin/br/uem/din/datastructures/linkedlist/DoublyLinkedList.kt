@@ -13,50 +13,50 @@ import java.util.LinkedList
  *
  * Referência: java.util.LinkedList — JDK (implementação baseada em doubly-linked list com sentinel).
  */
-actual class DoublyLinkedList<T> : MutableLinkedList<T> {
+public actual class DoublyLinkedList<T> : MutableLinkedList<T> {
     private val list = LinkedList<T>()
 
-    actual override val size: Int get() = list.size
+    public actual override val size: Int get() = list.size
 
-    actual override fun addFirst(element: T) {
+    public actual override fun addFirst(element: T) {
         list.addFirst(element)
     }
 
-    actual override fun addLast(element: T) {
+    public actual override fun addLast(element: T) {
         list.addLast(element)
     }
 
-    actual override fun removeFirst(): T? {
+    public actual override fun removeFirst(): T? {
         if (list.isEmpty()) return null
         return list.removeFirst()
     }
 
-    actual override fun removeLast(): T? {
+    public actual override fun removeLast(): T? {
         if (list.isEmpty()) return null
         return list.removeLast()
     }
 
-    actual operator fun get(index: Int): T = list[index]
+    public actual operator fun get(index: Int): T = list[index]
 
-    actual operator fun set(index: Int, element: T) {
+    public actual operator fun set(index: Int, element: T) {
         list[index] = element
     }
 
-    actual override fun contains(element: T): Boolean = list.contains(element)
+    public actual override fun contains(element: T): Boolean = list.contains(element)
 
-    actual override fun indexOf(element: T): Int = list.indexOf(element)
+    public actual override fun indexOf(element: T): Int = list.indexOf(element)
 
-    actual fun removeAt(index: Int): T = list.removeAt(index)
+    public actual fun removeAt(index: Int): T = list.removeAt(index)
 
-    actual override fun clear() {
+    public actual override fun clear() {
         list.clear()
     }
 
-    actual override fun isEmpty(): Boolean = list.isEmpty()
+    public actual override fun isEmpty(): Boolean = list.isEmpty()
 
-    actual override fun toList(): List<T> = list.toList()
+    public actual override fun toList(): List<T> = list.toList()
 
-    actual override fun toString(): String = list.toString()
+    public actual override fun toString(): String = list.toString()
 
-    actual override fun iterator(): Iterator<T> = list.iterator()
+    public actual override fun iterator(): Iterator<T> = list.iterator()
 }

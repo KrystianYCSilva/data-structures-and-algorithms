@@ -25,11 +25,11 @@ package br.uem.din.datastructures.hash
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 11 — Hash Tables (Open Addressing).
  */
-class OpenAddressingHashTable<K : Any, V>(
+public class OpenAddressingHashTable<K : Any, V>(
     initialCapacity: Int = 16,
     private val maxLoadFactor: Double = 0.7,
     private val probingStrategy: ProbingStrategy = ProbingStrategy.LINEAR
-) {
+) : MutableOpenHashTable<K, V> {
 
     /**
      * Estratégias de sondagem disponíveis para resolução de colisões.
@@ -40,7 +40,7 @@ class OpenAddressingHashTable<K : Any, V>(
      *
      * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 11.4.
      */
-    enum class ProbingStrategy {
+    public enum class ProbingStrategy {
         LINEAR,
         QUADRATIC,
         DOUBLE_HASHING
@@ -51,13 +51,13 @@ class OpenAddressingHashTable<K : Any, V>(
         class Tombstone<K, V> : Entry<K, V>()
     }
 
-    private var capacity = initialCapacity.coerceAtLeast(4)
+    private var capacity: Int = initialCapacity.coerceAtLeast(4)
     private var table: Array<Entry<K, V>?> = arrayOfNulls(capacity)
 
     /**
      * Número de pares chave-valor armazenados na tabela.
      */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -71,7 +71,7 @@ class OpenAddressingHashTable<K : Any, V>(
      * @param key a chave a ser inserida ou atualizada.
      * @param value o valor associado à chave.
      */
-    fun put(key: K, value: V) {
+    public override fun put(key: K, value: V) {
         if ((size + 1).toDouble() / capacity > maxLoadFactor) {
             resize(capacity * 2)
         }
@@ -110,7 +110,7 @@ class OpenAddressingHashTable<K : Any, V>(
      * @param key a chave a ser procurada.
      * @return o valor associado à chave, ou `null` se a chave não existir.
      */
-    fun get(key: K): V? {
+    public override fun get(key: K): V? {
         for (i in 0 until capacity) {
             val index = probe(key, i)
             when (val entry = table[index]) {
@@ -135,7 +135,7 @@ class OpenAddressingHashTable<K : Any, V>(
      * @param key a chave a ser removida.
      * @return o valor removido, ou `null` se a chave não existir.
      */
-    fun remove(key: K): V? {
+    public override fun remove(key: K): V? {
         for (i in 0 until capacity) {
             val index = probe(key, i)
             when (val entry = table[index]) {
@@ -161,7 +161,7 @@ class OpenAddressingHashTable<K : Any, V>(
      * @param key a chave a ser verificada.
      * @return `true` se a chave existir na tabela, `false` caso contrário.
      */
-    fun contains(key: K): Boolean = get(key) != null
+    public override fun contains(key: K): Boolean = get(key) != null
 
     /**
      * Calcula o índice de sondagem para a iteração `i` da chave `key`,
@@ -207,7 +207,7 @@ class OpenAddressingHashTable<K : Any, V>(
      *
      * @return string formatada com os pares chave-valor.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         val entries = table.filterIsInstance<Entry.Occupied<K, V>>()
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }
     }

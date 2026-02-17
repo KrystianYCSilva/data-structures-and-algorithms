@@ -5,8 +5,8 @@ import kotlin.test.*
 class ArrayQueueTest {
 
     @Test
-    fun testEnqueueDequeue() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueEnqueueDequeue() {
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         assertEquals(2, queue.size)
@@ -18,15 +18,15 @@ class ArrayQueueTest {
     }
 
     @Test
-    fun testDequeueEmpty() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueDequeueEmpty() {
+        val queue = arrayQueueOf<Int>()
         assertNull(queue.dequeue())
         assertNull(queue.peek())
     }
 
     @Test
-    fun testContains() {
-        val queue = ArrayQueue<String>()
+    fun testArrayQueueContains() {
+        val queue = arrayQueueOf<String>()
         queue.enqueue("a")
         queue.enqueue("b")
         assertTrue(queue.contains("a"))
@@ -34,8 +34,8 @@ class ArrayQueueTest {
     }
 
     @Test
-    fun testClear() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueClear() {
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         queue.clear()
@@ -44,8 +44,8 @@ class ArrayQueueTest {
     }
 
     @Test
-    fun testIterator() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueIterator() {
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(10)
         queue.enqueue(20)
         queue.enqueue(30)
@@ -55,8 +55,8 @@ class ArrayQueueTest {
     }
 
     @Test
-    fun testToList() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueToList() {
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         queue.enqueue(3)
@@ -64,10 +64,104 @@ class ArrayQueueTest {
     }
 
     @Test
-    fun testToString() {
-        val queue = ArrayQueue<Int>()
+    fun testArrayQueueToString() {
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         assertEquals("[1, 2]", queue.toString())
+    }
+
+    @Test
+    fun testArrayQueueIsEmpty() {
+        val queue = arrayQueueOf<Int>()
+        assertTrue(queue.isEmpty())
+        queue.enqueue(1)
+        assertFalse(queue.isEmpty())
+        queue.dequeue()
+        assertTrue(queue.isEmpty())
+    }
+
+    @Test
+    fun testArrayQueueSize() {
+        val queue = arrayQueueOf<Int>()
+        assertEquals(0, queue.size)
+        queue.enqueue(1)
+        assertEquals(1, queue.size)
+        queue.enqueue(2)
+        queue.enqueue(3)
+        assertEquals(3, queue.size)
+        queue.dequeue()
+        assertEquals(2, queue.size)
+    }
+
+    @Test
+    fun testArrayQueuePeekDoesNotRemove() {
+        val queue = arrayQueueOf<Int>()
+        queue.enqueue(42)
+        assertEquals(42, queue.peek())
+        assertEquals(42, queue.peek())
+        assertEquals(1, queue.size)
+    }
+
+    @Test
+    fun testArrayQueueFifoOrder() {
+        val queue = arrayQueueOf<String>()
+        queue.enqueue("first")
+        queue.enqueue("second")
+        queue.enqueue("third")
+        assertEquals("first", queue.dequeue())
+        assertEquals("second", queue.dequeue())
+        assertEquals("third", queue.dequeue())
+        assertNull(queue.dequeue())
+    }
+
+    @Test
+    fun testArrayQueueContainsAfterDequeue() {
+        val queue = arrayQueueOf<Int>()
+        queue.enqueue(1)
+        queue.enqueue(2)
+        queue.enqueue(3)
+        queue.dequeue()
+        assertFalse(queue.contains(1))
+        assertTrue(queue.contains(2))
+        assertTrue(queue.contains(3))
+    }
+
+    @Test
+    fun testArrayQueueClearThenReuse() {
+        val queue = arrayQueueOf<Int>()
+        queue.enqueue(1)
+        queue.enqueue(2)
+        queue.clear()
+        assertNull(queue.peek())
+        assertNull(queue.dequeue())
+        queue.enqueue(10)
+        assertEquals(10, queue.peek())
+        assertEquals(1, queue.size)
+    }
+
+    @Test
+    fun testArrayQueueManyElements() {
+        val queue = arrayQueueOf<Int>()
+        for (i in 0 until 1000) {
+            queue.enqueue(i)
+        }
+        assertEquals(1000, queue.size)
+        for (i in 0 until 1000) {
+            assertEquals(i, queue.dequeue())
+        }
+        assertTrue(queue.isEmpty())
+    }
+
+    @Test
+    fun testArrayQueueIteratorAfterDequeue() {
+        val queue = arrayQueueOf<Int>()
+        queue.enqueue(1)
+        queue.enqueue(2)
+        queue.enqueue(3)
+        queue.dequeue()
+        val collected = mutableListOf<Int>()
+        for (v in queue) collected.add(v)
+        assertEquals(listOf(2, 3), collected)
     }
 }

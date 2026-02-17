@@ -12,4 +12,4 @@ package br.uem.din.datastructures.graph
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22 — Elementary Graph Algorithms.
  */
-data class Vertex<T>(val index: Int, val data: T)
+public data class Vertex<T>(public val index: Int, public val data: T)

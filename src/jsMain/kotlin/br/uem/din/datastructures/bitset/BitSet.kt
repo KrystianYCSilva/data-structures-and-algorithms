@@ -4,16 +4,19 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Implementação JS do [BitSet] usando [IntArray] (palavras de 32 bits).
- *
- * JavaScript não possui tipos inteiros de 64 bits nativos, por isso utiliza
- * palavras de 32 bits com operações bitwise seguras no range de Int.
- * Cresce automaticamente quando bits além da capacidade são acessados.
+ * Cria uma instância JS de BitSet.
  */
-actual class BitSet actual constructor(size: Int) : Iterable<Int> {
+public actual fun bitSetOf(size: Int): BitSet {
+    return JsBitSet(size)
+}
+
+/**
+ * Implementação JS do [BitSet] usando [IntArray].
+ */
+private class JsBitSet(size: Int) : BitSet {
     private var bits = IntArray((size + 31) / 32)
 
-    actual fun set(index: Int) {
+    override fun set(index: Int) {
         require(index >= 0) { "index ($index) must be >= 0" }
         ensureCapacity(index)
         val wordIndex = index / 32
@@ -21,33 +24,35 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         bits[wordIndex] = bits[wordIndex] or (1 shl bitIndex)
     }
 
-    actual fun set(index: Int, value: Boolean) {
+    override fun set(index: Int, value: Boolean) {
         if (value) set(index) else clear(index)
     }
 
-    actual fun clear(index: Int) {
+    override fun clear(index: Int) {
+        require(index >= 0) { "index ($index) must be >= 0" }
         val wordIndex = index / 32
         if (wordIndex >= bits.size) return
         val bitIndex = index % 32
         bits[wordIndex] = bits[wordIndex] and (1 shl bitIndex).inv()
     }
 
-    actual fun clear() {
+    override fun clear() {
         bits.fill(0)
     }
 
-    actual operator fun get(index: Int): Boolean {
+    override operator fun get(index: Int): Boolean {
+        require(index >= 0) { "index ($index) must be >= 0" }
         val wordIndex = index / 32
         if (wordIndex >= bits.size) return false
         val bitIndex = index % 32
         return (bits[wordIndex] and (1 shl bitIndex)) != 0
     }
 
-    actual fun size(): Int {
+    override fun size(): Int {
         return bits.size * 32
     }
 
-    actual fun length(): Int {
+    override fun length(): Int {
         for (i in bits.indices.reversed()) {
             val word = bits[i]
             if (word != 0) {
@@ -61,11 +66,11 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return 0
     }
 
-    actual fun isEmpty(): Boolean {
+    override fun isEmpty(): Boolean {
         return bits.all { it == 0 }
     }
 
-    actual fun cardinality(): Int {
+    override fun cardinality(): Int {
         var count = 0
         for (word in bits) {
             count += word.countOneBits()
@@ -73,7 +78,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return count
     }
 
-    actual fun nextSetBit(fromIndex: Int): Int {
+    override fun nextSetBit(fromIndex: Int): Int {
         if (fromIndex < 0) return -1
         var wordIndex = fromIndex / 32
         if (wordIndex >= bits.size) return -1
@@ -88,7 +93,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun and(other: BitSet) {
+    override fun and(other: BitSet) {
+        if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(bits.size, other.bits.size)
         for (i in 0 until commonWords) {
             bits[i] = bits[i] and other.bits[i]
@@ -98,7 +104,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun or(other: BitSet) {
+    override fun or(other: BitSet) {
+        if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.bits.size > bits.size) {
             bits = bits.copyOf(other.bits.size)
         }
@@ -107,7 +114,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun xor(other: BitSet) {
+    override fun xor(other: BitSet) {
+        if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.bits.size > bits.size) {
             bits = bits.copyOf(other.bits.size)
         }
@@ -116,14 +124,15 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun andNot(other: BitSet) {
+    override fun andNot(other: BitSet) {
+        if (other !is JsBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(bits.size, other.bits.size)
         for (i in 0 until commonWords) {
             bits[i] = bits[i] and other.bits[i].inv()
         }
     }
 
-    actual override fun iterator(): Iterator<Int> = object : Iterator<Int> {
+    override fun iterator(): Iterator<Int> = object : Iterator<Int> {
         private var next = nextSetBit(0)
         override fun hasNext(): Boolean = next != -1
         override fun next(): Int {
@@ -134,7 +143,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual override fun toString(): String {
+    override fun toString(): String {
         val sb = StringBuilder()
         sb.append('{')
         var first = true
@@ -147,9 +156,9 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return sb.toString()
     }
 
-    actual override fun equals(other: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is BitSet) return false
+        if (other !is JsBitSet) return false
         val len = max(bits.size, other.bits.size)
         for (i in 0 until len) {
             val a = if (i < bits.size) bits[i] else 0
@@ -159,7 +168,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return true
     }
 
-    actual override fun hashCode(): Int {
+    override fun hashCode(): Int {
         var h = 1234L
         for (i in bits.indices.reversed()) {
             h = h xor (bits[i].toLong() * (i + 1))

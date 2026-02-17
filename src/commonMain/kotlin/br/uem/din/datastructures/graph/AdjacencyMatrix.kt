@@ -18,14 +18,14 @@ package br.uem.din.datastructures.graph
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.1 — Adjacency-matrix representation.
  */
-class AdjacencyMatrix<T> : Graph<T> {
+public class AdjacencyMatrix<T> : MutableGraph<T> {
 
     private val vertices = arrayListOf<Vertex<T>>()
     private val weights = arrayListOf<ArrayList<Double?>>()
     private val hasEdge = arrayListOf<ArrayList<Boolean>>()
 
     /** {@inheritDoc} */
-    override fun createVertex(data: T): Vertex<T> {
+    public override fun createVertex(data: T): Vertex<T> {
         val vertex = Vertex(vertices.count(), data)
         vertices.add(vertex)
         weights.forEach { it.add(null) }
@@ -42,19 +42,19 @@ class AdjacencyMatrix<T> : Graph<T> {
     }
 
     /** {@inheritDoc} */
-    override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
+    public override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         weights[source.index][destination.index] = weight
         hasEdge[source.index][destination.index] = true
     }
 
     /** {@inheritDoc} */
-    override fun addUndirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
+    public override fun addUndirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         addDirectedEdge(source, destination, weight)
         addDirectedEdge(destination, source, weight)
     }
 
     /** {@inheritDoc} */
-    override fun add(edge: Edge<T>) {
+    public override fun add(edge: Edge<T>) {
         when (edge.type) {
             EdgeType.DIRECTED -> addDirectedEdge(edge.source, edge.destination, edge.weight)
             EdgeType.UNDIRECTED -> addUndirectedEdge(edge.source, edge.destination, edge.weight)
@@ -62,7 +62,7 @@ class AdjacencyMatrix<T> : Graph<T> {
     }
 
     /** {@inheritDoc} */
-    override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
+    public override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
         val edges = arrayListOf<Edge<T>>()
         (0 until weights.size).forEach { column ->
             if (hasEdge[source.index][column]) {
@@ -73,7 +73,7 @@ class AdjacencyMatrix<T> : Graph<T> {
     }
 
     /** {@inheritDoc} */
-    override fun weight(source: Vertex<T>, destination: Vertex<T>): Double? {
+    public override fun weight(source: Vertex<T>, destination: Vertex<T>): Double? {
         return weights[source.index][destination.index]
     }
 
@@ -82,7 +82,7 @@ class AdjacencyMatrix<T> : Graph<T> {
      *
      * @return string formatada com as adjacências de cada vértice.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         return buildString {
             vertices.forEach { vertex ->
                 val edgeString = edges(vertex).joinToString { it.destination.data.toString() }

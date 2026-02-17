@@ -2,7 +2,7 @@ package br.uem.din.algorithms.graph
 
 import br.uem.din.datastructures.graph.Graph
 import br.uem.din.datastructures.graph.Vertex
-import br.uem.din.datastructures.queue.PriorityQueue
+import br.uem.din.datastructures.queue.priorityQueueOf
 
 /**
  * Tipo de visita durante a travessia de um grafo.
@@ -10,7 +10,7 @@ import br.uem.din.datastructures.queue.PriorityQueue
  * @property START indica o vértice inicial da travessia.
  * @property EDGE indica que o vértice foi alcançado por uma aresta.
  */
-enum class VisitType {
+public enum class VisitType {
     START,
     EDGE
 }
@@ -33,7 +33,7 @@ enum class VisitType {
  * Referência: Dijkstra, E. W. "A Note on Two Problems in Connexion with Graphs" (1959);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 24.3 — Dijkstra's Algorithm.
  */
-class Dijkstra<T>(private val graph: Graph<T>) {
+public class Dijkstra<T>(private val graph: Graph<T>) {
 
     private val costs = mutableMapOf<Vertex<T>, Double?>()
     private val visited = mutableSetOf<Vertex<T>>()
@@ -49,8 +49,8 @@ class Dijkstra<T>(private val graph: Graph<T>) {
      * @param start o vértice de origem.
      * @return mapa de vértices para seus custos mínimos.
      */
-    fun shortestPath(start: Vertex<T>): Map<Vertex<T>, Double?> {
-        val priorityQueue = PriorityQueue(compareBy<Vertex<T>> { costs[it] })
+    public fun shortestPath(start: Vertex<T>): Map<Vertex<T>, Double?> {
+        val priorityQueue = priorityQueueOf(compareBy<Vertex<T>> { costs[it] })
         priorityQueue.enqueue(start)
         costs[start] = 0.0
 

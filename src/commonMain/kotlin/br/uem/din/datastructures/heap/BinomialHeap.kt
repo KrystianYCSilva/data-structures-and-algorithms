@@ -1,5 +1,7 @@
 package br.uem.din.datastructures.heap
 
+import br.uem.din.datastructures.queue.MutableQueue
+
 /**
  * Heap Binomial (Binomial Heap) — heap mergeable composto por uma coleção de árvores binomiais.
  *
@@ -28,7 +30,7 @@ package br.uem.din.datastructures.heap
  * Referência: Vuillemin, J. "A data structure for manipulating priority queues" (1978);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 19 — Binomial Heaps.
  */
-class BinomialHeap<T : Comparable<T>> {
+public class BinomialHeap<T : Comparable<T>> : MutableQueue<T> {
 
     /**
      * Nó interno de uma árvore binomial.
@@ -42,18 +44,18 @@ class BinomialHeap<T : Comparable<T>> {
      * @property child referência ao filho mais à esquerda, ou `null` se folha.
      * @property sibling referência ao próximo irmão, ou `null` se for o último filho.
      */
-    class Node<T> internal constructor(
-        var key: T,
-        var degree: Int = 0,
-        var parent: Node<T>? = null,
-        var child: Node<T>? = null,
-        var sibling: Node<T>? = null
+    public class Node<T> internal constructor(
+        public var key: T,
+        public var degree: Int = 0,
+        public var parent: Node<T>? = null,
+        public var child: Node<T>? = null,
+        public var sibling: Node<T>? = null
     )
 
     private var head: Node<T>? = null
 
     /** Número de elementos armazenados no heap. */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -63,7 +65,7 @@ class BinomialHeap<T : Comparable<T>> {
      *
      * @return `true` se o heap não contiver elementos.
      */
-    fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Retorna o menor elemento do heap sem removê-lo.
@@ -74,7 +76,7 @@ class BinomialHeap<T : Comparable<T>> {
      *
      * @return o menor elemento, ou `null` se o heap estiver vazio.
      */
-    fun peek(): T? {
+    public override fun peek(): T? {
         var minNode: Node<T>? = null
         var current = head
         while (current != null) {
@@ -95,7 +97,7 @@ class BinomialHeap<T : Comparable<T>> {
      *
      * @param key o elemento a ser inserido.
      */
-    fun insert(key: T) {
+    public fun insert(key: T) {
         val newHeap = BinomialHeap<T>()
         newHeap.head = Node(key)
         newHeap.size = 1
@@ -113,7 +115,7 @@ class BinomialHeap<T : Comparable<T>> {
      *
      * @return o menor elemento removido, ou `null` se o heap estiver vazio.
      */
-    fun extractMin(): T? {
+    public fun extractMin(): T? {
         if (head == null) return null
 
         var minPrev: Node<T>? = null
@@ -158,6 +160,51 @@ class BinomialHeap<T : Comparable<T>> {
         return minNode.key
     }
 
+    /** {@inheritDoc} */
+    public override fun enqueue(element: T) {
+        insert(element)
+    }
+
+    /** {@inheritDoc} */
+    public override fun dequeue(): T? = extractMin()
+
+    /** {@inheritDoc} */
+    public override fun contains(element: T): Boolean {
+        return containsNode(head, element)
+    }
+
+    /** {@inheritDoc} */
+    public override fun clear() {
+        head = null
+        size = 0
+    }
+
+    /** {@inheritDoc} */
+    public override fun iterator(): Iterator<T> {
+        val elements = mutableListOf<T>()
+        collectElements(head, elements)
+        return elements.iterator()
+    }
+
+    private fun containsNode(node: Node<T>?, element: T): Boolean {
+        var current = node
+        while (current != null) {
+            if (current.key == element) return true
+            if (containsNode(current.child, element)) return true
+            current = current.sibling
+        }
+        return false
+    }
+
+    private fun collectElements(node: Node<T>?, result: MutableList<T>) {
+        var current = node
+        while (current != null) {
+            result.add(current.key)
+            collectElements(current.child, result)
+            current = current.sibling
+        }
+    }
+
     /**
      * Mescla (merge) outro heap binomial com este heap.
      *
@@ -168,7 +215,7 @@ class BinomialHeap<T : Comparable<T>> {
      *
      * @param other o outro heap a ser mesclado (será esvaziado após a operação).
      */
-    fun merge(other: BinomialHeap<T>) {
+    public fun merge(other: BinomialHeap<T>) {
         mergeWith(other)
     }
 
@@ -184,7 +231,7 @@ class BinomialHeap<T : Comparable<T>> {
      * @param newKey o novo valor da chave (deve ser menor ou igual à chave atual).
      * @throws IllegalArgumentException se [newKey] for maior que a chave atual do nó.
      */
-    fun decreaseKey(node: Node<T>, newKey: T) {
+    public fun decreaseKey(node: Node<T>, newKey: T) {
         require(newKey <= node.key) { "A nova chave deve ser menor ou igual à chave atual." }
         node.key = newKey
         bubbleUp(node)

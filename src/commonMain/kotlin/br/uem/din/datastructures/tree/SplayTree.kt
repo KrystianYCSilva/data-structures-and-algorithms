@@ -26,7 +26,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Problema 13-2;
  *             Goodrich, M. T. & Tamassia, R. "Data Structures and Algorithms in Java", Cap. 11.4.
  */
-class SplayTree<T : Comparable<T>> {
+public class SplayTree<T : Comparable<T>> : MutableSearchTree<T> {
 
     private class Node<T>(var value: T) {
         var left: Node<T>? = null
@@ -38,11 +38,13 @@ class SplayTree<T : Comparable<T>> {
     /**
      * Número de elementos armazenados na árvore.
      */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
+    public override fun isEmpty(): Boolean = size == 0
+
     /**
-     * Insere um valor na árvore Splay.
+     * Insere um elemento na árvore Splay.
      *
      * Se a árvore estiver vazia, cria a raiz. Caso contrário, realiza splay do valor
      * mais próximo, e insere o novo nó como raiz, dividindo a árvore anterior conforme
@@ -50,18 +52,19 @@ class SplayTree<T : Comparable<T>> {
      *
      * Complexidade amortizada: O(log n).
      *
-     * @param value o valor a ser inserido.
+     * @param element o elemento a ser inserido.
+     * @return `true` se o elemento foi inserido, `false` se já existia.
      */
-    fun insert(value: T) {
+    public override fun insert(element: T): Boolean {
         if (root == null) {
-            root = Node(value)
+            root = Node(element)
             size++
-            return
+            return true
         }
-        root = splay(root, value)
-        val cmp = value.compareTo(root!!.value)
-        if (cmp == 0) return
-        val newNode = Node(value)
+        root = splay(root, element)
+        val cmp = element.compareTo(root!!.value)
+        if (cmp == 0) return false
+        val newNode = Node(element)
         if (cmp < 0) {
             newNode.right = root
             newNode.left = root!!.left
@@ -73,6 +76,7 @@ class SplayTree<T : Comparable<T>> {
         }
         root = newNode
         size++
+        return true
     }
 
     /**
@@ -83,12 +87,12 @@ class SplayTree<T : Comparable<T>> {
      *
      * Complexidade amortizada: O(log n).
      *
-     * @param value o valor a ser procurado.
-     * @return `true` se o valor existir na árvore, `false` caso contrário.
+     * @param element o elemento a ser procurado.
+     * @return `true` se o elemento existir na árvore, `false` caso contrário.
      */
-    fun contains(value: T): Boolean {
-        root = splay(root, value)
-        return root != null && root!!.value == value
+    public override fun contains(element: T): Boolean {
+        root = splay(root, element)
+        return root != null && root!!.value == element
     }
 
     /**
@@ -99,20 +103,22 @@ class SplayTree<T : Comparable<T>> {
      *
      * Complexidade amortizada: O(log n).
      *
-     * @param value o valor a ser removido.
+     * @param element o elemento a ser removido.
+     * @return `true` se o elemento foi removido, `false` se não existia.
      */
-    fun remove(value: T) {
-        root ?: return
-        root = splay(root, value)
-        if (root!!.value != value) return
+    public override fun remove(element: T): Boolean {
+        root ?: return false
+        root = splay(root, element)
+        if (root!!.value != element) return false
         if (root!!.left == null) {
             root = root!!.right
         } else {
             val rightSubtree = root!!.right
-            root = splay(root!!.left, value)
+            root = splay(root!!.left, element)
             root!!.right = rightSubtree
         }
         size--
+        return true
     }
 
     /**
@@ -201,7 +207,7 @@ class SplayTree<T : Comparable<T>> {
      *
      * @return lista com todos os elementos em ordem.
      */
-    fun inOrder(): List<T> {
+    public override fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         inOrder(root, result)
         return result

@@ -1,6 +1,7 @@
 package br.uem.din.datastructures.probabilistic
 
 import br.uem.din.datastructures.bitset.BitSet
+import br.uem.din.datastructures.bitset.bitSetOf
 import kotlin.math.ln
 import kotlin.math.ceil
 import kotlin.math.pow
@@ -33,7 +34,7 @@ import kotlin.math.abs
  * Referência: Bloom, B. H. "Space/Time Trade-offs in Hash Coding with Allowable Errors" (1970);
  *             Kirsch, A. & Mitzenmacher, M. "Less Hashing, Same Performance" (2006).
  */
-class BloomFilter(private val expectedInsertions: Int, private val falsePositiveProbability: Double = 0.01) {
+public class BloomFilter(private val expectedInsertions: Int, private val falsePositiveProbability: Double = 0.01) {
 
     private val bitSetSize: Int
     private val numHashFunctions: Int
@@ -42,7 +43,7 @@ class BloomFilter(private val expectedInsertions: Int, private val falsePositive
     init {
         bitSetSize = ceil((-expectedInsertions * ln(falsePositiveProbability)) / (ln(2.0).pow(2))).toInt()
         numHashFunctions = ceil((bitSetSize.toDouble() / expectedInsertions) * ln(2.0)).toInt()
-        bitSet = BitSet(bitSetSize)
+        bitSet = bitSetOf(bitSetSize)
     }
 
     /**
@@ -52,7 +53,7 @@ class BloomFilter(private val expectedInsertions: Int, private val falsePositive
      *
      * @param element a string a ser adicionada ao filtro.
      */
-    fun add(element: String) {
+    public fun add(element: String) {
         val hash1 = element.hashCode()
         val hash2 = hash2(element)
         
@@ -74,7 +75,7 @@ class BloomFilter(private val expectedInsertions: Int, private val falsePositive
      * @param element a string a ser verificada.
      * @return `true` se o elemento possivelmente pertence ao conjunto, `false` se definitivamente não.
      */
-    fun contains(element: String): Boolean {
+    public fun contains(element: String): Boolean {
         val hash1 = element.hashCode()
         val hash2 = hash2(element)
         
@@ -109,12 +110,12 @@ class BloomFilter(private val expectedInsertions: Int, private val falsePositive
      *
      * @return o número de bits no filtro.
      */
-    fun size(): Int = bitSetSize
+    public fun size(): Int = bitSetSize
 
     /**
      * Retorna o número de funções de hash utilizadas (k).
      *
      * @return a quantidade de funções de hash.
      */
-    fun countHashFunctions(): Int = numHashFunctions
+    public fun countHashFunctions(): Int = numHashFunctions
 }

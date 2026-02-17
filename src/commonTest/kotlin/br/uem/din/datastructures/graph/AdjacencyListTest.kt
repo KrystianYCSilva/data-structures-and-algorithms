@@ -135,4 +135,25 @@ class AdjacencyListTest {
         assertTrue(str.contains("A"))
         assertTrue(str.contains("B"))
     }
+
+    @Test
+    fun testMutableGraphInterface() {
+        val graph: MutableGraph<String> = AdjacencyList()
+        val a = graph.createVertex("A")
+        val b = graph.createVertex("B")
+        graph.addDirectedEdge(a, b, 2.0)
+        assertEquals(1, graph.edges(a).size)
+        assertEquals(2.0, graph.weight(a, b))
+    }
+
+    @Test
+    fun testGraphReadOnlyView() {
+        val mutable: MutableGraph<String> = AdjacencyList()
+        val a = mutable.createVertex("A")
+        val b = mutable.createVertex("B")
+        mutable.addDirectedEdge(a, b, 3.0)
+        val readOnly: Graph<String> = mutable
+        assertEquals(1, readOnly.edges(a).size)
+        assertEquals(3.0, readOnly.weight(a, b))
+    }
 }

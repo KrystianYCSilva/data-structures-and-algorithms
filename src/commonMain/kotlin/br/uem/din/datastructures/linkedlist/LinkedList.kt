@@ -31,7 +31,7 @@ package br.uem.din.datastructures.linkedlist
  * @see DoublyLinkedList
  * @see CircularLinkedList
  */
-class LinkedList<T> : MutableLinkedList<T> {
+public class LinkedList<T> : MutableLinkedList<T> {
 
     private var head: Node<T>? = null
     private var tail: Node<T>? = null
@@ -41,7 +41,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * Complexidade: O(1).
      */
-    override var size = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -51,7 +51,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return `true` se a lista não contiver elementos, `false` caso contrário.
      */
-    override fun isEmpty() = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Retorna a representação textual da lista no formato `[v1, v2, ..., vn]`.
@@ -60,7 +60,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return string formatada com os elementos, ou `"[]"` se vazia.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         if (isEmpty()) return "[]"
         return joinToString(prefix = "[", postfix = "]")
     }
@@ -73,7 +73,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param value o valor a ser inserido.
      * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun push(value: T): LinkedList<T> {
+    public fun push(value: T): LinkedList<T> {
         addFirst(value)
         return this
     }
@@ -85,7 +85,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser inserido.
      */
-    override fun addFirst(element: T) {
+    public override fun addFirst(element: T) {
         head = Node(value = element, next = head)
         if (tail == null) {
             tail = head
@@ -101,7 +101,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param value o valor a ser inserido.
      * @return esta instância de [LinkedList] para encadeamento fluente.
      */
-    fun append(value: T): LinkedList<T> {
+    public fun append(value: T): LinkedList<T> {
         addLast(value)
         return this
     }
@@ -113,7 +113,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @param value o valor a ser inserido.
      */
-    override fun addLast(element: T) {
+    public override fun addLast(element: T) {
         if (isEmpty()) {
             addFirst(element)
             return
@@ -152,7 +152,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @return o valor na posição indicada.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    operator fun get(index: Int): T {
+    public operator fun get(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         return nodeAt(index)!!.value
     }
@@ -166,7 +166,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param value o novo valor.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    operator fun set(index: Int, value: T) {
+    public operator fun set(index: Int, value: T) {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         nodeAt(index)!!.value = value
     }
@@ -179,7 +179,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return `true` se o elemento existir na lista, `false` caso contrário.
      */
-    override fun contains(element: T): Boolean {
+    public override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
@@ -194,7 +194,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    override fun indexOf(element: T): Int {
+    public override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -232,7 +232,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @param value o valor a ser inserido.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    fun insertAt(index: Int, value: T) {
+    public fun insertAt(index: Int, value: T) {
         if (index < 0 || index > size) throw IndexOutOfBoundsException("Index $index, size $size")
         when (index) {
             0 -> addFirst(value)
@@ -248,7 +248,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun pop(): T? = removeFirst()
+    public fun pop(): T? = removeFirst()
 
     /**
      * Remove e retorna o primeiro elemento da lista.
@@ -257,7 +257,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    override fun removeFirst(): T? {
+    public override fun removeFirst(): T? {
         if (isEmpty()) return null
         val result = head?.value
         head = head?.next
@@ -275,7 +275,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    override fun removeLast(): T? {
+    public override fun removeLast(): T? {
         if (head?.next == null) return removeFirst()
         var prev = head
         var current = head
@@ -300,7 +300,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      * @return o valor removido.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    fun removeAt(index: Int): T {
+    public fun removeAt(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         if (index == 0) return removeFirst()!!
         val prev = nodeAt(index - 1)!!
@@ -336,7 +336,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * Complexidade: O(1).
      */
-    override fun clear() {
+    public override fun clear() {
         head = null
         tail = null
         size = 0
@@ -347,7 +347,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * Complexidade: O(n).
      */
-    fun reverse() {
+    public fun reverse() {
         tail = head
         var prev: Node<T>? = null
         var current = head
@@ -367,7 +367,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    override fun toList(): List<T> = iterator().asSequence().toList()
+    public override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna um [Iterator] que percorre os elementos da lista do início ao fim.
@@ -376,7 +376,7 @@ class LinkedList<T> : MutableLinkedList<T> {
      *
      * @return iterador sobre os elementos da lista.
      */
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
+    public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var current = head
         override fun hasNext(): Boolean = current != null
         override fun next(): T {

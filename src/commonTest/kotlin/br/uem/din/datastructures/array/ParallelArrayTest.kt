@@ -120,4 +120,124 @@ class ParallelArrayTest {
             pa.get(5, "x")
         }
     }
+
+    @Test
+    fun testClear() {
+        val pa = ParallelArray("id", "name")
+        pa.addRow(1, "Alice")
+        pa.addRow(2, "Bob")
+        pa.clear()
+        assertTrue(pa.isEmpty())
+        assertEquals(0, pa.size)
+    }
+
+    @Test
+    fun testContains() {
+        val pa = ParallelArray("id", "name")
+        pa.addRow(1, "Alice")
+        assertTrue(pa.contains(1))
+        assertTrue(pa.contains("Alice"))
+        assertFalse(pa.contains("Bob"))
+    }
+
+    @Test
+    fun testContainsNull() {
+        val pa = ParallelArray("x")
+        pa.addRow(null)
+        assertTrue(pa.contains(null))
+    }
+
+    @Test
+    fun testEquals() {
+        val a = ParallelArray("x", "y")
+        val b = ParallelArray("x", "y")
+        a.addRow(1, 2)
+        b.addRow(1, 2)
+        assertEquals(a, b)
+    }
+
+    @Test
+    fun testNotEquals() {
+        val a = ParallelArray("x")
+        val b = ParallelArray("x")
+        a.addRow(1)
+        b.addRow(2)
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun testNotEqualsDifferentColumns() {
+        val a = ParallelArray("x")
+        val b = ParallelArray("y")
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun testHashCodeConsistency() {
+        val a = ParallelArray("id")
+        val b = ParallelArray("id")
+        a.addRow(1)
+        b.addRow(1)
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
+    fun testToStringEmpty() {
+        val pa = ParallelArray("x")
+        assertTrue(pa.toString().contains("rows=0"))
+    }
+
+    @Test
+    fun testToStringWithData() {
+        val pa = ParallelArray("id", "name")
+        pa.addRow(1, "Alice")
+        val str = pa.toString()
+        assertTrue(str.contains("id=1"))
+        assertTrue(str.contains("name=Alice"))
+    }
+
+    @Test
+    fun testGetByColumnIndexOutOfBoundsThrows() {
+        val pa = ParallelArray("x")
+        pa.addRow(1)
+        assertFailsWith<IndexOutOfBoundsException> {
+            pa.get(0, 5)
+        }
+    }
+
+    @Test
+    fun testRemoveAtOutOfBoundsThrows() {
+        val pa = ParallelArray("x")
+        pa.addRow(1)
+        assertFailsWith<IndexOutOfBoundsException> {
+            pa.removeAt(5)
+        }
+    }
+
+    @Test
+    fun testSetOutOfBoundsThrows() {
+        val pa = ParallelArray("x")
+        pa.addRow(1)
+        assertFailsWith<IndexOutOfBoundsException> {
+            pa.set(5, "x", 99)
+        }
+    }
+
+    @Test
+    fun testSetInvalidColumnThrows() {
+        val pa = ParallelArray("x")
+        pa.addRow(1)
+        assertFailsWith<IllegalArgumentException> {
+            pa.set(0, "nonexistent", 99)
+        }
+    }
+
+    @Test
+    fun testGetColumnInvalidThrows() {
+        val pa = ParallelArray("x")
+        pa.addRow(1)
+        assertFailsWith<IllegalArgumentException> {
+            pa.getColumn("nonexistent")
+        }
+    }
 }

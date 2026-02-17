@@ -20,7 +20,7 @@ package br.uem.din.datastructures.tree
  * Referência: Fredkin, E. "Trie Memory" (1960);
  *             Sedgewick, R. & Wayne, K. "Algorithms", Cap. 5.2 — Tries.
  */
-class Trie<Key> {
+public class Trie<Key> {
     private val root = TrieNode<Key>(key = null, parent = null)
 
     /**
@@ -32,7 +32,7 @@ class Trie<Key> {
      *
      * @param list a sequência de chaves a ser inserida.
      */
-    fun insert(list: List<Key>) {
+    public fun insert(list: List<Key>) {
         var current = root
         list.forEach { element ->
             if (current.children[element] == null) {
@@ -53,7 +53,7 @@ class Trie<Key> {
      * @param list a sequência de chaves a ser verificada.
      * @return `true` se a sequência existir na Trie, `false` caso contrário.
      */
-    fun contains(list: List<Key>): Boolean {
+    public fun contains(list: List<Key>): Boolean {
         var current = root
         list.forEach { element ->
             val child = current.children[element] ?: return false
@@ -72,7 +72,7 @@ class Trie<Key> {
      *
      * @param list a sequência de chaves a ser removida.
      */
-    fun remove(list: List<Key>) {
+    public fun remove(list: List<Key>) {
         var current = root
         list.forEach { element ->
             val child = current.children[element] ?: return
@@ -95,7 +95,7 @@ class Trie<Key> {
      * @param prefix o prefixo a ser buscado.
      * @return lista de todas as sequências completas que possuem o prefixo dado.
      */
-    fun collections(prefix: List<Key>): List<List<Key>> {
+    public fun collections(prefix: List<Key>): List<List<Key>> {
         var current = root
         prefix.forEach { element ->
             val child = current.children[element] ?: return emptyList()

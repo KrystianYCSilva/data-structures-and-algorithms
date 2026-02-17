@@ -102,4 +102,81 @@ class MatrixTest {
         assertTrue(str.contains("[0, 1]"))
         assertTrue(str.contains("[2, 3]"))
     }
+
+    @Test
+    fun testContains() {
+        val m = Matrix(2, 2) { r, c -> r * 10 + c }
+        assertTrue(m.contains(0))
+        assertTrue(m.contains(11))
+        assertFalse(m.contains(99))
+    }
+
+    @Test
+    fun testIsEmpty() {
+        val m = Matrix(1, 1) { _, _ -> 0 }
+        assertFalse(m.isEmpty())
+    }
+
+    @Test
+    fun testToList() {
+        val m = Matrix(2, 2) { r, c -> r * 2 + c }
+        assertEquals(listOf(0, 1, 2, 3), m.toList())
+    }
+
+    @Test
+    fun testToNestedList() {
+        val m = Matrix(2, 3) { r, c -> r * 3 + c }
+        val nested = m.toNestedList()
+        assertEquals(2, nested.size)
+        assertEquals(listOf(0, 1, 2), nested[0])
+        assertEquals(listOf(3, 4, 5), nested[1])
+    }
+
+    @Test
+    fun testIterator() {
+        val m = Matrix(2, 2) { r, c -> r * 2 + c }
+        val items = m.toList()
+        assertEquals(listOf(0, 1, 2, 3), items)
+    }
+
+    @Test
+    fun testHashCodeConsistency() {
+        val a = Matrix(2, 2) { r, c -> r + c }
+        val b = Matrix(2, 2) { r, c -> r + c }
+        assertEquals(a.hashCode(), b.hashCode())
+    }
+
+    @Test
+    fun testNotEqualsDifferentDimensions() {
+        val a = Matrix(2, 3) { _, _ -> 0 }
+        val b = Matrix(3, 2) { _, _ -> 0 }
+        assertNotEquals(a, b)
+    }
+
+    @Test
+    fun testInvalidDimensionsThrows() {
+        assertFailsWith<IllegalArgumentException> { Matrix(0, 5) { _, _ -> 0 } }
+        assertFailsWith<IllegalArgumentException> { Matrix(5, 0) { _, _ -> 0 } }
+    }
+
+    @Test
+    fun testGetRowOutOfBoundsThrows() {
+        val m = Matrix(2, 2) { _, _ -> 0 }
+        assertFailsWith<IndexOutOfBoundsException> { m.getRow(-1) }
+        assertFailsWith<IndexOutOfBoundsException> { m.getRow(2) }
+    }
+
+    @Test
+    fun testGetColumnOutOfBoundsThrows() {
+        val m = Matrix(2, 2) { _, _ -> 0 }
+        assertFailsWith<IndexOutOfBoundsException> { m.getColumn(-1) }
+        assertFailsWith<IndexOutOfBoundsException> { m.getColumn(2) }
+    }
+
+    @Test
+    fun testSetOutOfBoundsThrows() {
+        val m = Matrix(2, 2) { _, _ -> 0 }
+        assertFailsWith<IndexOutOfBoundsException> { m[2, 0] = 1 }
+        assertFailsWith<IndexOutOfBoundsException> { m[0, -1] = 1 }
+    }
 }

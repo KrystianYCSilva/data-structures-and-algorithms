@@ -3,32 +3,35 @@ package br.uem.din.datastructures.queue
 import java.util.ArrayDeque
 
 /**
- * Implementação JVM de [ArrayQueue], delegando a [java.util.ArrayDeque].
- *
- * @param T o tipo dos elementos armazenados na fila.
- *
- * Referência: JDK ArrayDeque — circular array implementation.
+ * Cria uma instância JVM de ArrayQueue delegando para java.util.ArrayDeque.
  */
-actual class ArrayQueue<T> : MutableQueue<T> {
+public actual fun <T> arrayQueueOf(): MutableQueue<T> {
+    return JvmArrayQueue()
+}
+
+/**
+ * Wrapper privado para java.util.ArrayDeque.
+ */
+private class JvmArrayQueue<T> : MutableQueue<T> {
     private val deque = ArrayDeque<T>()
 
-    actual override fun enqueue(element: T) {
+    override fun enqueue(element: T) {
         deque.addLast(element)
     }
 
-    actual override fun dequeue(): T? = deque.pollFirst()
+    override fun dequeue(): T? = deque.pollFirst()
 
-    actual override fun peek(): T? = deque.peekFirst()
+    override fun peek(): T? = deque.peekFirst()
 
-    actual override val size: Int get() = deque.size
+    override val size: Int get() = deque.size
 
-    actual override fun isEmpty(): Boolean = deque.isEmpty()
+    override fun isEmpty(): Boolean = deque.isEmpty()
 
-    actual override fun contains(element: T): Boolean = deque.contains(element)
+    override fun contains(element: T): Boolean = deque.contains(element)
 
-    actual override fun clear() = deque.clear()
+    override fun clear(): Unit = deque.clear()
 
-    actual override fun iterator(): Iterator<T> = deque.iterator()
+    override fun iterator(): Iterator<T> = deque.iterator()
 
-    actual override fun toString(): String = deque.toString()
+    override fun toString(): String = deque.toString()
 }

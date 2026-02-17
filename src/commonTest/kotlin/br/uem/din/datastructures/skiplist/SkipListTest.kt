@@ -127,4 +127,32 @@ class SkipListTest {
         val skipList = SkipList<Int>()
         assertFalse(skipList.contains(1))
     }
+
+    @Test
+    fun testMutableSkipListInterface() {
+        val sl: MutableSkipList<Int> = SkipList()
+        sl.insert(30)
+        sl.insert(10)
+        sl.insert(20)
+        assertEquals(3, sl.size)
+        assertTrue(sl.contains(10))
+        assertFalse(sl.isEmpty())
+        assertEquals(listOf(10, 20, 30), sl.toList())
+        assertTrue(sl.remove(10))
+        assertFalse(sl.contains(10))
+        sl.clear()
+        assertTrue(sl.isEmpty())
+    }
+
+    @Test
+    fun testReadOnlySkipListView() {
+        val sl: MutableSkipList<Int> = SkipList()
+        sl.insert(5)
+        sl.insert(3)
+        sl.insert(7)
+        val readOnly: ReadOnlySkipList<Int> = sl
+        assertEquals(3, readOnly.size)
+        assertTrue(readOnly.contains(5))
+        assertEquals(listOf(3, 5, 7), readOnly.toList())
+    }
 }

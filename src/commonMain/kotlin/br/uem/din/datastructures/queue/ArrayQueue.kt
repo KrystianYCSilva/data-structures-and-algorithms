@@ -1,9 +1,9 @@
 package br.uem.din.datastructures.queue
 
 /**
- * Implementação de [MutableQueue] baseada em array, com delegação a plataformas nativas
- * via `expect`/`actual`.
+ * Cria uma nova instância de Fila baseada em Array (Array Queue).
  *
+ * Implementação:
  * - **JVM**: delega a [java.util.ArrayDeque]
  * - **JS/Native**: buffer circular com redimensionamento automático
  *
@@ -23,14 +23,4 @@ package br.uem.din.datastructures.queue
  * @see LinkedQueue
  * @see CircularQueue
  */
-expect class ArrayQueue<T>() : MutableQueue<T> {
-    override fun enqueue(element: T)
-    override fun dequeue(): T?
-    override fun peek(): T?
-    override val size: Int
-    override fun isEmpty(): Boolean
-    override fun contains(element: T): Boolean
-    override fun clear()
-    override fun iterator(): Iterator<T>
-    override fun toString(): String
-}
+public expect fun <T> arrayQueueOf(): MutableQueue<T>

@@ -2,11 +2,11 @@ package br.uem.din.datastructures.hash
 
 import kotlin.test.*
 
-class CuckooHashTableTest {
+class SeparateChainingHashTableTest {
 
     @Test
     fun testPutAndGet() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("a", 1)
         table.put("b", 2)
         assertEquals(1, table.get("a"))
@@ -15,13 +15,13 @@ class CuckooHashTableTest {
 
     @Test
     fun testGetMissing() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         assertNull(table.get("missing"))
     }
 
     @Test
     fun testPutOverwrite() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("a", 1)
         table.put("a", 99)
         assertEquals(99, table.get("a"))
@@ -30,7 +30,7 @@ class CuckooHashTableTest {
 
     @Test
     fun testRemove() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("a", 1)
         table.put("b", 2)
         assertEquals(1, table.remove("a"))
@@ -40,13 +40,13 @@ class CuckooHashTableTest {
 
     @Test
     fun testRemoveMissing() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         assertNull(table.remove("missing"))
     }
 
     @Test
     fun testContains() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("x", 10)
         assertTrue(table.contains("x"))
         assertFalse(table.contains("y"))
@@ -54,7 +54,7 @@ class CuckooHashTableTest {
 
     @Test
     fun testSize() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         assertEquals(0, table.size)
         table.put("a", 1)
         assertEquals(1, table.size)
@@ -65,20 +65,28 @@ class CuckooHashTableTest {
     }
 
     @Test
-    fun testRehashOnManyInsertions() {
-        val table = CuckooHashTable<Int, Int>(initialCapacity = 4)
-        for (i in 0 until 50) {
+    fun testIsEmpty() {
+        val table = SeparateChainingHashTable<String, Int>()
+        assertTrue(table.isEmpty())
+        table.put("a", 1)
+        assertFalse(table.isEmpty())
+    }
+
+    @Test
+    fun testRehash() {
+        val table = SeparateChainingHashTable<Int, Int>(initialCapacity = 4, maxLoadFactor = 0.5)
+        for (i in 0 until 20) {
             table.put(i, i * 10)
         }
-        assertEquals(50, table.size)
-        for (i in 0 until 50) {
+        assertEquals(20, table.size)
+        for (i in 0 until 20) {
             assertEquals(i * 10, table.get(i))
         }
     }
 
     @Test
     fun testRemoveThenInsert() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("a", 1)
         table.remove("a")
         table.put("a", 2)
@@ -88,7 +96,7 @@ class CuckooHashTableTest {
 
     @Test
     fun testToString() {
-        val table = CuckooHashTable<String, Int>()
+        val table = SeparateChainingHashTable<String, Int>()
         table.put("key", 42)
         val str = table.toString()
         assertTrue(str.contains("key"))
@@ -97,7 +105,7 @@ class CuckooHashTableTest {
 
     @Test
     fun testMutableOpenHashTableInterface() {
-        val table: MutableOpenHashTable<String, Int> = CuckooHashTable()
+        val table: MutableOpenHashTable<String, Int> = SeparateChainingHashTable()
         table.put("a", 1)
         table.put("b", 2)
         assertEquals(1, table.get("a"))
@@ -106,5 +114,29 @@ class CuckooHashTableTest {
         assertFalse(table.isEmpty())
         table.remove("a")
         assertNull(table.get("a"))
+    }
+
+    @Test
+    fun testManyCollisions() {
+        val table = SeparateChainingHashTable<Int, String>(initialCapacity = 2)
+        for (i in 0 until 50) {
+            table.put(i, "val$i")
+        }
+        assertEquals(50, table.size)
+        for (i in 0 until 50) {
+            assertEquals("val$i", table.get(i))
+        }
+    }
+
+    @Test
+    fun testRemoveFromChain() {
+        val table = SeparateChainingHashTable<Int, String>(initialCapacity = 1)
+        table.put(0, "zero")
+        table.put(1, "one")
+        table.put(2, "two")
+        assertEquals("one", table.remove(1))
+        assertNull(table.get(1))
+        assertEquals("zero", table.get(0))
+        assertEquals("two", table.get(2))
     }
 }

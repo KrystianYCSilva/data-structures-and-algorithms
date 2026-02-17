@@ -1,40 +1,42 @@
 package br.uem.din.datastructures.stack
 
 /**
- * Implementação JS de [ArrayStack] usando [ArrayList] como armazenamento interno.
- *
- * Armazena elementos com o topo no final do array, garantindo push/pop O(1) amortizado.
- * A iteração percorre do topo (último elemento) à base (primeiro elemento).
- *
- * @param T o tipo dos elementos armazenados na pilha.
+ * Cria uma instância JS de ArrayStack.
  */
-actual class ArrayStack<T> : MutableStack<T> {
+public actual fun <T> arrayStackOf(): MutableStack<T> {
+    return JsArrayStack()
+}
+
+/**
+ * Implementação JS de ArrayStack usando ArrayList.
+ */
+private class JsArrayStack<T> : MutableStack<T> {
     private val storage = ArrayList<T>()
 
-    actual override fun push(element: T): T {
+    override fun push(element: T): T {
         storage.add(element)
         return element
     }
 
-    actual override fun pop(): T? {
+    override fun pop(): T? {
         if (storage.isEmpty()) return null
         return storage.removeAt(storage.size - 1)
     }
 
-    actual override fun peek(): T? {
+    override fun peek(): T? {
         if (storage.isEmpty()) return null
         return storage[storage.size - 1]
     }
 
-    actual override val size: Int get() = storage.size
+    override val size: Int get() = storage.size
 
-    actual override fun isEmpty(): Boolean = storage.isEmpty()
+    override fun isEmpty(): Boolean = storage.isEmpty()
 
-    actual override fun contains(element: T): Boolean = storage.contains(element)
+    override fun contains(element: T): Boolean = storage.contains(element)
 
-    actual override fun clear() = storage.clear()
+    override fun clear(): Unit = storage.clear()
 
-    actual override fun iterator(): Iterator<T> = object : Iterator<T> {
+    override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var index = storage.size - 1
         override fun hasNext(): Boolean = index >= 0
         override fun next(): T {
@@ -43,7 +45,7 @@ actual class ArrayStack<T> : MutableStack<T> {
         }
     }
 
-    actual override fun toString(): String {
+    override fun toString(): String {
         if (storage.isEmpty()) return "[]"
         val sb = StringBuilder("[")
         for (i in storage.size - 1 downTo 0) {

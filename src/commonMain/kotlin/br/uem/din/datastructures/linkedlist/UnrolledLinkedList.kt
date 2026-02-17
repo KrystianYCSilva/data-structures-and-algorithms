@@ -30,7 +30,7 @@ package br.uem.din.datastructures.linkedlist
  * Referência: Shao, Z. et al. "Cache-Conscious Structure Layout" (1999);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10 — Elementary Data Structures.
  */
-class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
+public class UnrolledLinkedList<T>(public val nodeCapacity: Int = 16) : MutableLinkedList<T> {
 
     /**
      * Nó interno da lista desenrolada, contendo um array de elementos com capacidade fixa.
@@ -65,7 +65,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * Complexidade: O(1).
      */
-    override var size = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -78,7 +78,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @param element o elemento a ser adicionado.
      */
-    override fun addFirst(element: T) {
+    public override fun addFirst(element: T) {
         if (head == null) {
             head = UnrolledNode()
             tail = head
@@ -104,7 +104,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @param element o elemento a ser adicionado.
      */
-    override fun addLast(element: T) = add(element)
+    public override fun addLast(element: T): Unit = add(element)
 
     /**
      * Remove e retorna o primeiro elemento da lista desenrolada.
@@ -114,7 +114,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
     @Suppress("UNCHECKED_CAST")
-    override fun removeFirst(): T? {
+    public override fun removeFirst(): T? {
         if (isEmpty()) return null
         return removeAt(0)
     }
@@ -126,7 +126,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    override fun removeLast(): T? {
+    public override fun removeLast(): T? {
         if (isEmpty()) return null
         return removeAt(size - 1)
     }
@@ -140,7 +140,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @param element o elemento a ser adicionado.
      */
-    fun add(element: T) {
+    public fun add(element: T) {
         if (head == null) {
             head = UnrolledNode()
             tail = head
@@ -168,7 +168,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
     @Suppress("UNCHECKED_CAST")
-    operator fun get(index: Int): T {
+    public operator fun get(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         var node = head
         var idx = index
@@ -192,7 +192,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
     @Suppress("UNCHECKED_CAST")
-    fun removeAt(index: Int): T {
+    public fun removeAt(index: Int): T {
         if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index, size $size")
         var node = head
         var prev: UnrolledNode? = null
@@ -229,7 +229,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    override fun contains(element: T): Boolean {
+    public override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
@@ -244,7 +244,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    override fun indexOf(element: T): Int {
+    public override fun indexOf(element: T): Int {
         var idx = 0
         for (v in this) {
             if (v == element) return idx
@@ -258,7 +258,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * Complexidade: O(1).
      */
-    override fun clear() {
+    public override fun clear() {
         head = null
         tail = null
         size = 0
@@ -269,7 +269,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    override fun isEmpty() = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Retorna uma cópia dos elementos como [List] imutável do Kotlin stdlib.
@@ -278,7 +278,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    override fun toList(): List<T> = iterator().asSequence().toList()
+    public override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna representação textual da lista no formato `[v1, v2, ..., vn]`.
@@ -287,7 +287,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @return string formatada com os elementos da lista.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         if (isEmpty()) return "[]"
         return joinToString(prefix = "[", postfix = "]")
     }
@@ -299,7 +299,7 @@ class UnrolledLinkedList<T>(val nodeCapacity: Int = 16) : MutableLinkedList<T> {
      *
      * @return iterador sobre os elementos.
      */
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
+    public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var currentNode = head
         private var currentIndex = 0
 

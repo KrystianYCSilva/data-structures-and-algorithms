@@ -21,7 +21,7 @@ package br.uem.din.datastructures.set
  * Referência: Knuth, D. E. "The Art of Computer Programming", Vol. 2 — Seminumerical Algorithms;
  *             Blizard, W. D. "Multiset Theory" (1989), Notre Dame Journal of Formal Logic, 30(1).
  */
-class Multiset<T> {
+public class Multiset<T> : MutableMultiset<T> {
 
     private val counts: HashMap<T, Int> = HashMap()
 
@@ -30,7 +30,7 @@ class Multiset<T> {
      *
      * Por exemplo, se o multiset contém {a, a, b}, o tamanho é 3.
      */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -42,7 +42,7 @@ class Multiset<T> {
      * @param occurrences o número de ocorrências a adicionar (padrão: 1).
      * @throws IllegalArgumentException se [occurrences] for menor que 1.
      */
-    fun add(element: T, occurrences: Int = 1) {
+    public override fun add(element: T, occurrences: Int) {
         require(occurrences >= 1) { "Número de ocorrências deve ser >= 1, recebido: $occurrences" }
         counts[element] = (counts[element] ?: 0) + occurrences
         size += occurrences
@@ -61,7 +61,7 @@ class Multiset<T> {
      * @return `true` se o elemento existia no multiset, `false` caso contrário.
      * @throws IllegalArgumentException se [occurrences] for menor que 1.
      */
-    fun remove(element: T, occurrences: Int = 1): Boolean {
+    public override fun remove(element: T, occurrences: Int): Boolean {
         require(occurrences >= 1) { "Número de ocorrências deve ser >= 1, recebido: $occurrences" }
         val currentCount = counts[element] ?: return false
         val newCount = currentCount - occurrences
@@ -83,7 +83,7 @@ class Multiset<T> {
      * @param element o elemento cuja contagem será consultada.
      * @return o número de ocorrências do elemento, ou 0 se não existir.
      */
-    fun count(element: T): Int = counts[element] ?: 0
+    public override fun count(element: T): Int = counts[element] ?: 0
 
     /**
      * Verifica se o multiset contém pelo menos uma ocorrência do elemento.
@@ -93,7 +93,7 @@ class Multiset<T> {
      * @param element o elemento a ser verificado.
      * @return `true` se o elemento existir no multiset, `false` caso contrário.
      */
-    fun contains(element: T): Boolean = counts.containsKey(element)
+    public override fun contains(element: T): Boolean = counts.containsKey(element)
 
     /**
      * Retorna o conjunto de elementos distintos no multiset (sem duplicatas).
@@ -102,14 +102,14 @@ class Multiset<T> {
      *
      * @return um [Set] contendo os elementos distintos.
      */
-    fun distinctElements(): Set<T> = counts.keys.toSet()
+    public override fun distinctElements(): Set<T> = counts.keys.toSet()
 
     /**
      * Retorna o número de elementos distintos no multiset.
      *
      * @return a quantidade de elementos únicos.
      */
-    val distinctCount: Int
+    public override val distinctCount: Int
         get() = counts.size
 
     /**
@@ -117,12 +117,12 @@ class Multiset<T> {
      *
      * @return `true` se o multiset não contiver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Remove todas as ocorrências de todos os elementos do multiset.
      */
-    fun clear() {
+    public override fun clear() {
         counts.clear()
         size = 0
     }
@@ -132,7 +132,7 @@ class Multiset<T> {
      *
      * @return string formatada com os elementos e suas multiplicidades.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         return counts.entries.joinToString(prefix = "{", postfix = "}") { "${it.key}×${it.value}" }
     }
 }

@@ -17,31 +17,31 @@ package br.uem.din.datastructures.graph
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.1 — Adjacency-list representation.
  */
-class AdjacencyList<T> : Graph<T> {
+public class AdjacencyList<T> : MutableGraph<T> {
 
     private val adjacencies: HashMap<Vertex<T>, ArrayList<Edge<T>>> = HashMap()
 
     /** {@inheritDoc} */
-    override fun createVertex(data: T): Vertex<T> {
+    public override fun createVertex(data: T): Vertex<T> {
         val vertex = Vertex(adjacencies.count(), data)
         adjacencies[vertex] = ArrayList()
         return vertex
     }
 
     /** {@inheritDoc} */
-    override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
+    public override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         val edge = Edge(source, destination, weight)
         adjacencies[source]?.add(edge)
     }
 
     /** {@inheritDoc} */
-    override fun addUndirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
+    public override fun addUndirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         addDirectedEdge(source, destination, weight)
         addDirectedEdge(destination, source, weight)
     }
 
     /** {@inheritDoc} */
-    override fun add(edge: Edge<T>) {
+    public override fun add(edge: Edge<T>) {
         when (edge.type) {
             EdgeType.DIRECTED -> addDirectedEdge(edge.source, edge.destination, edge.weight)
             EdgeType.UNDIRECTED -> addUndirectedEdge(edge.source, edge.destination, edge.weight)
@@ -49,12 +49,12 @@ class AdjacencyList<T> : Graph<T> {
     }
 
     /** {@inheritDoc} */
-    override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
+    public override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
         return adjacencies[source] ?: ArrayList()
     }
 
     /** {@inheritDoc} */
-    override fun weight(source: Vertex<T>, destination: Vertex<T>): Double? {
+    public override fun weight(source: Vertex<T>, destination: Vertex<T>): Double? {
         return edges(source).firstOrNull { it.destination == destination }?.weight
     }
 
@@ -63,7 +63,7 @@ class AdjacencyList<T> : Graph<T> {
      *
      * @return string formatada com a lista de adjacência.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         return buildString {
             adjacencies.forEach { (vertex, edges) ->
                 val edgeString = edges.joinToString { it.destination.data.toString() }

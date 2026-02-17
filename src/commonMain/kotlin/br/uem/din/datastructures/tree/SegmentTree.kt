@@ -30,7 +30,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Problema 14-2;
  *             Halim, S. & Halim, F. "Competitive Programming 3", Cap. 2.4.3.
  */
-class SegmentTree<T>(
+public class SegmentTree<T>(
     private val identity: T,
     private val combine: (T, T) -> T
 ) {
@@ -49,7 +49,7 @@ class SegmentTree<T>(
      *
      * @param data o array de valores de entrada.
      */
-    fun build(data: List<T>) {
+    public fun build(data: List<T>) {
         n = data.size
         if (n == 0) return
         tree = MutableList(4 * n) { identity }
@@ -81,7 +81,7 @@ class SegmentTree<T>(
      * @param right índice direito do intervalo (0-indexed, inclusive).
      * @return o resultado da agregação no intervalo.
      */
-    fun query(left: Int, right: Int): T {
+    public fun query(left: Int, right: Int): T {
         require(left in 0 until n && right in 0 until n && left <= right) {
             "Índices fora do intervalo válido [0, ${n - 1}]."
         }
@@ -107,7 +107,7 @@ class SegmentTree<T>(
      * @param index o índice do elemento a ser atualizado (0-indexed).
      * @param value o novo valor.
      */
-    fun update(index: Int, value: T) {
+    public fun update(index: Int, value: T) {
         require(index in 0 until n) { "Índice fora do intervalo válido [0, ${n - 1}]." }
         update(1, 0, n - 1, index, value)
     }
@@ -141,7 +141,7 @@ class SegmentTree<T>(
      * @param right índice direito do intervalo (0-indexed, inclusive).
      * @param value o valor a ser aplicado ao intervalo.
      */
-    fun rangeUpdate(left: Int, right: Int, value: T) {
+    public fun rangeUpdate(left: Int, right: Int, value: T) {
         require(left in 0 until n && right in 0 until n && left <= right) {
             "Índices fora do intervalo válido [0, ${n - 1}]."
         }

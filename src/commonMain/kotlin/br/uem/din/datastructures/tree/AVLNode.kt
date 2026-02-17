@@ -20,24 +20,24 @@ package br.uem.din.datastructures.tree
  * Referência: Adelson-Velsky, G. M. & Landis, E. M. "An algorithm for the organization of information" (1962);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 13 (árvores balanceadas).
  */
-class AVLNode<T>(var value: T) {
+internal class AVLNode<T>(public var value: T) {
     /** Filho esquerdo deste nó, ou `null` se ausente. */
-    var leftChild: AVLNode<T>? = null
+    public var leftChild: AVLNode<T>? = null
     /** Filho direito deste nó, ou `null` se ausente. */
-    var rightChild: AVLNode<T>? = null
+    public var rightChild: AVLNode<T>? = null
 
     /** Altura deste nó na árvore (folhas têm altura 0). */
-    var height = 0
+    public var height: Int = 0
 
     /** Altura da subárvore esquerda; retorna -1 se o filho esquerdo não existir. */
-    val leftHeight: Int
+    public val leftHeight: Int
         get() = leftChild?.height ?: -1
 
     /** Altura da subárvore direita; retorna -1 se o filho direito não existir. */
-    val rightHeight: Int
+    public val rightHeight: Int
         get() = rightChild?.height ?: -1
 
     /** Fator de balanceamento: leftHeight - rightHeight. Valores fora de [-1, 1] indicam desbalanceamento. */
-    val balanceFactor: Int
+    public val balanceFactor: Int
         get() = leftHeight - rightHeight
 }

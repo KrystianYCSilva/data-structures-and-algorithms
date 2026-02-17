@@ -1,12 +1,13 @@
 package br.uem.din.datastructures.bitset
 
+import br.uem.din.datastructures.bitset.bitSetOf
 import kotlin.test.*
 
 class BitSetTest {
 
     @Test
     fun testSetAndGet() {
-        val bs = BitSet(64)
+        val bs = bitSetOf(64)
         assertFalse(bs[10])
         bs.set(10)
         assertTrue(bs[10])
@@ -20,7 +21,7 @@ class BitSetTest {
 
     @Test
     fun testBit0() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(0)
         assertTrue(bs[0])
         assertEquals(1, bs.length())
@@ -29,7 +30,7 @@ class BitSetTest {
 
     @Test
     fun testWordBoundaries32() {
-        val bs = BitSet(64)
+        val bs = bitSetOf(64)
         bs.set(31)
         assertTrue(bs[31])
         bs.set(32)
@@ -41,7 +42,7 @@ class BitSetTest {
 
     @Test
     fun testWordBoundaries64() {
-        val bs = BitSet(128)
+        val bs = bitSetOf(128)
         bs.set(63)
         assertTrue(bs[63])
         bs.set(64)
@@ -53,7 +54,7 @@ class BitSetTest {
 
     @Test
     fun testResize() {
-        val bs = BitSet(32)
+        val bs = bitSetOf(32)
         bs.set(128)
         assertTrue(bs[128])
         assertTrue(bs.size() >= 129)
@@ -61,7 +62,7 @@ class BitSetTest {
 
     @Test
     fun testLength() {
-        val bs = BitSet(64)
+        val bs = bitSetOf(64)
         assertEquals(0, bs.length())
         bs.set(0)
         assertEquals(1, bs.length())
@@ -73,7 +74,7 @@ class BitSetTest {
 
     @Test
     fun testIsEmpty() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         assertTrue(bs.isEmpty())
         bs.set(5)
         assertFalse(bs.isEmpty())
@@ -83,15 +84,15 @@ class BitSetTest {
 
     @Test
     fun testSizeAllocated() {
-        val bs = BitSet(64)
+        val bs = bitSetOf(64)
         assertTrue(bs.size() >= 64)
-        val bs2 = BitSet(100)
+        val bs2 = bitSetOf(100)
         assertTrue(bs2.size() >= 100)
     }
 
     @Test
     fun testCardinality() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         assertEquals(0, bs.cardinality())
         bs.set(1)
         bs.set(5)
@@ -103,7 +104,7 @@ class BitSetTest {
 
     @Test
     fun testClearAll() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(1)
         bs.set(50)
         bs.set(100)
@@ -115,7 +116,7 @@ class BitSetTest {
 
     @Test
     fun testNextSetBit() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(3)
         bs.set(10)
         bs.set(75)
@@ -128,7 +129,7 @@ class BitSetTest {
 
     @Test
     fun testIterator() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(1)
         bs.set(5)
         bs.set(10)
@@ -138,14 +139,14 @@ class BitSetTest {
 
     @Test
     fun testIteratorEmpty() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         assertFalse(bs.iterator().hasNext())
         assertEquals(emptyList(), bs.toList())
     }
 
     @Test
     fun testToString() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         assertEquals("{}", bs.toString())
         bs.set(1)
         bs.set(5)
@@ -155,8 +156,8 @@ class BitSetTest {
 
     @Test
     fun testEquals() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         assertEquals(a, b)
         a.set(10)
         b.set(10)
@@ -167,8 +168,8 @@ class BitSetTest {
 
     @Test
     fun testHashCodeConsistency() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         a.set(5)
         a.set(100)
         b.set(5)
@@ -178,8 +179,8 @@ class BitSetTest {
 
     @Test
     fun testAnd() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         a.set(1); a.set(2); a.set(3)
         b.set(2); b.set(3); b.set(4)
         a.and(b)
@@ -191,8 +192,8 @@ class BitSetTest {
 
     @Test
     fun testOr() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         a.set(1); a.set(2)
         b.set(3); b.set(4)
         a.or(b)
@@ -204,8 +205,8 @@ class BitSetTest {
 
     @Test
     fun testXor() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         a.set(1); a.set(2); a.set(3)
         b.set(2); b.set(3); b.set(4)
         a.xor(b)
@@ -217,8 +218,8 @@ class BitSetTest {
 
     @Test
     fun testAndNot() {
-        val a = BitSet()
-        val b = BitSet()
+        val a = bitSetOf()
+        val b = bitSetOf()
         a.set(1); a.set(2); a.set(3)
         b.set(2); b.set(3)
         a.andNot(b)
@@ -228,20 +229,38 @@ class BitSetTest {
     }
 
     @Test
-    fun testNegativeIndexThrows() {
-        val bs = BitSet()
+    fun testNegativeIndexSetThrows() {
+        val bs = bitSetOf()
         assertFailsWith<IllegalArgumentException> { bs.set(-1) }
     }
 
     @Test
+    fun testNegativeIndexClearThrows() {
+        val bs = bitSetOf()
+        assertFailsWith<IllegalArgumentException> { bs.clear(-1) }
+    }
+
+    @Test
+    fun testNegativeIndexGetThrows() {
+        val bs = bitSetOf()
+        assertFailsWith<IllegalArgumentException> { bs[-1] }
+    }
+
+    @Test
+    fun testNegativeIndexSetValueThrows() {
+        val bs = bitSetOf()
+        assertFailsWith<IllegalArgumentException> { bs.set(-1, true) }
+    }
+
+    @Test
     fun testGetBeyondCapacity() {
-        val bs = BitSet(32)
+        val bs = bitSetOf(32)
         assertFalse(bs[1000])
     }
 
     @Test
     fun testMultipleBitsSameWord() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(0); bs.set(1); bs.set(2); bs.set(3)
         assertEquals(4, bs.cardinality())
         assertTrue(bs[0])
@@ -253,7 +272,7 @@ class BitSetTest {
 
     @Test
     fun testLargeIndex() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(10000)
         assertTrue(bs[10000])
         assertFalse(bs[9999])
@@ -262,7 +281,7 @@ class BitSetTest {
 
     @Test
     fun testIterableExtensions() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         bs.set(2); bs.set(4); bs.set(6)
         assertEquals(12, bs.sumOf { it })
         assertEquals(listOf(2, 4, 6), bs.filter { it > 0 })
@@ -271,7 +290,7 @@ class BitSetTest {
 
     @Test
     fun testDefaultConstructor() {
-        val bs = BitSet()
+        val bs = bitSetOf()
         assertTrue(bs.isEmpty())
         assertTrue(bs.size() >= 64)
     }

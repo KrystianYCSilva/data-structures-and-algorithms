@@ -2,7 +2,7 @@ package br.uem.din.algorithms.graph
 
 import br.uem.din.datastructures.graph.Graph
 import br.uem.din.datastructures.graph.Vertex
-import br.uem.din.datastructures.queue.PriorityQueue
+import br.uem.din.datastructures.queue.priorityQueueOf
 import kotlin.math.abs
 
 /**
@@ -27,7 +27,7 @@ import kotlin.math.abs
  *             Determination of Minimum Cost Paths" (1968);
  *             Russell, S. & Norvig, P. "Artificial Intelligence: A Modern Approach", Cap. 3.5.
  */
-class AStar<T>(private val graph: Graph<T>) {
+public class AStar<T>(private val graph: Graph<T>) {
 
     private val costs = mutableMapOf<Vertex<T>, Double?>()
     private val visited = mutableSetOf<Vertex<T>>()
@@ -44,8 +44,8 @@ class AStar<T>(private val graph: Graph<T>) {
      * @param destination o vértice de destino.
      * @return mapa de vértices para seus custos mínimos.
      */
-    fun shortestPath(start: Vertex<T>, destination: Vertex<T>): Map<Vertex<T>, Double?> {
-        val priorityQueue = PriorityQueue(compareBy<Vertex<T>> { costs[it]!! + heuristic(it, destination) })
+    public fun shortestPath(start: Vertex<T>, destination: Vertex<T>): Map<Vertex<T>, Double?> {
+        val priorityQueue = priorityQueueOf(compareBy<Vertex<T>> { costs[it]!! + heuristic(it, destination) })
         priorityQueue.enqueue(start)
         costs[start] = 0.0
 

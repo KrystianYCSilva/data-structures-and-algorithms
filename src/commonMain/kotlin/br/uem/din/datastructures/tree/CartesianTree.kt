@@ -27,7 +27,7 @@ package br.uem.din.datastructures.tree
  *             for Geometry Problems" (1984);
  *             Bender, M. A. & Farach-Colton, M. "The LCA Problem Revisited" (2000).
  */
-class CartesianTree<T : Comparable<T>> {
+public class CartesianTree<T : Comparable<T>> {
 
     /**
      * Nó da Árvore Cartesiana.
@@ -37,17 +37,17 @@ class CartesianTree<T : Comparable<T>> {
      * @property left filho esquerdo, ou `null` se ausente.
      * @property right filho direito, ou `null` se ausente.
      */
-    class Node<T>(
-        val value: T,
-        val index: Int,
-        var left: Node<T>? = null,
-        var right: Node<T>? = null
+    public class Node<T>(
+        public val value: T,
+        public val index: Int,
+        public var left: Node<T>? = null,
+        public var right: Node<T>? = null
     )
 
     /**
      * Raiz da árvore, ou `null` se a árvore estiver vazia.
      */
-    var root: Node<T>? = null
+    public var root: Node<T>? = null
         private set
 
     /**
@@ -63,7 +63,7 @@ class CartesianTree<T : Comparable<T>> {
      *
      * @param values o array de valores a partir do qual a árvore será construída.
      */
-    fun buildFromArray(values: List<T>) {
+    public fun buildFromArray(values: List<T>) {
         if (values.isEmpty()) {
             root = null
             return
@@ -92,7 +92,7 @@ class CartesianTree<T : Comparable<T>> {
      *
      * @return lista com os valores em ordem dos índices originais.
      */
-    fun inOrder(): List<T> {
+    public fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         inOrder(root, result)
         return result
@@ -112,7 +112,7 @@ class CartesianTree<T : Comparable<T>> {
      *
      * @return `true` se a propriedade de min-heap for válida para todos os nós.
      */
-    fun isValidMinHeap(): Boolean = isValidMinHeap(root)
+    public fun isValidMinHeap(): Boolean = isValidMinHeap(root)
 
     private fun isValidMinHeap(node: Node<T>?): Boolean {
         node ?: return true

@@ -16,7 +16,7 @@ package br.uem.din.datastructures.tree
  * Referência: Fredkin, E. "Trie Memory" (1960);
  *             Sedgewick, R. & Wayne, K. "Algorithms", Cap. 5.2 — Tries.
  */
-class TrieNode<Key>(var key: Key?, var parent: TrieNode<Key>?) {
-    val children: HashMap<Key, TrieNode<Key>> = HashMap()
-    var isTerminating = false
+internal class TrieNode<Key>(public var key: Key?, public var parent: TrieNode<Key>?) {
+    public val children: HashMap<Key, TrieNode<Key>> = HashMap()
+    public var isTerminating: Boolean = false
 }

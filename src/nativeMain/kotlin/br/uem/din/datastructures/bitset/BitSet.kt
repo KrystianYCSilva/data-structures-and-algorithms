@@ -4,16 +4,19 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Implementação Native do [BitSet] usando [LongArray] (palavras de 64 bits).
- *
- * Kotlin/Native não dispõe de `java.util.BitSet`, por isso esta implementação
- * manual utiliza `LongArray` para eficiência máxima de armazenamento em plataformas
- * de 64 bits. Cresce automaticamente quando bits além da capacidade são acessados.
+ * Cria uma instância Native de BitSet.
  */
-actual class BitSet actual constructor(size: Int) : Iterable<Int> {
+public actual fun bitSetOf(size: Int): BitSet {
+    return NativeBitSet(size)
+}
+
+/**
+ * Implementação Native do [BitSet] usando [LongArray].
+ */
+private class NativeBitSet(size: Int) : BitSet {
     private var words = LongArray((size + 63) / 64)
 
-    actual fun set(index: Int) {
+    override fun set(index: Int) {
         require(index >= 0) { "index ($index) must be >= 0" }
         val wordIndex = index / 64
         ensureCapacity(wordIndex + 1)
@@ -21,31 +24,33 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         words[wordIndex] = words[wordIndex] or (1L shl bitIndex)
     }
 
-    actual fun set(index: Int, value: Boolean) {
+    override fun set(index: Int, value: Boolean) {
         if (value) set(index) else clear(index)
     }
 
-    actual fun clear(index: Int) {
+    override fun clear(index: Int) {
+        require(index >= 0) { "index ($index) must be >= 0" }
         val wordIndex = index / 64
         if (wordIndex >= words.size) return
         val bitIndex = index % 64
         words[wordIndex] = words[wordIndex] and (1L shl bitIndex).inv()
     }
 
-    actual fun clear() {
+    override fun clear() {
         words.fill(0L)
     }
 
-    actual operator fun get(index: Int): Boolean {
+    override operator fun get(index: Int): Boolean {
+        require(index >= 0) { "index ($index) must be >= 0" }
         val wordIndex = index / 64
         if (wordIndex >= words.size) return false
         val bitIndex = index % 64
         return (words[wordIndex] and (1L shl bitIndex)) != 0L
     }
 
-    actual fun size(): Int = words.size * 64
+    override fun size(): Int = words.size * 64
 
-    actual fun length(): Int {
+    override fun length(): Int {
         for (i in words.lastIndex downTo 0) {
             val word = words[i]
             if (word != 0L) {
@@ -59,11 +64,11 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return 0
     }
 
-    actual fun isEmpty(): Boolean {
+    override fun isEmpty(): Boolean {
         return words.all { it == 0L }
     }
 
-    actual fun cardinality(): Int {
+    override fun cardinality(): Int {
         var count = 0
         for (word in words) {
             count += word.countOneBits()
@@ -71,7 +76,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return count
     }
 
-    actual fun nextSetBit(fromIndex: Int): Int {
+    override fun nextSetBit(fromIndex: Int): Int {
         if (fromIndex < 0) return -1
         var wordIndex = fromIndex / 64
         if (wordIndex >= words.size) return -1
@@ -86,7 +91,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun and(other: BitSet) {
+    override fun and(other: BitSet) {
+        if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(words.size, other.words.size)
         for (i in 0 until commonWords) {
             words[i] = words[i] and other.words[i]
@@ -96,7 +102,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun or(other: BitSet) {
+    override fun or(other: BitSet) {
+        if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.words.size > words.size) {
             words = words.copyOf(other.words.size)
         }
@@ -105,7 +112,8 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun xor(other: BitSet) {
+    override fun xor(other: BitSet) {
+        if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         if (other.words.size > words.size) {
             words = words.copyOf(other.words.size)
         }
@@ -114,14 +122,15 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual fun andNot(other: BitSet) {
+    override fun andNot(other: BitSet) {
+        if (other !is NativeBitSet) throw IllegalArgumentException("Incompatible BitSet implementation")
         val commonWords = min(words.size, other.words.size)
         for (i in 0 until commonWords) {
             words[i] = words[i] and other.words[i].inv()
         }
     }
 
-    actual override fun iterator(): Iterator<Int> = object : Iterator<Int> {
+    override fun iterator(): Iterator<Int> = object : Iterator<Int> {
         private var next = nextSetBit(0)
         override fun hasNext(): Boolean = next != -1
         override fun next(): Int {
@@ -132,7 +141,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         }
     }
 
-    actual override fun toString(): String {
+    override fun toString(): String {
         val sb = StringBuilder()
         sb.append('{')
         var first = true
@@ -145,9 +154,9 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return sb.toString()
     }
 
-    actual override fun equals(other: Any?): Boolean {
+    override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is BitSet) return false
+        if (other !is NativeBitSet) return false
         val len = max(words.size, other.words.size)
         for (i in 0 until len) {
             val a = if (i < words.size) words[i] else 0L
@@ -157,7 +166,7 @@ actual class BitSet actual constructor(size: Int) : Iterable<Int> {
         return true
     }
 
-    actual override fun hashCode(): Int {
+    override fun hashCode(): Int {
         var h = 1234L
         for (i in words.indices.reversed()) {
             h = h xor (words[i] * (i + 1))

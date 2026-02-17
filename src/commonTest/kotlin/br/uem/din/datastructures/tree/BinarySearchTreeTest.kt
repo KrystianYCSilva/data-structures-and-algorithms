@@ -122,10 +122,40 @@ class BinarySearchTreeTest {
     @Test
     fun testInsertDuplicates() {
         val bst = BinarySearchTree<Int>()
+        assertTrue(bst.insert(5))
+        assertFalse(bst.insert(5))
+        assertFalse(bst.insert(5))
+        assertEquals(1, bst.size)
+        assertEquals(listOf(5), bst.inOrder())
+    }
+
+    @Test
+    fun testInsertReturnValue() {
+        val bst = BinarySearchTree<Int>()
+        assertTrue(bst.insert(1))
+        assertTrue(bst.insert(2))
+        assertFalse(bst.insert(1))
+    }
+
+    @Test
+    fun testRemoveReturnValue() {
+        val bst = BinarySearchTree<Int>()
         bst.insert(5)
-        bst.insert(5)
-        bst.insert(5)
-        assertEquals(3, bst.size)
-        assertEquals(listOf(5, 5, 5), bst.inOrder())
+        bst.insert(3)
+        assertTrue(bst.remove(3))
+        assertFalse(bst.remove(3))
+        assertFalse(bst.remove(99))
+    }
+
+    @Test
+    fun testMutableSearchTreeInterface() {
+        val tree: MutableSearchTree<Int> = BinarySearchTree()
+        tree.insert(10)
+        tree.insert(5)
+        tree.insert(15)
+        assertTrue(tree.contains(10))
+        assertEquals(3, tree.size)
+        assertFalse(tree.isEmpty())
+        assertEquals(listOf(5, 10, 15), tree.inOrder())
     }
 }

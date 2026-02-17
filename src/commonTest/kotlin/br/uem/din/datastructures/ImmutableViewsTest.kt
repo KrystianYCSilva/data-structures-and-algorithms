@@ -1,14 +1,14 @@
 package br.uem.din.datastructures
 
-import br.uem.din.datastructures.queue.ArrayQueue
-import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.queue.arrayQueueOf
+import br.uem.din.datastructures.stack.arrayStackOf
 import kotlin.test.*
 
 class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyPeek() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         val view = stack.asReadOnly()
@@ -17,7 +17,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlySize() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         val view = stack.asReadOnly()
@@ -27,7 +27,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyContains() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(10)
         stack.push(20)
         val view = stack.asReadOnly()
@@ -38,7 +38,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyIterator() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         stack.push(3)
@@ -50,7 +50,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyToString() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         val view = stack.asReadOnly()
@@ -59,7 +59,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyLiveView() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         val view = stack.asReadOnly()
         assertEquals(1, view.size)
@@ -70,7 +70,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testStackAsReadOnlyEmpty() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         val view = stack.asReadOnly()
         assertTrue(view.isEmpty())
         assertNull(view.peek())
@@ -79,7 +79,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyPeek() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         val view = queue.asReadOnly()
@@ -88,7 +88,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlySize() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         val view = queue.asReadOnly()
@@ -98,7 +98,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyContains() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(10)
         queue.enqueue(20)
         val view = queue.asReadOnly()
@@ -109,7 +109,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyIterator() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         queue.enqueue(3)
@@ -121,7 +121,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyToString() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         queue.enqueue(2)
         val view = queue.asReadOnly()
@@ -130,7 +130,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyLiveView() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         queue.enqueue(1)
         val view = queue.asReadOnly()
         assertEquals(1, view.size)
@@ -140,7 +140,7 @@ class ImmutableViewsTest {
 
     @Test
     fun testQueueAsReadOnlyEmpty() {
-        val queue = ArrayQueue<Int>()
+        val queue = arrayQueueOf<Int>()
         val view = queue.asReadOnly()
         assertTrue(view.isEmpty())
         assertNull(view.peek())

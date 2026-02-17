@@ -18,14 +18,14 @@ package br.uem.din.datastructures.tree
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 12 — Binary Search Trees.
  */
-class BinarySearchTree<T : Comparable<T>> {
+public class BinarySearchTree<T : Comparable<T>> : MutableSearchTree<T> {
 
     private var root: BinaryNode<T>? = null
 
     /**
      * Número de elementos armazenados na árvore.
      */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -35,54 +35,52 @@ class BinarySearchTree<T : Comparable<T>> {
      *
      * @return `true` se a árvore não contiver elementos.
      */
-    fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
-     * Insere um valor na árvore, mantendo a propriedade BST.
+     * Insere um elemento na árvore, mantendo a propriedade BST.
+     *
+     * Rejeita duplicatas: se o elemento já existir, retorna `false`.
      *
      * Complexidade: O(h), onde h é a altura da árvore.
      *
-     * @param value o valor a ser inserido.
+     * @param element o elemento a ser inserido.
+     * @return `true` se o elemento foi inserido, `false` se já existia.
      */
-    fun insert(value: T) {
-        root = insert(root, value)
+    public override fun insert(element: T): Boolean {
+        if (contains(element)) return false
+        root = insert(root, element)
         size++
+        return true
     }
 
-    /**
-     * Inserção recursiva auxiliar que retorna a raiz da subárvore modificada.
-     *
-     * @param node o nó atual da recursão (pode ser `null` para criar uma folha).
-     * @param value o valor a ser inserido.
-     * @return o nó raiz da subárvore após a inserção.
-     */
-    private fun insert(node: BinaryNode<T>?, value: T): BinaryNode<T> {
-        node ?: return BinaryNode(value)
-        if (value < node.value) {
-            node.leftChild = insert(node.leftChild, value)
+    private fun insert(node: BinaryNode<T>?, element: T): BinaryNode<T> {
+        node ?: return BinaryNode(element)
+        if (element < node.value) {
+            node.leftChild = insert(node.leftChild, element)
         } else {
-            node.rightChild = insert(node.rightChild, value)
+            node.rightChild = insert(node.rightChild, element)
         }
         return node
     }
 
     /**
-     * Verifica se a árvore contém o valor especificado.
+     * Verifica se a árvore contém o elemento especificado.
      *
      * Utiliza busca iterativa percorrendo a árvore da raiz às folhas.
      *
      * Complexidade: O(h), onde h é a altura da árvore.
      *
-     * @param value o valor a ser procurado.
-     * @return `true` se o valor existir na árvore, `false` caso contrário.
+     * @param element o elemento a ser procurado.
+     * @return `true` se o elemento existir na árvore, `false` caso contrário.
      */
-    fun contains(value: T): Boolean {
+    public override fun contains(element: T): Boolean {
         var current = root
         while (current != null) {
-            if (current.value == value) {
+            if (current.value == element) {
                 return true
             }
-            current = if (value < current.value) {
+            current = if (element < current.value) {
                 current.leftChild
             } else {
                 current.rightChild
@@ -92,33 +90,28 @@ class BinarySearchTree<T : Comparable<T>> {
     }
 
     /**
-     * Remove o valor especificado da árvore, se existir.
+     * Remove o elemento especificado da árvore, se existir.
      *
      * Utiliza o algoritmo de remoção com substituição pelo sucessor in-order
      * (menor valor da subárvore direita) quando o nó possui dois filhos.
      *
      * Complexidade: O(h), onde h é a altura da árvore.
      *
-     * @param value o valor a ser removido.
+     * @param element o elemento a ser removido.
+     * @return `true` se o elemento foi removido, `false` se não existia.
      */
-    fun remove(value: T) {
-        if (!contains(value)) return
-        root = remove(root, value)
+    public override fun remove(element: T): Boolean {
+        if (!contains(element)) return false
+        root = remove(root, element)
         size--
+        return true
     }
 
-    /**
-     * Remoção recursiva auxiliar que retorna a raiz da subárvore modificada.
-     *
-     * @param node o nó atual da recursão.
-     * @param value o valor a ser removido.
-     * @return o nó raiz da subárvore após a remoção, ou `null` se a subárvore ficou vazia.
-     */
-    private fun remove(node: BinaryNode<T>?, value: T): BinaryNode<T>? {
+    private fun remove(node: BinaryNode<T>?, element: T): BinaryNode<T>? {
         node ?: return null
 
         when {
-            value == node.value -> {
+            element == node.value -> {
                 if (node.leftChild == null && node.rightChild == null) {
                     return null
                 }
@@ -133,8 +126,8 @@ class BinarySearchTree<T : Comparable<T>> {
                 }
                 node.rightChild = remove(node.rightChild, node.value)
             }
-            value < node.value -> node.leftChild = remove(node.leftChild, value)
-            else -> node.rightChild = remove(node.rightChild, value)
+            element < node.value -> node.leftChild = remove(node.leftChild, element)
+            else -> node.rightChild = remove(node.rightChild, element)
         }
         return node
     }
@@ -146,7 +139,7 @@ class BinarySearchTree<T : Comparable<T>> {
      *
      * @return lista com todos os elementos em ordem.
      */
-    fun inOrder(): List<T> {
+    public override fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         root?.traverseInOrder { result.add(it) }
         return result

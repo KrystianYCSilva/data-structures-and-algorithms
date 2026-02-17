@@ -13,7 +13,7 @@ package br.uem.din.datastructures.queue
  *
  * @see MutableQueue
  */
-interface Queue<T> : Iterable<T> {
+public interface Queue<T> : Iterable<T> {
     /**
      * Retorna o elemento na frente da fila sem removê-lo.
      *
@@ -21,7 +21,7 @@ interface Queue<T> : Iterable<T> {
      *
      * @return o primeiro elemento, ou `null` se a fila estiver vazia.
      */
-    fun peek(): T?
+    public fun peek(): T?
 
     /**
      * Retorna o número de elementos na fila.
@@ -30,7 +30,7 @@ interface Queue<T> : Iterable<T> {
      *
      * @return a quantidade de elementos.
      */
-    val size: Int
+    public val size: Int
 
     /**
      * Verifica se a fila está vazia.
@@ -39,7 +39,7 @@ interface Queue<T> : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean
+    public fun isEmpty(): Boolean
 
     /**
      * Verifica se a fila contém o elemento especificado.
@@ -49,7 +49,7 @@ interface Queue<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean
+    public fun contains(element: T): Boolean
 }
 
 /**
@@ -67,7 +67,7 @@ interface Queue<T> : Iterable<T> {
  * @see LinkedQueue
  * @see CircularQueue
  */
-interface MutableQueue<T> : Queue<T> {
+public interface MutableQueue<T> : Queue<T> {
     /**
      * Insere um elemento no final da fila.
      *
@@ -75,7 +75,7 @@ interface MutableQueue<T> : Queue<T> {
      *
      * @param element o elemento a ser inserido.
      */
-    fun enqueue(element: T)
+    public fun enqueue(element: T)
 
     /**
      * Remove e retorna o elemento na frente da fila.
@@ -84,14 +84,14 @@ interface MutableQueue<T> : Queue<T> {
      *
      * @return o elemento removido, ou `null` se a fila estiver vazia.
      */
-    fun dequeue(): T?
+    public fun dequeue(): T?
 
     /**
      * Remove todos os elementos da fila.
      *
      * Complexidade: O(1) na maioria das implementações.
      */
-    fun clear()
+    public fun clear()
 }
 
 /**
@@ -102,4 +102,4 @@ interface MutableQueue<T> : Queue<T> {
  *
  * @return lista imutável dos elementos.
  */
-fun <T> Queue<T>.toList(): List<T> = iterator().asSequence().toList()
+public fun <T> Queue<T>.toList(): List<T> = iterator().asSequence().toList()

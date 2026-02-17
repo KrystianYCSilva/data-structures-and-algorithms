@@ -14,7 +14,7 @@ package br.uem.din.datastructures.tree
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 12 — Binary Search Trees.
  */
-class BinaryNode<T>(var value: T) {
-    var leftChild: BinaryNode<T>? = null
-    var rightChild: BinaryNode<T>? = null
+internal class BinaryNode<T>(public var value: T) {
+    public var leftChild: BinaryNode<T>? = null
+    public var rightChild: BinaryNode<T>? = null
 }

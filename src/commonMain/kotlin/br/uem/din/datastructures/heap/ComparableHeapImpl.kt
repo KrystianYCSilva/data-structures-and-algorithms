@@ -20,27 +20,27 @@ import br.uem.din.extensions.swap
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort.
  */
-class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
+internal class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
     /** {@inheritDoc} */
-    override val size: Int get() = storage.size
+    public override val size: Int get() = storage.size
 
     /** {@inheritDoc} */
-    override fun peek(): T? = storage.firstOrNull()
+    public override fun peek(): T? = storage.firstOrNull()
 
     /** {@inheritDoc} */
-    override fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /** {@inheritDoc} */
-    override fun insert(element: T) {
+    public override fun insert(element: T) {
         storage.add(element)
         siftUp(size - 1)
     }
 
     /** {@inheritDoc} */
-    override fun remove(): T? {
+    public override fun remove(): T? {
         if (isEmpty()) return null
         storage.swap(0, size - 1)
         val removed = storage.removeAt(size - 1)
@@ -51,7 +51,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
     }
 
     /** {@inheritDoc} */
-    override fun remove(index: Int): T? {
+    public override fun remove(index: Int): T? {
         if (index >= size) return null
         return if (index == size - 1) {
             storage.removeAt(size - 1)
@@ -65,7 +65,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
     }
 
     /** {@inheritDoc} */
-    override fun siftDown(index: Int) {
+    protected override fun siftDown(index: Int) {
         var parent = index
         while (true) {
             val left = leftChildIndex(parent)
@@ -86,7 +86,7 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
     }
 
     /** {@inheritDoc} */
-    override protected fun siftUp(index: Int) {
+    protected override fun siftUp(index: Int) {
         var child = index
         var parent = parentIndex(child)
         while (child > 0 && storage[child] < storage[parent]) {
@@ -96,9 +96,9 @@ class ComparableHeapImpl<T : Comparable<T>> : AbstractHeap<T>() {
         }
     }
 
-    override fun contains(element: T): Boolean = storage.contains(element)
+    public override fun contains(element: T): Boolean = storage.contains(element)
 
-    override fun clear() = storage.clear()
+    public override fun clear(): Unit = storage.clear()
 
-    override fun iterator(): Iterator<T> = storage.iterator()
+    public override fun iterator(): Iterator<T> = storage.iterator()
 }

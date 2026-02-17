@@ -23,27 +23,27 @@ import br.uem.din.datastructures.linkedlist.LinkedList
  *
  * @see ArrayStack
  */
-class LinkedStack<T> : MutableStack<T> {
+public class LinkedStack<T> : MutableStack<T> {
     private val list = LinkedList<T>()
 
-    override fun push(element: T): T {
+    public override fun push(element: T): T {
         list.addFirst(element)
         return element
     }
 
-    override fun pop(): T? = list.removeFirst()
+    public override fun pop(): T? = list.removeFirst()
 
-    override fun peek(): T? = if (list.isEmpty()) null else list[0]
+    public override fun peek(): T? = if (list.isEmpty()) null else list[0]
 
-    override val size: Int get() = list.size
+    public override val size: Int get() = list.size
 
-    override fun isEmpty(): Boolean = list.isEmpty()
+    public override fun isEmpty(): Boolean = list.isEmpty()
 
-    override fun contains(element: T): Boolean = list.contains(element)
+    public override fun contains(element: T): Boolean = list.contains(element)
 
-    override fun clear() = list.clear()
+    public override fun clear(): Unit = list.clear()
 
-    override fun iterator(): Iterator<T> = list.iterator()
+    public override fun iterator(): Iterator<T> = list.iterator()
 
-    override fun toString(): String = list.toString()
+    public override fun toString(): String = list.toString()
 }

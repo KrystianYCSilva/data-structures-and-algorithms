@@ -24,10 +24,10 @@ import br.uem.din.datastructures.queue.MutableQueue
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort;
  *             Williams, J. W. J. "Algorithm 232 — Heapsort" (1964).
  */
-abstract class AbstractHeap<T> : MutableQueue<T> {
+internal abstract class AbstractHeap<T> : MutableQueue<T> {
 
-    abstract override val size: Int
-    abstract override fun peek(): T?
+    public abstract override val size: Int
+    public abstract override fun peek(): T?
 
     /**
      * Insere um elemento no heap, restaurando a propriedade heap via sift-up.
@@ -36,7 +36,7 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @param element o elemento a ser inserido.
      */
-    abstract fun insert(element: T)
+    public abstract fun insert(element: T)
 
     /**
      * Insere um elemento no heap (delega para [insert]).
@@ -45,7 +45,7 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @param element o elemento a ser inserido.
      */
-    override fun enqueue(element: T) {
+    public override fun enqueue(element: T) {
         insert(element)
     }
 
@@ -56,16 +56,16 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @return o elemento removido, ou `null` se o heap estiver vazio.
      */
-    override fun dequeue(): T? {
+    public override fun dequeue(): T? {
         return remove()
     }
 
     /** Calcula o índice do filho esquerdo de um nó na representação em array. */
-    protected fun leftChildIndex(index: Int) = (2 * index) + 1
+    protected fun leftChildIndex(index: Int): Int = (2 * index) + 1
     /** Calcula o índice do filho direito de um nó na representação em array. */
-    protected fun rightChildIndex(index: Int) = (2 * index) + 2
+    protected fun rightChildIndex(index: Int): Int = (2 * index) + 2
     /** Calcula o índice do nó pai na representação em array. */
-    protected fun parentIndex(index: Int) = (index - 1) / 2
+    protected fun parentIndex(index: Int): Int = (index - 1) / 2
 
     /**
      * Remove e retorna o elemento raiz (de maior prioridade) do heap.
@@ -74,7 +74,7 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @return o elemento removido, ou `null` se vazio.
      */
-    abstract fun remove(): T?
+    public abstract fun remove(): T?
 
     /**
      * Remove e retorna o elemento na posição especificada do heap.
@@ -84,7 +84,7 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      * @param index a posição do elemento a ser removido.
      * @return o elemento removido, ou `null` se o índice for inválido.
      */
-    abstract fun remove(index: Int): T?
+    public abstract fun remove(index: Int): T?
 
     /**
      * Move um elemento para baixo no heap até restaurar a propriedade heap (heapify-down).
@@ -112,14 +112,14 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    abstract override fun contains(element: T): Boolean
+    public abstract override fun contains(element: T): Boolean
 
     /**
      * Remove todos os elementos do heap.
      *
      * Complexidade: O(1).
      */
-    abstract override fun clear()
+    public abstract override fun clear()
 
     /**
      * Retorna um [Iterator] sobre os elementos do heap.
@@ -128,5 +128,5 @@ abstract class AbstractHeap<T> : MutableQueue<T> {
      *
      * @return iterador sobre os elementos.
      */
-    abstract override fun iterator(): Iterator<T>
+    public abstract override fun iterator(): Iterator<T>
 }

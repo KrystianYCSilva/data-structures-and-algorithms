@@ -25,7 +25,7 @@ package br.uem.din.datastructures.tree
  *             Knuth, D. E. "The Art of Computer Programming", Vol. 3, Seção 6.3;
  *             Sedgewick, R. & Wayne, K. "Algorithms", Cap. 5.2.
  */
-class RadixTree {
+public class RadixTree {
 
     private class Node(
         var label: String = "",
@@ -38,7 +38,7 @@ class RadixTree {
     /**
      * Número de chaves armazenadas na árvore.
      */
-    var size: Int = 0
+    public var size: Int = 0
         private set
 
     /**
@@ -52,7 +52,7 @@ class RadixTree {
      *
      * @param key a chave a ser inserida.
      */
-    fun insert(key: String) {
+    public fun insert(key: String) {
         if (key.isEmpty()) {
             if (!root.isTerminal) {
                 root.isTerminal = true
@@ -105,7 +105,7 @@ class RadixTree {
      * @param key a chave a ser procurada.
      * @return `true` se a chave existir na árvore, `false` caso contrário.
      */
-    fun search(key: String): Boolean {
+    public fun search(key: String): Boolean {
         if (key.isEmpty()) return root.isTerminal
         return search(root, key)
     }
@@ -128,7 +128,7 @@ class RadixTree {
      *
      * @param key a chave a ser removida.
      */
-    fun remove(key: String) {
+    public fun remove(key: String) {
         if (key.isEmpty()) {
             if (root.isTerminal) {
                 root.isTerminal = false
@@ -140,7 +140,7 @@ class RadixTree {
     }
 
     @Deprecated("Use remove(key) para consistência com a API do projeto.", replaceWith = ReplaceWith("remove(key)"))
-    fun delete(key: String) {
+    public fun delete(key: String) {
         remove(key)
     }
 
@@ -183,7 +183,7 @@ class RadixTree {
      * @param prefix o prefixo a ser buscado.
      * @return lista de todas as chaves com o prefixo dado.
      */
-    fun prefixSearch(prefix: String): List<String> {
+    public fun prefixSearch(prefix: String): List<String> {
         if (prefix.isEmpty()) {
             val result = mutableListOf<String>()
             collectAll(root, "", result)

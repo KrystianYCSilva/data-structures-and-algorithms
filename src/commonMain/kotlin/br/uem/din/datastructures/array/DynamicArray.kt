@@ -1,21 +1,5 @@
 package br.uem.din.datastructures.array
 
-/**
- * Array Unidimensional fixo (Vetor).
- *
- * Typealias para `Array<T>` nativo do Kotlin. Representa um bloco contíguo de memória
- * com tamanho fixo definido na criação. Mapeado para:
- * - `Object[]` no JVM
- * - `Array` nativo em JS
- * - Array nativo em Kotlin/Native
- *
- * Complexidades:
- * - Acesso por índice: O(1)
- * - Tamanho fixo (não redimensiona)
- *
- * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.
- */
-typealias Vector<T> = Array<T>
 
 /**
  * Array Dinâmico (redimensionável).
@@ -38,4 +22,4 @@ typealias Vector<T> = Array<T>
  *
  * @see kotlin.collections.ArrayList
  */
-typealias DynamicArray<T> = ArrayList<T>
+public typealias DynamicArray<T> = ArrayList<T>

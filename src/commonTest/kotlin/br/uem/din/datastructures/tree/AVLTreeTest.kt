@@ -121,6 +121,36 @@ class AVLTreeTest {
         assertTrue(balanceFactor in -1..1)
     }
 
+    @Test
+    fun testInsertReturnValue() {
+        val avl = AVLTree<Int>()
+        assertTrue(avl.insert(5))
+        assertTrue(avl.insert(3))
+        assertFalse(avl.insert(5))
+    }
+
+    @Test
+    fun testRemoveReturnValue() {
+        val avl = AVLTree<Int>()
+        avl.insert(5)
+        avl.insert(3)
+        assertTrue(avl.remove(3))
+        assertFalse(avl.remove(3))
+        assertFalse(avl.remove(99))
+    }
+
+    @Test
+    fun testMutableSearchTreeInterface() {
+        val tree: MutableSearchTree<Int> = AVLTree()
+        tree.insert(10)
+        tree.insert(5)
+        tree.insert(15)
+        assertTrue(tree.contains(10))
+        assertEquals(3, tree.size)
+        assertFalse(tree.isEmpty())
+        assertEquals(listOf(5, 10, 15), tree.inOrder())
+    }
+
     private fun height(node: AVLNode<Int>?): Int {
         if (node == null) return 0
         return node.height

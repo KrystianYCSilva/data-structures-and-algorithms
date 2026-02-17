@@ -18,7 +18,7 @@ package br.uem.din.datastructures.tree
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> BinaryNode<T>.traverseInOrder(visit: (T) -> Unit) {
+internal fun <T> BinaryNode<T>.traverseInOrder(visit: (T) -> Unit) {
     leftChild?.traverseInOrder(visit)
     visit(value)
     rightChild?.traverseInOrder(visit)
@@ -29,7 +29,7 @@ fun <T> BinaryNode<T>.traverseInOrder(visit: (T) -> Unit) {
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> BinaryNode<T>.traversePreOrder(visit: (T) -> Unit) {
+internal fun <T> BinaryNode<T>.traversePreOrder(visit: (T) -> Unit) {
     visit(value)
     leftChild?.traversePreOrder(visit)
     rightChild?.traversePreOrder(visit)
@@ -40,7 +40,7 @@ fun <T> BinaryNode<T>.traversePreOrder(visit: (T) -> Unit) {
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> BinaryNode<T>.traversePostOrder(visit: (T) -> Unit) {
+internal fun <T> BinaryNode<T>.traversePostOrder(visit: (T) -> Unit) {
     leftChild?.traversePostOrder(visit)
     rightChild?.traversePostOrder(visit)
     visit(value)
@@ -51,7 +51,7 @@ fun <T> BinaryNode<T>.traversePostOrder(visit: (T) -> Unit) {
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> AVLNode<T>.traverseInOrder(visit: (T) -> Unit) {
+internal fun <T> AVLNode<T>.traverseInOrder(visit: (T) -> Unit) {
     leftChild?.traverseInOrder(visit)
     visit(value)
     rightChild?.traverseInOrder(visit)
@@ -62,7 +62,7 @@ fun <T> AVLNode<T>.traverseInOrder(visit: (T) -> Unit) {
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> AVLNode<T>.traversePreOrder(visit: (T) -> Unit) {
+internal fun <T> AVLNode<T>.traversePreOrder(visit: (T) -> Unit) {
     visit(value)
     leftChild?.traversePreOrder(visit)
     rightChild?.traversePreOrder(visit)
@@ -73,7 +73,7 @@ fun <T> AVLNode<T>.traversePreOrder(visit: (T) -> Unit) {
  *
  * @param visit função de callback invocada para cada valor visitado.
  */
-fun <T> AVLNode<T>.traversePostOrder(visit: (T) -> Unit) {
+internal fun <T> AVLNode<T>.traversePostOrder(visit: (T) -> Unit) {
     leftChild?.traversePostOrder(visit)
     rightChild?.traversePostOrder(visit)
     visit(value)

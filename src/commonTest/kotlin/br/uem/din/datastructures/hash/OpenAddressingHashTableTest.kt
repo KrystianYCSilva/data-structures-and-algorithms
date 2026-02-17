@@ -127,4 +127,17 @@ class OpenAddressingHashTableTest {
         assertTrue(str.contains("key"))
         assertTrue(str.contains("42"))
     }
+
+    @Test
+    fun testMutableOpenHashTableInterface() {
+        val table: MutableOpenHashTable<String, Int> = OpenAddressingHashTable()
+        table.put("a", 1)
+        table.put("b", 2)
+        assertEquals(1, table.get("a"))
+        assertTrue(table.contains("b"))
+        assertEquals(2, table.size)
+        assertFalse(table.isEmpty())
+        table.remove("a")
+        assertNull(table.get("a"))
+    }
 }

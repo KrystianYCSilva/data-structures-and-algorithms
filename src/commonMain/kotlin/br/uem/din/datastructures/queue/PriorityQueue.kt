@@ -1,12 +1,12 @@
 package br.uem.din.datastructures.queue
 
 /**
- * Fila de prioridade (Priority Queue) — declaração `expect` para Kotlin Multiplatform.
+ * Cria uma nova instância de uma Fila de Prioridade (Priority Queue).
  *
  * Fila onde o elemento com maior prioridade (menor valor segundo o [Comparator] ou
  * ordenação natural [Comparable]) é sempre desinfileirado primeiro (min-heap).
- * Implementa [MutableQueue] com suporte completo a [Iterable].
  *
+ * Implementação:
  * - **JVM**: delega a [java.util.PriorityQueue]
  * - **JS/Native**: implementação manual de binary min-heap
  *
@@ -24,18 +24,5 @@ package br.uem.din.datastructures.queue
  * @param comparator comparador opcional; se `null`, usa a ordenação natural de [T].
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort / Priority Queues.
- *
- * @see ArrayQueue
- * @see LinkedQueue
  */
-expect class PriorityQueue<T>(comparator: Comparator<T>? = null) : MutableQueue<T> {
-    override fun enqueue(element: T)
-    override fun dequeue(): T?
-    override fun peek(): T?
-    override val size: Int
-    override fun isEmpty(): Boolean
-    override fun contains(element: T): Boolean
-    override fun clear()
-    override fun iterator(): Iterator<T>
-    override fun toString(): String
-}
+public expect fun <T> priorityQueueOf(comparator: Comparator<T>? = null): MutableQueue<T>

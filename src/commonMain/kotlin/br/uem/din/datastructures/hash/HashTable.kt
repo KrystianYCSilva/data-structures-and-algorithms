@@ -1,13 +1,13 @@
 package br.uem.din.datastructures.hash
 
 /**
- * A Hash Table implementation.
+ * Implementação de Tabela Hash (Hash Table).
  *
- * In Kotlin Multiplatform, `kotlin.collections.HashMap` is an alias for:
- * - `java.util.HashMap` on JVM
- * - A JS implementation on JavaScript
- * - A Native implementation on Native targets
+ * No Kotlin Multiplatform, `kotlin.collections.HashMap` é um alias para:
+ * - `java.util.HashMap` na JVM
+ * - Uma implementação JS no JavaScript
+ * - Uma implementação nativa nos alvos Native
  *
- * This meets the requirement of using native implementations where available.
+ * Isso atende ao requisito de utilizar implementações nativas onde disponíveis.
  */
-typealias HashTable<K, V> = kotlin.collections.HashMap<K, V>
+public typealias HashTable<K, V> = kotlin.collections.HashMap<K, V>

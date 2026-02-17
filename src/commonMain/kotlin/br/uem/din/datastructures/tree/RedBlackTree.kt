@@ -1,11 +1,12 @@
 package br.uem.din.datastructures.tree
 
 /**
- * Árvore Rubro-Negra (Red-Black Tree) — árvore binária de busca autobalanceada.
+ * Cria uma nova instância de Árvore Rubro-Negra (Red-Black Tree).
  *
- * Inventada por Rudolf Bayer (1972) e popularizada por Guibas & Sedgewick (1978),
- * mantém propriedades de balanceamento através de coloração de nós (vermelho/preto)
- * e rotações, garantindo altura O(log n).
+ * Árvore binária de busca autobalanceada inventada por Rudolf Bayer (1972)
+ * e popularizada por Guibas & Sedgewick (1978). Mantém propriedades de
+ * balanceamento através de coloração de nós (vermelho/preto) e rotações,
+ * garantindo altura O(log n).
  *
  * Propriedades invariantes:
  * 1. Todo nó é vermelho ou preto
@@ -14,10 +15,16 @@ package br.uem.din.datastructures.tree
  * 4. Nós vermelhos têm apenas filhos pretos (sem dois vermelhos consecutivos)
  * 5. Todos os caminhos de um nó até suas folhas descendentes contêm o mesmo número de nós pretos
  *
+ * Implementação:
+ * - **JVM**: delega a [java.util.TreeSet] (internamente usa `TreeMap` rubro-negra)
+ * - **JS/Native**: implementação manual CLRS via [RedBlackTreeImpl]
+ *
  * | Operação | Complexidade |
  * |----------|--------------|
  * | insert   | O(log n)     |
+ * | remove   | O(log n)     |
  * | contains | O(log n)     |
+ * | inOrder  | O(n)         |
  * | size     | O(1)         |
  * | isEmpty  | O(1)         |
  *
@@ -25,10 +32,7 @@ package br.uem.din.datastructures.tree
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 13 — Red-Black Trees;
  *             Guibas, L. J. & Sedgewick, R. "A Dichromatic Framework for Balanced Trees" (1978).
+ *
+ * @see MutableSearchTree
  */
-expect class RedBlackTree<T : Comparable<T>>() {
-    fun insert(value: T): Boolean
-    fun contains(value: T): Boolean
-    fun size(): Int
-    fun isEmpty(): Boolean
-}
+public expect fun <T : Comparable<T>> redBlackTreeOf(): MutableSearchTree<T>

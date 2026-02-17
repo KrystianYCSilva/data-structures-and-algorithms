@@ -6,7 +6,7 @@ class StackTest {
 
     @Test
     fun testArrayStackPushPop() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         assertTrue(stack.isEmpty())
         stack.push(1)
         stack.push(2)
@@ -20,14 +20,14 @@ class StackTest {
 
     @Test
     fun testArrayStackPopEmpty() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         assertNull(stack.pop())
         assertNull(stack.peek())
     }
 
     @Test
     fun testArrayStackContains() {
-        val stack = ArrayStack<String>()
+        val stack = arrayStackOf<String>()
         stack.push("a")
         stack.push("b")
         stack.push("c")
@@ -37,7 +37,7 @@ class StackTest {
 
     @Test
     fun testArrayStackClear() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         stack.clear()
@@ -48,7 +48,7 @@ class StackTest {
 
     @Test
     fun testArrayStackIterator() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         stack.push(3)
@@ -59,7 +59,7 @@ class StackTest {
 
     @Test
     fun testArrayStackToList() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         stack.push(3)
@@ -68,7 +68,7 @@ class StackTest {
 
     @Test
     fun testArrayStackIterableExtensions() {
-        val stack = ArrayStack<Int>()
+        val stack = arrayStackOf<Int>()
         stack.push(1)
         stack.push(2)
         stack.push(3)

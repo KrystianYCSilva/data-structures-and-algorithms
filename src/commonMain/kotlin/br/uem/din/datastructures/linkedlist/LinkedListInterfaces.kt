@@ -16,13 +16,13 @@ package br.uem.din.datastructures.linkedlist
  *
  * @see MutableLinkedList
  */
-interface ImmutableLinkedList<T> : Iterable<T> {
+public interface ImmutableLinkedList<T> : Iterable<T> {
     /**
      * Número de elementos na lista.
      *
      * Complexidade: O(1).
      */
-    val size: Int
+    public val size: Int
 
     /**
      * Verifica se a lista está vazia.
@@ -31,7 +31,7 @@ interface ImmutableLinkedList<T> : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean
+    public fun isEmpty(): Boolean
 
     /**
      * Verifica se a lista contém o elemento especificado.
@@ -41,7 +41,7 @@ interface ImmutableLinkedList<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean
+    public fun contains(element: T): Boolean
 
     /**
      * Retorna o índice da primeira ocorrência do valor, ou -1 se não encontrado.
@@ -51,7 +51,7 @@ interface ImmutableLinkedList<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    fun indexOf(element: T): Int
+    public fun indexOf(element: T): Int
 
     /**
      * Retorna uma cópia dos elementos como [List] imutável do Kotlin stdlib.
@@ -60,7 +60,7 @@ interface ImmutableLinkedList<T> : Iterable<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    fun toList(): List<T>
+    public fun toList(): List<T>
 }
 
 /**
@@ -80,7 +80,7 @@ interface ImmutableLinkedList<T> : Iterable<T> {
  * @see CircularLinkedList
  * @see UnrolledLinkedList
  */
-interface MutableLinkedList<T> : ImmutableLinkedList<T> {
+public interface MutableLinkedList<T> : ImmutableLinkedList<T> {
     /**
      * Insere um elemento no início da lista.
      *
@@ -88,7 +88,7 @@ interface MutableLinkedList<T> : ImmutableLinkedList<T> {
      *
      * @param element o valor a ser inserido.
      */
-    fun addFirst(element: T)
+    public fun addFirst(element: T)
 
     /**
      * Insere um elemento no final da lista.
@@ -97,7 +97,7 @@ interface MutableLinkedList<T> : ImmutableLinkedList<T> {
      *
      * @param element o valor a ser inserido.
      */
-    fun addLast(element: T)
+    public fun addLast(element: T)
 
     /**
      * Remove e retorna o primeiro elemento da lista.
@@ -106,7 +106,7 @@ interface MutableLinkedList<T> : ImmutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeFirst(): T?
+    public fun removeFirst(): T?
 
     /**
      * Remove e retorna o último elemento da lista.
@@ -115,12 +115,45 @@ interface MutableLinkedList<T> : ImmutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    fun removeLast(): T?
+    public fun removeLast(): T?
+
+    /**
+     * Retorna o elemento na posição especificada.
+     *
+     * Complexidade: O(n).
+     *
+     * @param index a posição desejada (0-based).
+     * @return o valor na posição indicada.
+     * @throws IndexOutOfBoundsException se o índice for inválido.
+     */
+    public operator fun get(index: Int): T
+
+    /**
+     * Substitui o valor na posição especificada.
+     *
+     * Complexidade: O(n).
+     *
+     * @param index a posição desejada (0-based).
+     * @param element o novo valor.
+     * @throws IndexOutOfBoundsException se o índice for inválido.
+     */
+    public operator fun set(index: Int, element: T)
+
+    /**
+     * Remove e retorna o elemento na posição especificada.
+     *
+     * Complexidade: O(n).
+     *
+     * @param index a posição do elemento a ser removido (0-based).
+     * @return o valor removido.
+     * @throws IndexOutOfBoundsException se o índice for inválido.
+     */
+    public fun removeAt(index: Int): T
 
     /**
      * Remove todos os elementos da lista.
      *
      * Complexidade: O(1).
      */
-    fun clear()
+    public fun clear()
 }

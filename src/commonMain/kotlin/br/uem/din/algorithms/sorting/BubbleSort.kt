@@ -19,7 +19,7 @@ package br.uem.din.algorithms.sorting
  *
  * Referência: Knuth, D. E. "The Art of Computer Programming", Vol. 3, Sec. 5.2.2 — Sorting by Exchanging.
  */
-fun <T : Comparable<T>> bubbleSort(list: MutableList<T>) {
+public fun <T : Comparable<T>> bubbleSort(list: MutableList<T>) {
     val n = list.size
     for (i in 0 until n - 1) {
         for (j in 0 until n - i - 1) {

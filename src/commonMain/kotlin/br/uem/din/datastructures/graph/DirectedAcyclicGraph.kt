@@ -13,8 +13,10 @@ package br.uem.din.datastructures.graph
  * criaria um ciclo é rejeitada com uma exceção.
  *
  * Complexidades:
- * - [addVertex]: O(1)
- * - [addEdge]: O(|V| + |E|) (inclui verificação de ciclo via DFS)
+ * - [createVertex] / [addVertex]: O(1)
+ * - [addDirectedEdge] / [addEdge]: O(|V| + |E|) (inclui verificação de ciclo via DFS)
+ * - [edges]: O(1)
+ * - [weight]: O(deg(v))
  * - [topologicalSort]: O(|V| + |E|)
  * - [shortestPath]: O(|V| + |E|)
  * - Espaço: O(|V| + |E|)
@@ -25,20 +27,13 @@ package br.uem.din.datastructures.graph
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 24.2 — Single-source shortest
  *             paths in directed acyclic graphs.
  */
-class DirectedAcyclicGraph<T> {
+public class DirectedAcyclicGraph<T> : MutableGraph<T> {
 
     private val adjacencies: HashMap<Vertex<T>, ArrayList<Edge<T>>> = HashMap()
     private val vertices: ArrayList<Vertex<T>> = ArrayList()
 
-    /**
-     * Cria e retorna um novo vértice contendo o dado especificado.
-     *
-     * Complexidade: O(1).
-     *
-     * @param data o dado a ser armazenado no vértice.
-     * @return o [Vertex] criado.
-     */
-    fun addVertex(data: T): Vertex<T> {
+    /** {@inheritDoc} */
+    public override fun createVertex(data: T): Vertex<T> {
         val vertex = Vertex(vertices.size, data)
         vertices.add(vertex)
         adjacencies[vertex] = ArrayList()
@@ -46,23 +41,15 @@ class DirectedAcyclicGraph<T> {
     }
 
     /**
-     * Adiciona uma aresta direcionada de [source] para [destination] com peso opcional.
+     * Alias para [createVertex], mantido por compatibilidade.
      *
-     * Antes da inserção, verifica se a aresta criaria um ciclo no grafo. Se um ciclo
-     * for detectado, a aresta não é adicionada e uma [IllegalArgumentException] é lançada.
-     *
-     * A detecção de ciclo é realizada por DFS a partir de [destination], verificando
-     * se [source] é alcançável — o que indicaria que a nova aresta fecharia um ciclo.
-     *
-     * Complexidade: O(|V| + |E|) devido à verificação de ciclo.
-     *
-     * @param source o vértice de origem.
-     * @param destination o vértice de destino.
-     * @param weight o peso da aresta, ou `null` para arestas sem peso.
-     * @throws IllegalArgumentException se a aresta criar um ciclo no grafo.
-     * @throws IllegalArgumentException se o vértice não pertencer a este grafo.
+     * @param data o dado a ser armazenado no vértice.
+     * @return o [Vertex] criado.
      */
-    fun addEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double? = null) {
+    public fun addVertex(data: T): Vertex<T> = createVertex(data)
+
+    /** {@inheritDoc} */
+    public override fun addDirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
         require(adjacencies.containsKey(source)) { "Vértice de origem não pertence ao grafo: $source" }
         require(adjacencies.containsKey(destination)) { "Vértice de destino não pertence ao grafo: $destination" }
 
@@ -80,13 +67,42 @@ class DirectedAcyclicGraph<T> {
     }
 
     /**
-     * Retorna todas as arestas que partem do vértice especificado.
+     * Alias para [addDirectedEdge], mantido por compatibilidade.
      *
      * @param source o vértice de origem.
-     * @return lista de arestas adjacentes.
+     * @param destination o vértice de destino.
+     * @param weight o peso da aresta, ou `null` para arestas sem peso.
+     * @throws IllegalArgumentException se a aresta criar um ciclo no grafo.
      */
-    fun edges(source: Vertex<T>): List<Edge<T>> {
-        return adjacencies[source] ?: emptyList()
+    public fun addEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double? = null) {
+        addDirectedEdge(source, destination, weight)
+    }
+
+    /**
+     * Operação não suportada em DAG — um DAG é direcionado por definição.
+     *
+     * @throws UnsupportedOperationException sempre.
+     */
+    public override fun addUndirectedEdge(source: Vertex<T>, destination: Vertex<T>, weight: Double?) {
+        throw UnsupportedOperationException("DAG não suporta arestas não-direcionadas.")
+    }
+
+    /** {@inheritDoc} */
+    public override fun add(edge: Edge<T>) {
+        when (edge.type) {
+            EdgeType.DIRECTED -> addDirectedEdge(edge.source, edge.destination, edge.weight)
+            EdgeType.UNDIRECTED -> throw UnsupportedOperationException("DAG não suporta arestas não-direcionadas.")
+        }
+    }
+
+    /** {@inheritDoc} */
+    public override fun edges(source: Vertex<T>): ArrayList<Edge<T>> {
+        return adjacencies[source] ?: ArrayList()
+    }
+
+    /** {@inheritDoc} */
+    public override fun weight(source: Vertex<T>, destination: Vertex<T>): Double? {
+        return edges(source).firstOrNull { it.destination == destination }?.weight
     }
 
     /**
@@ -94,7 +110,7 @@ class DirectedAcyclicGraph<T> {
      *
      * @return lista de vértices.
      */
-    fun vertices(): List<Vertex<T>> = vertices.toList()
+    public fun vertices(): List<Vertex<T>> = vertices.toList()
 
     /**
      * Retorna uma ordenação topológica dos vértices do DAG.
@@ -109,7 +125,7 @@ class DirectedAcyclicGraph<T> {
      *
      * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.4 — Topological sort.
      */
-    fun topologicalSort(): List<Vertex<T>> {
+    public fun topologicalSort(): List<Vertex<T>> {
         val visited = HashSet<Vertex<T>>()
         val stack = ArrayDeque<Vertex<T>>()
 
@@ -139,7 +155,7 @@ class DirectedAcyclicGraph<T> {
      * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 24.2 —
      *             Single-source shortest paths in directed acyclic graphs.
      */
-    fun shortestPath(source: Vertex<T>): Map<Vertex<T>, Double> {
+    public fun shortestPath(source: Vertex<T>): Map<Vertex<T>, Double> {
         require(adjacencies.containsKey(source)) { "Vértice fonte não pertence ao grafo: $source" }
 
         val topOrder = topologicalSort()
@@ -222,7 +238,7 @@ class DirectedAcyclicGraph<T> {
      *
      * @return string formatada com a lista de adjacência.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         return buildString {
             adjacencies.forEach { (vertex, edges) ->
                 val edgeString = edges.joinToString { "${it.destination.data}(${it.weight ?: "1.0"})" }

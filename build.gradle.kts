@@ -12,9 +12,13 @@ repositories {
 }
 
 kotlin {
+    explicitApi()
+
     jvm {
         withJava()
     }
+
+    jvmToolchain(8)
     js(IR) {
         browser {
             testTask {

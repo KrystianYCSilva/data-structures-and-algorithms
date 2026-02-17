@@ -28,7 +28,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 18 — B-Trees;
  *             Knuth, D. E. "The Art of Computer Programming", Vol. 3, Seção 6.2.4.
  */
-class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
+public class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
 
     init {
         require(minimumDegree >= 2) { "O grau mínimo deve ser >= 2." }
@@ -44,7 +44,7 @@ class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
     /**
      * Número de chaves armazenadas na árvore.
      */
-    var size: Int = 0
+    public var size: Int = 0
         private set
 
     /**
@@ -58,7 +58,7 @@ class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      * @param value a chave a ser procurada.
      * @return `true` se a chave existir na árvore, `false` caso contrário.
      */
-    fun search(value: T): Boolean = search(root, value)
+    public fun search(value: T): Boolean = search(root, value)
 
     private fun search(node: Node<T>, value: T): Boolean {
         var i = 0
@@ -81,7 +81,7 @@ class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * @param value a chave a ser inserida.
      */
-    fun insert(value: T) {
+    public fun insert(value: T) {
         val r = root
         if (r.keys.size == 2 * minimumDegree - 1) {
             val s = Node<T>(leaf = false)
@@ -170,7 +170,7 @@ class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * @param value a chave a ser removida.
      */
-    fun remove(value: T) {
+    public fun remove(value: T) {
         if (!search(value)) return
         remove(root, value)
         if (root.keys.isEmpty() && !root.leaf) {
@@ -351,7 +351,7 @@ class BTree<T : Comparable<T>>(private val minimumDegree: Int = 2) {
      *
      * @return lista com todos os elementos em ordem.
      */
-    fun inOrder(): List<T> {
+    public fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         inOrder(root, result)
         return result

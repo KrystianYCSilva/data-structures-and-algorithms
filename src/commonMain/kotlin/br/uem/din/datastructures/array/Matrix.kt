@@ -23,7 +23,7 @@ package br.uem.din.datastructures.array
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 4 (Strassen),
  *             Cap. 25 (Floyd-Warshall).
  */
-class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) : Iterable<T> {
+public class Matrix<T>(public val rows: Int, public val cols: Int, init: (row: Int, col: Int) -> T) : Iterable<T> {
 
     private val data: MutableList<T>
 
@@ -43,7 +43,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @throws IndexOutOfBoundsException se os índices forem inválidos.
      */
-    operator fun get(row: Int, col: Int): T {
+    public operator fun get(row: Int, col: Int): T {
         checkBounds(row, col)
         return data[row * cols + col]
     }
@@ -55,7 +55,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @throws IndexOutOfBoundsException se os índices forem inválidos.
      */
-    operator fun set(row: Int, col: Int, value: T) {
+    public operator fun set(row: Int, col: Int, value: T) {
         checkBounds(row, col)
         data[row * cols + col] = value
     }
@@ -69,7 +69,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      * @return lista com os elementos da linha.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    fun getRow(row: Int): List<T> {
+    public fun getRow(row: Int): List<T> {
         if (row < 0 || row >= rows) throw IndexOutOfBoundsException("Row: $row, Rows: $rows")
         val start = row * cols
         return data.subList(start, start + cols).toList()
@@ -84,7 +84,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      * @return lista com os elementos da coluna.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    fun getColumn(col: Int): List<T> {
+    public fun getColumn(col: Int): List<T> {
         if (col < 0 || col >= cols) throw IndexOutOfBoundsException("Col: $col, Cols: $cols")
         return List(rows) { row -> data[row * cols + col] }
     }
@@ -96,7 +96,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @return nova [Matrix] com dimensões [cols] × [rows].
      */
-    fun transpose(): Matrix<T> {
+    public fun transpose(): Matrix<T> {
         return Matrix(cols, rows) { r, c -> this[c, r] }
     }
 
@@ -108,7 +108,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      * @param transform função de transformação aplicada a cada elemento.
      * @return nova [Matrix] com os valores transformados.
      */
-    fun <R> map(transform: (T) -> R): Matrix<R> {
+    public fun <R> map(transform: (T) -> R): Matrix<R> {
         return Matrix(rows, cols) { r, c -> transform(this[r, c]) }
     }
 
@@ -117,7 +117,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * Complexidade: O(rows × cols).
      */
-    fun forEach(action: (row: Int, col: Int, value: T) -> Unit) {
+    public fun forEach(action: (row: Int, col: Int, value: T) -> Unit) {
         for (r in 0 until rows) {
             for (c in 0 until cols) {
                 action(r, c, this[r, c])
@@ -130,7 +130,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * Complexidade: O(1).
      */
-    val size: Int get() = rows * cols
+    public val size: Int get() = rows * cols
 
     /**
      * Verifica se a matriz contém o elemento especificado.
@@ -140,7 +140,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean = data.contains(element)
+    public fun contains(element: T): Boolean = data.contains(element)
 
     /**
      * Uma matriz nunca está vazia (dimensões devem ser > 0).
@@ -149,7 +149,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @return sempre `false`.
      */
-    fun isEmpty(): Boolean = false
+    public fun isEmpty(): Boolean = false
 
     /**
      * Retorna todos os elementos em row-major order como [List] imutável.
@@ -158,7 +158,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @return lista com todos os elementos.
      */
-    fun toList(): List<T> = data.toList()
+    public fun toList(): List<T> = data.toList()
 
     /**
      * Retorna todos os elementos como lista de listas (cada sub-lista é uma linha).
@@ -167,7 +167,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @return lista de listas representando as linhas.
      */
-    fun toNestedList(): List<List<T>> = List(rows) { r -> getRow(r) }
+    public fun toNestedList(): List<List<T>> = List(rows) { r -> getRow(r) }
 
     /**
      * Retorna um [Iterator] que percorre todos os elementos em row-major order.
@@ -176,9 +176,9 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
      *
      * @return iterador sobre os elementos.
      */
-    override fun iterator(): Iterator<T> = data.iterator()
+    public override fun iterator(): Iterator<T> = data.iterator()
 
-    override fun toString(): String {
+    public override fun toString(): String {
         val sb = StringBuilder()
         for (r in 0 until rows) {
             sb.append(getRow(r).joinToString(prefix = "[", postfix = "]"))
@@ -187,13 +187,13 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
         return sb.toString()
     }
 
-    override fun equals(other: Any?): Boolean {
+    public override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Matrix<*>) return false
         return rows == other.rows && cols == other.cols && data == other.data
     }
 
-    override fun hashCode(): Int {
+    public override fun hashCode(): Int {
         var result = rows
         result = 31 * result + cols
         result = 31 * result + data.hashCode()
@@ -205,7 +205,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
             throw IndexOutOfBoundsException("[$row, $col] out of bounds for ${rows}x${cols} matrix")
     }
 
-    companion object {
+    public companion object {
         /**
          * Cria uma matriz identidade numérica N×N (requer valores 0 e 1 do tipo).
          *
@@ -214,7 +214,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
          * @param one o valor "um" do tipo.
          * @return matriz identidade N×N.
          */
-        fun <T> identity(n: Int, zero: T, one: T): Matrix<T> {
+        public fun <T> identity(n: Int, zero: T, one: T): Matrix<T> {
             return Matrix(n, n) { r, c -> if (r == c) one else zero }
         }
 
@@ -226,7 +226,7 @@ class Matrix<T>(val rows: Int, val cols: Int, init: (row: Int, col: Int) -> T) :
          * @param value o valor de preenchimento.
          * @return matriz [rows]×[cols] preenchida com [value].
          */
-        fun <T> fill(rows: Int, cols: Int, value: T): Matrix<T> {
+        public fun <T> fill(rows: Int, cols: Int, value: T): Matrix<T> {
             return Matrix(rows, cols) { _, _ -> value }
         }
     }

@@ -27,7 +27,7 @@ import kotlin.random.Random
  *             Naor, M. & Nissim, K. "Certificate Revocation and Certificate Update" (1998);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Problema 13-4 (Treaps).
  */
-class Treap<T : Comparable<T>> {
+public class Treap<T : Comparable<T>> : MutableSearchTree<T> {
 
     private class Node<T>(
         var value: T,
@@ -41,8 +41,10 @@ class Treap<T : Comparable<T>> {
     /**
      * Número de elementos armazenados na Treap.
      */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
+
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Divide a Treap em duas Treaps: uma com todos os valores menores que [value]
@@ -101,14 +103,16 @@ class Treap<T : Comparable<T>> {
      *
      * Complexidade esperada: O(log n).
      *
-     * @param value o valor a ser inserido.
+     * @param element o elemento a ser inserido.
+     * @return `true` se o elemento foi inserido, `false` se já existia.
      */
-    fun insert(value: T) {
-        if (contains(value)) return
-        val (left, right) = split(root, value)
-        val newNode = Node(value)
+    public override fun insert(element: T): Boolean {
+        if (contains(element)) return false
+        val (left, right) = split(root, element)
+        val newNode = Node(element)
         root = merge(merge(left, newNode), right)
         size++
+        return true
     }
 
     /**
@@ -118,13 +122,13 @@ class Treap<T : Comparable<T>> {
      *
      * Complexidade esperada: O(log n).
      *
-     * @param value o valor a ser procurado.
-     * @return `true` se o valor existir na Treap, `false` caso contrário.
+     * @param element o elemento a ser procurado.
+     * @return `true` se o elemento existir na Treap, `false` caso contrário.
      */
-    fun contains(value: T): Boolean {
+    public override fun contains(element: T): Boolean {
         var current = root
         while (current != null) {
-            val cmp = value.compareTo(current.value)
+            val cmp = element.compareTo(current.value)
             current = when {
                 cmp == 0 -> return true
                 cmp < 0 -> current.left
@@ -141,10 +145,13 @@ class Treap<T : Comparable<T>> {
      *
      * Complexidade esperada: O(log n).
      *
-     * @param value o valor a ser removido.
+     * @param element o elemento a ser removido.
+     * @return `true` se o elemento foi removido, `false` se não existia.
      */
-    fun remove(value: T) {
-        root = remove(root, value)
+    public override fun remove(element: T): Boolean {
+        if (!contains(element)) return false
+        root = remove(root, element)
+        return true
     }
 
     private fun remove(node: Node<T>?, value: T): Node<T>? {
@@ -168,7 +175,7 @@ class Treap<T : Comparable<T>> {
      *
      * @return lista com todos os elementos em ordem.
      */
-    fun inOrder(): List<T> {
+    public override fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         inOrder(root, result)
         return result

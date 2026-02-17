@@ -13,7 +13,7 @@ package br.uem.din.datastructures.stack
  *
  * @see MutableStack
  */
-interface Stack<T> : Iterable<T> {
+public interface Stack<T> : Iterable<T> {
     /**
      * Retorna o elemento no topo da pilha sem removê-lo.
      *
@@ -21,7 +21,7 @@ interface Stack<T> : Iterable<T> {
      *
      * @return o elemento no topo, ou `null` se a pilha estiver vazia.
      */
-    fun peek(): T?
+    public fun peek(): T?
 
     /**
      * Retorna o número de elementos na pilha.
@@ -30,7 +30,7 @@ interface Stack<T> : Iterable<T> {
      *
      * @return a quantidade de elementos.
      */
-    val size: Int
+    public val size: Int
 
     /**
      * Verifica se a pilha está vazia.
@@ -39,7 +39,7 @@ interface Stack<T> : Iterable<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean
+    public fun isEmpty(): Boolean
 
     /**
      * Verifica se a pilha contém o elemento especificado.
@@ -49,7 +49,7 @@ interface Stack<T> : Iterable<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    fun contains(element: T): Boolean
+    public fun contains(element: T): Boolean
 }
 
 /**
@@ -66,7 +66,7 @@ interface Stack<T> : Iterable<T> {
  * @see ArrayStack
  * @see LinkedStack
  */
-interface MutableStack<T> : Stack<T> {
+public interface MutableStack<T> : Stack<T> {
     /**
      * Empilha um elemento no topo da pilha.
      *
@@ -75,7 +75,7 @@ interface MutableStack<T> : Stack<T> {
      * @param element o elemento a ser empilhado.
      * @return o próprio elemento empilhado.
      */
-    fun push(element: T): T
+    public fun push(element: T): T
 
     /**
      * Remove e retorna o elemento no topo da pilha.
@@ -84,14 +84,14 @@ interface MutableStack<T> : Stack<T> {
      *
      * @return o elemento removido, ou `null` se a pilha estiver vazia.
      */
-    fun pop(): T?
+    public fun pop(): T?
 
     /**
      * Remove todos os elementos da pilha.
      *
      * Complexidade: O(1) na maioria das implementações.
      */
-    fun clear()
+    public fun clear()
 }
 
 /**
@@ -102,4 +102,4 @@ interface MutableStack<T> : Stack<T> {
  *
  * @return lista imutável dos elementos.
  */
-fun <T> Stack<T>.toList(): List<T> = iterator().asSequence().toList()
+public fun <T> Stack<T>.toList(): List<T> = iterator().asSequence().toList()

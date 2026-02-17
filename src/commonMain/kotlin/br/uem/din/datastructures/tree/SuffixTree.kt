@@ -24,7 +24,7 @@ package br.uem.din.datastructures.tree
  *             Weiner, P. "Linear Pattern Matching Algorithms" (1973);
  *             McCreight, E. M. "A Space-Economical Suffix Tree Construction Algorithm" (1976).
  */
-class SuffixTree {
+public class SuffixTree {
 
     private class Node(
         var start: Int = -1,
@@ -63,7 +63,7 @@ class SuffixTree {
      *
      * @param input o texto a partir do qual construir a árvore de sufixos.
      */
-    fun build(input: String) {
+    public fun build(input: String) {
         text = "$input$"
         root = Node()
         root.suffixLink = root
@@ -162,7 +162,7 @@ class SuffixTree {
      * @param pattern o padrão a ser buscado.
      * @return `true` se o padrão ocorrer no texto, `false` caso contrário.
      */
-    fun searchPattern(pattern: String): Boolean {
+    public fun searchPattern(pattern: String): Boolean {
         if (pattern.isEmpty()) return true
         var node = root
         var i = 0
@@ -193,7 +193,7 @@ class SuffixTree {
      * @param pattern o padrão cuja frequência será contada.
      * @return o número de ocorrências do padrão no texto.
      */
-    fun countOccurrences(pattern: String): Int {
+    public fun countOccurrences(pattern: String): Int {
         if (pattern.isEmpty()) return text.length
         val node = findNode(pattern) ?: return 0
         return countLeaves(node)
@@ -210,7 +210,7 @@ class SuffixTree {
      *
      * @return a maior substring que ocorre mais de uma vez, ou string vazia se nenhuma existir.
      */
-    fun longestRepeatedSubstring(): String {
+    public fun longestRepeatedSubstring(): String {
         var best = ""
         fun dfs(node: Node, accumulated: String) {
             for ((_, child) in node.children) {

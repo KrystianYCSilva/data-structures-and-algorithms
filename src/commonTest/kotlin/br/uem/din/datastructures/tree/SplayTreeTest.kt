@@ -95,4 +95,44 @@ class SplayTreeTest {
         tree.remove(5)
         assertEquals(listOf(3, 7), tree.inOrder())
     }
+
+    @Test
+    fun testIsEmpty() {
+        val tree = SplayTree<Int>()
+        assertTrue(tree.isEmpty())
+        tree.insert(5)
+        assertFalse(tree.isEmpty())
+        tree.remove(5)
+        assertTrue(tree.isEmpty())
+    }
+
+    @Test
+    fun testInsertReturnValue() {
+        val tree = SplayTree<Int>()
+        assertTrue(tree.insert(5))
+        assertTrue(tree.insert(3))
+        assertFalse(tree.insert(5))
+    }
+
+    @Test
+    fun testRemoveReturnValue() {
+        val tree = SplayTree<Int>()
+        tree.insert(5)
+        tree.insert(3)
+        assertTrue(tree.remove(3))
+        assertFalse(tree.remove(3))
+        assertFalse(tree.remove(99))
+    }
+
+    @Test
+    fun testMutableSearchTreeInterface() {
+        val tree: MutableSearchTree<Int> = SplayTree()
+        tree.insert(10)
+        tree.insert(5)
+        tree.insert(15)
+        assertTrue(tree.contains(10))
+        assertEquals(3, tree.size)
+        assertFalse(tree.isEmpty())
+        assertEquals(listOf(5, 10, 15), tree.inOrder())
+    }
 }

@@ -22,26 +22,26 @@ import br.uem.din.datastructures.linkedlist.LinkedList
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 10.1 — Stacks and Queues.
  */
-class LinkedQueue<T> : MutableQueue<T> {
+public class LinkedQueue<T> : MutableQueue<T> {
     private val list = LinkedList<T>()
 
-    override fun enqueue(element: T) {
+    public override fun enqueue(element: T) {
         list.addLast(element)
     }
 
-    override fun dequeue(): T? = list.removeFirst()
+    public override fun dequeue(): T? = list.removeFirst()
 
-    override fun peek(): T? = if (list.isEmpty()) null else list[0]
+    public override fun peek(): T? = if (list.isEmpty()) null else list[0]
 
-    override val size: Int get() = list.size
+    public override val size: Int get() = list.size
 
-    override fun isEmpty(): Boolean = list.isEmpty()
+    public override fun isEmpty(): Boolean = list.isEmpty()
 
-    override fun contains(element: T): Boolean = list.contains(element)
+    public override fun contains(element: T): Boolean = list.contains(element)
 
-    override fun clear() = list.clear()
+    public override fun clear(): Unit = list.clear()
 
-    override fun iterator(): Iterator<T> = list.iterator()
+    public override fun iterator(): Iterator<T> = list.iterator()
 
-    override fun toString(): String = list.toString()
+    public override fun toString(): String = list.toString()
 }

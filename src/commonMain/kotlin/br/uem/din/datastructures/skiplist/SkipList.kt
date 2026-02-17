@@ -28,7 +28,7 @@ import kotlin.random.Random
  * Referência: Pugh, W. "Skip Lists: A Probabilistic Alternative to Balanced Trees" (1990);
  *             Sedgewick, R. & Wayne, K. "Algorithms", Cap. 3.5.
  */
-class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p: Double = 0.5) : Iterable<T> {
+public class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p: Double = 0.5) : MutableSkipList<T> {
 
     /**
      * Nó interno da Skip List, contendo o valor e um array de ponteiros forward
@@ -44,8 +44,7 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
 
     private val head = Node<T>(null, maxLevel)
     private var level = 0
-    /** Número de elementos armazenados na Skip List. */
-    var size = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -58,23 +57,20 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      *
      * @param value o valor a ser inserido.
      */
-    fun insert(value: T) {
+    public override fun insert(element: T) {
         val update = arrayOfNulls<Node<T>>(maxLevel + 1)
         var current = head
 
         for (i in level downTo 0) {
-            while (current.forward[i] != null && current.forward[i]!!.value!! < value) {
+            while (current.forward[i] != null && current.forward[i]!!.value!! < element) {
                 current = current.forward[i]!!
             }
             update[i] = current
         }
-        
-        // Move to next node at level 0
+
         val next = current.forward[0]
 
-        // If value already exists, we don't insert (Set behavior) or we could duplicate.
-        // Assuming Set behavior for simplicity.
-        if (next != null && next.value == value) {
+        if (next != null && next.value == element) {
             return
         }
 
@@ -86,7 +82,7 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
             level = rLevel
         }
 
-        val newNode = Node(value, rLevel)
+        val newNode = Node(element, rLevel)
         for (i in 0..rLevel) {
             newNode.forward[i] = update[i]!!.forward[i]
             update[i]!!.forward[i] = newNode
@@ -105,15 +101,15 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      * @param value o valor a ser procurado.
      * @return `true` se o valor existir na Skip List, `false` caso contrário.
      */
-    fun contains(value: T): Boolean {
+    public override fun contains(element: T): Boolean {
         var current = head
         for (i in level downTo 0) {
-            while (current.forward[i] != null && current.forward[i]!!.value!! < value) {
+            while (current.forward[i] != null && current.forward[i]!!.value!! < element) {
                 current = current.forward[i]!!
             }
         }
         current = current.forward[0] ?: return false
-        return current.value == value
+        return current.value == element
     }
 
     /**
@@ -124,19 +120,19 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      * @param value o valor a ser removido.
      * @return `true` se o valor foi encontrado e removido, `false` caso contrário.
      */
-    fun remove(value: T): Boolean {
+    public override fun remove(element: T): Boolean {
         val update = arrayOfNulls<Node<T>>(maxLevel + 1)
         var current = head
 
         for (i in level downTo 0) {
-            while (current.forward[i] != null && current.forward[i]!!.value!! < value) {
+            while (current.forward[i] != null && current.forward[i]!!.value!! < element) {
                 current = current.forward[i]!!
             }
             update[i] = current
         }
 
         val target = current.forward[0]
-        if (target == null || target.value != value) return false
+        if (target == null || target.value != element) return false
 
         for (i in 0..level) {
             if (update[i]?.forward?.get(i) != target) break
@@ -156,14 +152,14 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Remove todos os elementos da Skip List.
      *
      * Complexidade: O(1).
      */
-    fun clear() {
+    public override fun clear() {
         for (i in 0..maxLevel) {
             head.forward[i] = null
         }
@@ -178,7 +174,7 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      *
      * @return lista imutável contendo todos os elementos em ordem crescente.
      */
-    fun toList(): List<T> = iterator().asSequence().toList()
+    public override fun toList(): List<T> = iterator().asSequence().toList()
 
     /**
      * Retorna representação textual da Skip List no formato `[v1, v2, ..., vn]`.
@@ -187,7 +183,7 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      *
      * @return string formatada com os elementos ordenados.
      */
-    override fun toString(): String {
+    public override fun toString(): String {
         if (isEmpty()) return "[]"
         return joinToString(prefix = "[", postfix = "]")
     }
@@ -199,7 +195,7 @@ class SkipList<T : Comparable<T>>(private val maxLevel: Int = 16, private val p:
      *
      * @return iterador sobre os elementos ordenados.
      */
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
+    public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var current = head.forward[0]
         override fun hasNext(): Boolean = current != null
         override fun next(): T {

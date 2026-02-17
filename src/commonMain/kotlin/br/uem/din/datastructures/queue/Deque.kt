@@ -23,14 +23,14 @@ package br.uem.din.datastructures.queue
  *
  * Referência: Knuth, D. E. "The Art of Computer Programming", Vol. 1, Sec. 2.2.1 — Deques.
  */
-class Deque<T> : MutableQueue<T> {
+public class Deque<T> : MutableQueue<T> {
     private val storage = ArrayDeque<T>()
 
-    override val size: Int get() = storage.size
+    public override val size: Int get() = storage.size
 
-    override fun isEmpty(): Boolean = storage.isEmpty()
+    public override fun isEmpty(): Boolean = storage.isEmpty()
 
-    override fun enqueue(element: T) {
+    public override fun enqueue(element: T) {
         storage.add(element)
     }
 
@@ -41,11 +41,11 @@ class Deque<T> : MutableQueue<T> {
      *
      * @param element o elemento a ser inserido.
      */
-    fun enqueueFront(element: T) {
+    public fun enqueueFront(element: T) {
         storage.addFirst(element)
     }
 
-    override fun dequeue(): T? {
+    public override fun dequeue(): T? {
         if (isEmpty()) return null
         return storage.removeFirst()
     }
@@ -57,12 +57,12 @@ class Deque<T> : MutableQueue<T> {
      *
      * @return o elemento removido, ou `null` se o deque estiver vazio.
      */
-    fun dequeueBack(): T? {
+    public fun dequeueBack(): T? {
         if (isEmpty()) return null
         return storage.removeLast()
     }
 
-    override fun peek(): T? = storage.firstOrNull()
+    public override fun peek(): T? = storage.firstOrNull()
 
     /**
      * Retorna o elemento do final do deque sem removê-lo.
@@ -71,13 +71,13 @@ class Deque<T> : MutableQueue<T> {
      *
      * @return o último elemento, ou `null` se vazio.
      */
-    fun peekBack(): T? = storage.lastOrNull()
+    public fun peekBack(): T? = storage.lastOrNull()
 
-    override fun contains(element: T): Boolean = storage.contains(element)
+    public override fun contains(element: T): Boolean = storage.contains(element)
 
-    override fun clear() = storage.clear()
+    public override fun clear(): Unit = storage.clear()
 
-    override fun iterator(): Iterator<T> = storage.iterator()
+    public override fun iterator(): Iterator<T> = storage.iterator()
 
-    override fun toString(): String = storage.toString()
+    public override fun toString(): String = storage.toString()
 }

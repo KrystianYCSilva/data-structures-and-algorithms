@@ -28,7 +28,7 @@ package br.uem.din.datastructures.tree
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 18;
  *             Ramakrishnan, R. & Gehrke, J. "Database Management Systems", Cap. 10.
  */
-class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
+public class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
 
     init {
         require(order >= 3) { "A ordem deve ser >= 3." }
@@ -51,7 +51,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
     /**
      * Número de chaves armazenadas na árvore.
      */
-    var size: Int = 0
+    public var size: Int = 0
         private set
 
     /**
@@ -65,7 +65,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      * @param value a chave a ser procurada.
      * @return `true` se a chave existir na árvore, `false` caso contrário.
      */
-    fun search(value: T): Boolean {
+    public fun search(value: T): Boolean {
         val leaf = findLeaf(root, value)
         return leaf.keys.contains(value)
     }
@@ -83,7 +83,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      * @param to limite superior do intervalo (inclusive).
      * @return lista ordenada dos valores no intervalo.
      */
-    fun rangeSearch(from: T, to: T): List<T> {
+    public fun rangeSearch(from: T, to: T): List<T> {
         val result = mutableListOf<T>()
         var leaf: LeafNode<T>? = findLeaf(root, from)
         while (leaf != null) {
@@ -106,7 +106,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * @param value a chave a ser inserida.
      */
-    fun insert(value: T) {
+    public fun insert(value: T) {
         val result = insert(root, value)
         if (result != null) {
             val newRoot = InternalNode<T>()
@@ -213,7 +213,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * @param value a chave a ser removida.
      */
-    fun remove(value: T) {
+    public fun remove(value: T) {
         if (!search(value)) return
         remove(root, value, null, -1)
         if (root is InternalNode<T>) {
@@ -360,7 +360,7 @@ class BPlusTree<T : Comparable<T>>(private val order: Int = 4) {
      *
      * @return lista com todos os elementos em ordem.
      */
-    fun inOrder(): List<T> {
+    public fun inOrder(): List<T> {
         val result = mutableListOf<T>()
         var leaf = findLeftmostLeaf(root)
         while (leaf != null) {

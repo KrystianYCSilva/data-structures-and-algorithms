@@ -136,4 +136,29 @@ class MultisetTest {
         assertTrue(str.endsWith("}"))
         assertTrue(str.contains("x"))
     }
+
+    @Test
+    fun testMutableMultisetInterface() {
+        val ms: MutableMultiset<String> = Multiset()
+        ms.add("a", 3)
+        ms.add("b")
+        assertEquals(4, ms.size)
+        assertEquals(3, ms.count("a"))
+        assertTrue(ms.contains("b"))
+        assertEquals(2, ms.distinctCount)
+        assertFalse(ms.isEmpty())
+        ms.clear()
+        assertTrue(ms.isEmpty())
+    }
+
+    @Test
+    fun testReadOnlyMultisetView() {
+        val ms: MutableMultiset<String> = Multiset()
+        ms.add("x", 2)
+        val readOnly: ReadOnlyMultiset<String> = ms
+        assertEquals(2, readOnly.size)
+        assertEquals(2, readOnly.count("x"))
+        assertTrue(readOnly.contains("x"))
+        assertEquals(setOf("x"), readOnly.distinctElements())
+    }
 }

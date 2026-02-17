@@ -1,5 +1,6 @@
 package br.uem.din.datastructures.heap
 
+import br.uem.din.datastructures.queue.MutableQueue
 import kotlin.math.ln
 import kotlin.math.floor
 
@@ -33,7 +34,7 @@ import kotlin.math.floor
  *             network optimization algorithms" (1987);
  *             Cormen, T. H. et al. "Introduction to Algorithms", Cap. 19 — Fibonacci Heaps.
  */
-class FibonacciHeap<T : Comparable<T>> {
+public class FibonacciHeap<T : Comparable<T>> : MutableQueue<T> {
 
     /**
      * Nó interno do Fibonacci Heap.
@@ -50,21 +51,21 @@ class FibonacciHeap<T : Comparable<T>> {
      * @property left irmão esquerdo na lista circular duplamente ligada.
      * @property right irmão direito na lista circular duplamente ligada.
      */
-    class Node<T>(
-        var key: T,
-        var degree: Int = 0,
-        var mark: Boolean = false,
-        var parent: Node<T>? = null,
-        var child: Node<T>? = null
+    public class Node<T>(
+        public var key: T,
+        public var degree: Int = 0,
+        public var mark: Boolean = false,
+        public var parent: Node<T>? = null,
+        public var child: Node<T>? = null
     ) {
-        var left: Node<T> = this
-        var right: Node<T> = this
+        public var left: Node<T> = this
+        public var right: Node<T> = this
     }
 
     private var min: Node<T>? = null
 
     /** Número de elementos armazenados no heap. */
-    var size: Int = 0
+    public override var size: Int = 0
         private set
 
     /**
@@ -74,7 +75,7 @@ class FibonacciHeap<T : Comparable<T>> {
      *
      * @return `true` se o heap não contiver elementos.
      */
-    fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /**
      * Retorna o menor elemento do heap sem removê-lo.
@@ -83,7 +84,7 @@ class FibonacciHeap<T : Comparable<T>> {
      *
      * @return o menor elemento, ou `null` se o heap estiver vazio.
      */
-    fun peek(): T? = min?.key
+    public override fun peek(): T? = min?.key
 
     /**
      * Insere um elemento no Fibonacci Heap.
@@ -96,7 +97,7 @@ class FibonacciHeap<T : Comparable<T>> {
      * @param key o elemento a ser inserido.
      * @return o [Node] criado (pode ser usado posteriormente em [decreaseKey]).
      */
-    fun insert(key: T): Node<T> {
+    public fun insert(key: T): Node<T> {
         val node = Node(key)
         if (min == null) {
             min = node
@@ -121,7 +122,7 @@ class FibonacciHeap<T : Comparable<T>> {
      *
      * @return o menor elemento removido, ou `null` se o heap estiver vazio.
      */
-    fun extractMin(): T? {
+    public fun extractMin(): T? {
         val z = min ?: return null
         val minKey = z.key
 
@@ -147,6 +148,68 @@ class FibonacciHeap<T : Comparable<T>> {
         return minKey
     }
 
+    /** {@inheritDoc} */
+    public override fun enqueue(element: T) {
+        insert(element)
+    }
+
+    /** {@inheritDoc} */
+    public override fun dequeue(): T? = extractMin()
+
+    /** {@inheritDoc} */
+    public override fun contains(element: T): Boolean {
+        val m = min ?: return false
+        return containsInRootList(m, element)
+    }
+
+    /** {@inheritDoc} */
+    public override fun clear() {
+        min = null
+        size = 0
+    }
+
+    /** {@inheritDoc} */
+    public override fun iterator(): Iterator<T> {
+        val elements = mutableListOf<T>()
+        val m = min
+        if (m != null) {
+            for (root in collectSiblings(m)) {
+                collectAllElements(root, elements)
+            }
+        }
+        return elements.iterator()
+    }
+
+    private fun containsInRootList(start: Node<T>, element: T): Boolean {
+        var current = start
+        do {
+            if (containsInTree(current, element)) return true
+            current = current.right
+        } while (current != start)
+        return false
+    }
+
+    private fun containsInTree(node: Node<T>, element: T): Boolean {
+        if (node.key == element) return true
+        val child = node.child ?: return false
+        var c = child
+        do {
+            if (containsInTree(c, element)) return true
+            c = c.right
+        } while (c != child)
+        return false
+    }
+
+    private fun collectAllElements(node: Node<T>, result: MutableList<T>) {
+        result.add(node.key)
+        val child = node.child ?: return
+        var c = child
+        do {
+            collectAllElements(c, result)
+            c = c.right
+        } while (c != child)
+    }
+
     /**
      * Mescla (merge) outro Fibonacci Heap com este heap.
      *
@@ -157,7 +220,7 @@ class FibonacciHeap<T : Comparable<T>> {
      *
      * @param other o outro heap a ser mesclado.
      */
-    fun merge(other: FibonacciHeap<T>) {
+    public fun merge(other: FibonacciHeap<T>) {
         if (other.min == null) return
 
         if (min == null) {
@@ -187,7 +250,7 @@ class FibonacciHeap<T : Comparable<T>> {
      * @param newKey o novo valor da chave (deve ser menor ou igual à chave atual).
      * @throws IllegalArgumentException se [newKey] for maior que a chave atual do nó.
      */
-    fun decreaseKey(node: Node<T>, newKey: T) {
+    public fun decreaseKey(node: Node<T>, newKey: T) {
         require(newKey <= node.key) { "A nova chave deve ser menor ou igual à chave atual." }
         node.key = newKey
         val parent = node.parent

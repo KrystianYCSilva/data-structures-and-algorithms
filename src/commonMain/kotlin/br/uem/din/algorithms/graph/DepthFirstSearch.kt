@@ -3,7 +3,7 @@ package br.uem.din.algorithms.graph
 import br.uem.din.datastructures.graph.Graph
 import br.uem.din.datastructures.graph.Vertex
 import br.uem.din.datastructures.stack.MutableStack
-import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.stack.arrayStackOf
 
 /**
  * Busca em profundidade (Depth-First Search — DFS).
@@ -20,7 +20,7 @@ import br.uem.din.datastructures.stack.ArrayStack
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.3 — Depth-First Search.
  */
-class DepthFirstSearch<T> {
+public class DepthFirstSearch<T> {
 
     /**
      * Executa a busca em profundidade a partir do vértice [source].
@@ -33,8 +33,8 @@ class DepthFirstSearch<T> {
      * @param source o vértice de origem da busca.
      * @return lista de vértices na ordem de visitação (DFS order).
      */
-    fun search(graph: Graph<T>, source: Vertex<T>): ArrayList<Vertex<T>> {
-        val stack: MutableStack<Vertex<T>> = ArrayStack()
+    public fun search(graph: Graph<T>, source: Vertex<T>): ArrayList<Vertex<T>> {
+        val stack: MutableStack<Vertex<T>> = arrayStackOf()
         val pushed = mutableSetOf<Vertex<T>>()
         val visited = ArrayList<Vertex<T>>()
 

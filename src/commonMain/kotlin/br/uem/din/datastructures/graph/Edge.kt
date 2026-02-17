@@ -6,7 +6,7 @@ package br.uem.din.datastructures.graph
  * Define se a aresta é direcionada (de origem para destino apenas) ou
  * não-direcionada (bidirecional).
  */
-enum class EdgeType {
+public enum class EdgeType {
     DIRECTED,
     UNDIRECTED
 }
@@ -25,9 +25,9 @@ enum class EdgeType {
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 22.1 — Representations of graphs.
  */
-data class Edge<T>(
-    val source: Vertex<T>,
-    val destination: Vertex<T>,
-    val weight: Double? = null,
-    val type: EdgeType = EdgeType.DIRECTED
+public data class Edge<T>(
+    public val source: Vertex<T>,
+    public val destination: Vertex<T>,
+    public val weight: Double? = null,
+    public val type: EdgeType = EdgeType.DIRECTED
 )

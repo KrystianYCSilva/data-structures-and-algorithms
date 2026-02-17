@@ -22,7 +22,7 @@ package br.uem.din.datastructures.queue
  *
  * Referência: Sedgewick, R. "Algorithms in Java", Cap. 4 — Queues.
  */
-class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
+public class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
     private val internalCapacity = capacity + 1
     private val storage: MutableList<T?> = MutableList(internalCapacity) { null }
     private var readIndex = 0
@@ -36,14 +36,14 @@ class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
      *
      * Complexidade: O(1).
      */
-    val isFull: Boolean
+    public val isFull: Boolean
         get() = internalCount == capacity
 
-    override val size: Int get() = internalCount
+    public override val size: Int get() = internalCount
 
-    override fun isEmpty(): Boolean = internalCount == 0
+    public override fun isEmpty(): Boolean = internalCount == 0
 
-    override fun enqueue(element: T) {
+    public override fun enqueue(element: T) {
         if (!offer(element)) {
             throw IllegalStateException("Queue is full")
         }
@@ -57,14 +57,14 @@ class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
      * @param element o elemento a ser inserido.
      * @return `true` se o elemento foi inserido com sucesso, `false` se a fila estiver cheia.
      */
-    fun offer(element: T): Boolean {
+    public fun offer(element: T): Boolean {
         if (isFull) return false
         storage[writeIndex] = element
         writeIndex = (writeIndex + 1) % internalCapacity
         return true
     }
 
-    override fun dequeue(): T? {
+    public override fun dequeue(): T? {
         if (isEmpty()) return null
         val dequeued = storage[readIndex]
         storage[readIndex] = null
@@ -72,25 +72,25 @@ class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
         return dequeued
     }
 
-    override fun peek(): T? {
+    public override fun peek(): T? {
         if (isEmpty()) return null
         return storage[readIndex]
     }
 
-    override fun contains(element: T): Boolean {
+    public override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
         return false
     }
 
-    override fun clear() {
+    public override fun clear() {
         for (i in storage.indices) storage[i] = null
         readIndex = 0
         writeIndex = 0
     }
 
-    override fun iterator(): Iterator<T> = object : Iterator<T> {
+    public override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var index = readIndex
         private var remaining = internalCount
 
@@ -106,7 +106,7 @@ class CircularQueue<T>(private val capacity: Int) : MutableQueue<T> {
         }
     }
 
-    override fun toString(): String {
+    public override fun toString(): String {
         if (isEmpty()) return "[]"
         return iterator().asSequence().joinToString(prefix = "[", postfix = "]")
     }

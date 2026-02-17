@@ -1,17 +1,22 @@
 package br.uem.din.datastructures.queue
 
 /**
- * Implementação JS de [ArrayQueue] com buffer circular e redimensionamento automático.
- *
- * @param T o tipo dos elementos armazenados na fila.
+ * Cria uma instância JS de ArrayQueue.
  */
-actual class ArrayQueue<T> : MutableQueue<T> {
+public actual fun <T> arrayQueueOf(): MutableQueue<T> {
+    return JsArrayQueue()
+}
+
+/**
+ * Implementação JS de ArrayQueue com buffer circular.
+ */
+private class JsArrayQueue<T> : MutableQueue<T> {
     private var elements = arrayOfNulls<Any?>(16)
     private var head = 0
     private var tail = 0
     private var _count = 0
 
-    actual override fun enqueue(element: T) {
+    override fun enqueue(element: T) {
         if (_count == elements.size) doubleCapacity()
         elements[tail] = element
         tail = (tail + 1) % elements.size
@@ -19,7 +24,7 @@ actual class ArrayQueue<T> : MutableQueue<T> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    actual override fun dequeue(): T? {
+    override fun dequeue(): T? {
         if (_count == 0) return null
         val element = elements[head] as T
         elements[head] = null
@@ -29,30 +34,30 @@ actual class ArrayQueue<T> : MutableQueue<T> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    actual override fun peek(): T? {
+    override fun peek(): T? {
         if (_count == 0) return null
         return elements[head] as T
     }
 
-    actual override val size: Int get() = _count
+    override val size: Int get() = _count
 
-    actual override fun isEmpty(): Boolean = _count == 0
+    override fun isEmpty(): Boolean = _count == 0
 
-    actual override fun contains(element: T): Boolean {
+    override fun contains(element: T): Boolean {
         for (v in this) {
             if (v == element) return true
         }
         return false
     }
 
-    actual override fun clear() {
+    override fun clear() {
         for (i in elements.indices) elements[i] = null
         head = 0
         tail = 0
         _count = 0
     }
 
-    actual override fun iterator(): Iterator<T> = object : Iterator<T> {
+    override fun iterator(): Iterator<T> = object : Iterator<T> {
         private var index = head
         private var remaining = _count
 
@@ -68,7 +73,7 @@ actual class ArrayQueue<T> : MutableQueue<T> {
         }
     }
 
-    actual override fun toString(): String {
+    override fun toString(): String {
         if (isEmpty()) return "[]"
         return iterator().asSequence().joinToString(prefix = "[", postfix = "]")
     }

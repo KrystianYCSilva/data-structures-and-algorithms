@@ -24,13 +24,13 @@ package br.uem.din.datastructures.linkedlist
  * @see LinkedList
  * @see CircularLinkedList
  */
-expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
+public expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
     /**
      * Número de elementos na lista.
      *
      * Complexidade: O(1).
      */
-    override val size: Int
+    public override val size: Int
 
     /**
      * Insere um elemento no início da lista.
@@ -39,7 +39,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @param element o valor a ser inserido.
      */
-    override fun addFirst(element: T)
+    public override fun addFirst(element: T)
 
     /**
      * Insere um elemento no final da lista.
@@ -48,7 +48,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @param element o valor a ser inserido.
      */
-    override fun addLast(element: T)
+    public override fun addLast(element: T)
 
     /**
      * Remove e retorna o primeiro elemento da lista.
@@ -57,7 +57,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    override fun removeFirst(): T?
+    public override fun removeFirst(): T?
 
     /**
      * Remove e retorna o último elemento da lista.
@@ -66,7 +66,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @return o valor removido, ou `null` se a lista estiver vazia.
      */
-    override fun removeLast(): T?
+    public override fun removeLast(): T?
 
     /**
      * Retorna o elemento na posição especificada.
@@ -77,7 +77,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      * @return o valor na posição indicada.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    operator fun get(index: Int): T
+    public operator fun get(index: Int): T
 
     /**
      * Substitui o valor na posição especificada.
@@ -88,7 +88,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      * @param element o novo valor.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    operator fun set(index: Int, element: T)
+    public operator fun set(index: Int, element: T)
 
     /**
      * Verifica se a lista contém o elemento especificado.
@@ -98,7 +98,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return `true` se encontrado, `false` caso contrário.
      */
-    override fun contains(element: T): Boolean
+    public override fun contains(element: T): Boolean
 
     /**
      * Retorna o índice da primeira ocorrência do valor, ou -1 se não encontrado.
@@ -108,7 +108,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      * @param element o valor a ser procurado.
      * @return o índice (0-based), ou -1.
      */
-    override fun indexOf(element: T): Int
+    public override fun indexOf(element: T): Int
 
     /**
      * Remove e retorna o elemento na posição especificada.
@@ -119,14 +119,14 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      * @return o valor removido.
      * @throws IndexOutOfBoundsException se o índice for inválido.
      */
-    fun removeAt(index: Int): T
+    public fun removeAt(index: Int): T
 
     /**
      * Remove todos os elementos da lista.
      *
      * Complexidade: O(1).
      */
-    override fun clear()
+    public override fun clear()
 
     /**
      * Verifica se a lista está vazia.
@@ -135,7 +135,7 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @return `true` se não houver elementos, `false` caso contrário.
      */
-    override fun isEmpty(): Boolean
+    public override fun isEmpty(): Boolean
 
     /**
      * Retorna uma cópia dos elementos como [List] imutável do Kotlin stdlib.
@@ -144,19 +144,19 @@ expect class DoublyLinkedList<T>() : MutableLinkedList<T> {
      *
      * @return lista imutável contendo todos os elementos na ordem de inserção.
      */
-    override fun toList(): List<T>
+    public override fun toList(): List<T>
 
     /**
      * Retorna a representação textual da lista no formato `[v1, v2, ..., vn]`.
      *
      * @return string com os elementos da lista.
      */
-    override fun toString(): String
+    public override fun toString(): String
 
     /**
      * Retorna um [Iterator] que percorre os elementos da lista do início ao fim.
      *
      * @return iterador sobre os elementos.
      */
-    override fun iterator(): Iterator<T>
+    public override fun iterator(): Iterator<T>
 }

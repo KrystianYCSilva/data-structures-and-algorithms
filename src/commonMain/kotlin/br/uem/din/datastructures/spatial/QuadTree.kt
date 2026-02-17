@@ -28,7 +28,7 @@ package br.uem.din.datastructures.spatial
  *             on Composite Keys" (1974);
  *             Samet, H. "The Design and Analysis of Spatial Data Structures" (1990).
  */
-class QuadTree(
+public class QuadTree(
     private val boundary: Rectangle,
     private val nodeCapacity: Int = 4,
     private val maxDepth: Int = 20
@@ -40,7 +40,7 @@ class QuadTree(
      * @property x a coordenada horizontal.
      * @property y a coordenada vertical.
      */
-    data class Point(val x: Double, val y: Double)
+    public data class Point(val x: Double, val y: Double)
 
     /**
      * Retângulo alinhado aos eixos (axis-aligned bounding box — AABB).
@@ -53,7 +53,7 @@ class QuadTree(
      * @property halfWidth metade da largura do retângulo.
      * @property halfHeight metade da altura do retângulo.
      */
-    data class Rectangle(
+    public data class Rectangle(
         val cx: Double,
         val cy: Double,
         val halfWidth: Double,
@@ -67,7 +67,7 @@ class QuadTree(
          * @param point o ponto a ser testado.
          * @return `true` se o ponto estiver dentro ou na borda do retângulo.
          */
-        fun containsPoint(point: Point): Boolean =
+        public fun containsPoint(point: Point): Boolean =
             point.x >= cx - halfWidth && point.x <= cx + halfWidth &&
                     point.y >= cy - halfHeight && point.y <= cy + halfHeight
 
@@ -81,7 +81,7 @@ class QuadTree(
          * @param other o outro retângulo.
          * @return `true` se houver interseção.
          */
-        fun intersects(other: Rectangle): Boolean =
+        public fun intersects(other: Rectangle): Boolean =
             !(other.cx - other.halfWidth > cx + halfWidth ||
                     other.cx + other.halfWidth < cx - halfWidth ||
                     other.cy - other.halfHeight > cy + halfHeight ||
@@ -97,7 +97,7 @@ class QuadTree(
     private var depth: Int = 0
 
     /** Número total de pontos armazenados nesta quadtree e suas subárvores. */
-    var size: Int = 0
+    public var size: Int = 0
         private set
 
     /**
@@ -112,7 +112,7 @@ class QuadTree(
      * @param point o ponto a ser inserido.
      * @return `true` se o ponto foi inserido com sucesso, `false` se estiver fora dos limites.
      */
-    fun insert(point: Point): Boolean {
+    public fun insert(point: Point): Boolean {
         if (!boundary.containsPoint(point)) return false
 
         if (!divided && (points.size < nodeCapacity || depth >= maxDepth)) {
@@ -143,7 +143,7 @@ class QuadTree(
      * @param range o retângulo que define a região de busca.
      * @return uma lista de todos os pontos encontrados dentro da região.
      */
-    fun query(range: Rectangle): List<Point> {
+    public fun query(range: Rectangle): List<Point> {
         val found = mutableListOf<Point>()
         query(range, found)
         return found
@@ -157,7 +157,7 @@ class QuadTree(
      * @param point o ponto a ser procurado.
      * @return `true` se o ponto existir na quadtree.
      */
-    fun contains(point: Point): Boolean {
+    public fun contains(point: Point): Boolean {
         if (!boundary.containsPoint(point)) return false
 
         for (p in points) {
@@ -181,7 +181,7 @@ class QuadTree(
      *
      * @return uma lista de todos os pontos.
      */
-    fun allPoints(): List<Point> {
+    public fun allPoints(): List<Point> {
         val result = mutableListOf<Point>()
         collectAll(result)
         return result

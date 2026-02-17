@@ -21,27 +21,27 @@ import br.uem.din.extensions.swap
  *
  * Referência: Cormen, T. H. et al. "Introduction to Algorithms", Cap. 6 — Heapsort.
  */
-class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHeap<T>() {
+internal class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHeap<T>() {
 
     private var storage: ArrayList<T> = ArrayList()
 
     /** {@inheritDoc} */
-    override val size: Int get() = storage.size
+    public override val size: Int get() = storage.size
 
     /** {@inheritDoc} */
-    override fun peek(): T? = storage.firstOrNull()
+    public override fun peek(): T? = storage.firstOrNull()
 
     /** {@inheritDoc} */
-    override fun isEmpty(): Boolean = size == 0
+    public override fun isEmpty(): Boolean = size == 0
 
     /** {@inheritDoc} */
-    override fun insert(element: T) {
+    public override fun insert(element: T) {
         storage.add(element)
         siftUp(size - 1)
     }
 
     /** {@inheritDoc} */
-    override fun remove(): T? {
+    public override fun remove(): T? {
         if (isEmpty()) return null
         storage.swap(0, size - 1)
         val removed = storage.removeAt(size - 1)
@@ -52,7 +52,7 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
     }
 
     /** {@inheritDoc} */
-    override fun remove(index: Int): T? {
+    public override fun remove(index: Int): T? {
         if (index >= size) return null
         return if (index == size - 1) {
             storage.removeAt(size - 1)
@@ -97,9 +97,9 @@ class ComparatorHeapImpl<T>(private val comparator: Comparator<T>) : AbstractHea
         }
     }
 
-    override fun contains(element: T): Boolean = storage.contains(element)
+    public override fun contains(element: T): Boolean = storage.contains(element)
 
-    override fun clear() = storage.clear()
+    public override fun clear(): Unit = storage.clear()
 
-    override fun iterator(): Iterator<T> = storage.iterator()
+    public override fun iterator(): Iterator<T> = storage.iterator()
 }
