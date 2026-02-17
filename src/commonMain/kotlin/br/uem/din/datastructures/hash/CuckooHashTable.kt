@@ -140,7 +140,13 @@ public class CuckooHashTable<K : Any, V>(initialCapacity: Int = 16) : MutableOpe
      * @param key a chave a ser verificada.
      * @return `true` se a chave existir na tabela, `false` caso contrário.
      */
-    public override fun contains(key: K): Boolean = get(key) != null
+    public override fun contains(key: K): Boolean {
+        val entry1 = table1[hash1(key)]
+        if (entry1 != null && entry1.key == key) return true
+
+        val entry2 = table2[hash2(key)]
+        return entry2 != null && entry2.key == key
+    }
 
     /**
      * Realiza a inserção efetiva de uma entrada, executando a cadeia de realocações
@@ -242,3 +248,4 @@ public class CuckooHashTable<K : Any, V>(initialCapacity: Int = 16) : MutableOpe
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }
     }
 }
+

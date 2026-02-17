@@ -101,4 +101,38 @@ class BinomialHeapTest {
         assertEquals(42, heap.extractMin())
         assertTrue(heap.isEmpty())
     }
+
+    @Test
+    fun testMergeExtractAll() {
+        val h1 = BinomialHeap<Int>()
+        h1.insert(4); h1.insert(2)
+        val h2 = BinomialHeap<Int>()
+        h2.insert(5); h2.insert(1); h2.insert(3)
+        h1.merge(h2)
+        val extracted = mutableListOf<Int>()
+        while (!h1.isEmpty()) {
+            extracted.add(h1.extractMin()!!)
+        }
+        assertEquals(listOf(1, 2, 3, 4, 5), extracted)
+    }
+
+    @Test
+    fun testDuplicateElements() {
+        val heap = BinomialHeap<Int>()
+        heap.insert(3); heap.insert(3); heap.insert(3)
+        assertEquals(3, heap.size)
+        assertEquals(3, heap.extractMin())
+        assertEquals(3, heap.extractMin())
+        assertEquals(3, heap.extractMin())
+        assertTrue(heap.isEmpty())
+    }
+
+    @Test
+    fun testMergeTwoEmpty() {
+        val h1 = BinomialHeap<Int>()
+        val h2 = BinomialHeap<Int>()
+        h1.merge(h2)
+        assertTrue(h1.isEmpty())
+        assertNull(h1.peek())
+    }
 }

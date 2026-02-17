@@ -1,5 +1,6 @@
 package br.uem.din.datastructures.probabilistic
 
+import br.uem.din.datastructures.asReadOnly
 import kotlin.test.*
 
 class BloomFilterTest {
@@ -137,5 +138,48 @@ class BloomFilterTest {
         val specials = listOf("hello world", "foo\tbar", "line\nbreak", "emoji☺", "日本語")
         specials.forEach { bf.add(it) }
         specials.forEach { assertTrue(bf.contains(it), "False negative for '$it'") }
+    }
+
+    @Test
+    fun testImmutableBloomFilterView() {
+        val mutable: MutableBloomFilter = BloomFilter(100, 0.01)
+        mutable.add("alpha")
+        mutable.add("beta")
+        val readOnly: ImmutableBloomFilter = mutable.asReadOnly()
+        assertTrue(readOnly.contains("alpha"))
+        assertTrue(readOnly.contains("beta"))
+        assertFalse(readOnly.contains("gamma"))
+        assertEquals(mutable.size(), readOnly.size())
+        assertEquals(mutable.countHashFunctions(), readOnly.countHashFunctions())
+
+        mutable.add("gamma")
+        assertTrue(readOnly.contains("gamma"))
+    }
+
+    @Test
+    fun testExpectedInsertions1() {
+        val bf = BloomFilter(1, 0.01)
+        assertTrue(bf.size() > 0)
+        assertTrue(bf.countHashFunctions() > 0)
+        bf.add("only")
+        assertTrue(bf.contains("only"))
+    }
+
+    @Test
+    fun testHighFalsePositiveProbability() {
+        val bf = BloomFilter(10, 0.5)
+        assertTrue(bf.size() > 0)
+        assertTrue(bf.countHashFunctions() >= 1)
+        bf.add("x")
+        assertTrue(bf.contains("x"))
+    }
+
+    @Test
+    fun testMutableBloomFilterInterface() {
+        val bf: MutableBloomFilter = BloomFilter(100, 0.01)
+        bf.add("test")
+        assertTrue(bf.contains("test"))
+        assertTrue(bf.size() > 0)
+        assertTrue(bf.countHashFunctions() > 0)
     }
 }

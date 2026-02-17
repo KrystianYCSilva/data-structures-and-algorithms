@@ -120,7 +120,14 @@ public class SeparateChainingHashTable<K : Any, V>(
      * @param key a chave a ser verificada.
      * @return `true` se a chave existir na tabela, `false` caso contrário.
      */
-    public override fun contains(key: K): Boolean = get(key) != null
+    public override fun contains(key: K): Boolean {
+        val index = bucketIndex(key)
+        val bucket = buckets[index] ?: return false
+        for (entry in bucket) {
+            if (entry.key == key) return true
+        }
+        return false
+    }
 
     /**
      * Calcula o índice do bucket para a chave especificada.
@@ -164,3 +171,4 @@ public class SeparateChainingHashTable<K : Any, V>(
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }
     }
 }
+

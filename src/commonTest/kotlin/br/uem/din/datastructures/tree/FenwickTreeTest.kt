@@ -71,4 +71,32 @@ class FenwickTreeTest {
         tree.build(longArrayOf(1, 2, 3))
         assertEquals(2L, tree.rangeSum(1, 1))
     }
+
+    @Test
+    fun testNegativeDeltaUpdate() {
+        val tree = FenwickTree(3)
+        tree.build(longArrayOf(10, 20, 30))
+        tree.update(1, -5)
+        assertEquals(15L, tree.pointQuery(1))
+        assertEquals(25L, tree.prefixSum(1))
+    }
+
+    @Test
+    fun testLargeArray() {
+        val n = 100
+        val tree = FenwickTree(n)
+        val arr = LongArray(n) { it.toLong() + 1 }
+        tree.build(arr)
+        val expectedTotal = (n.toLong() * (n + 1)) / 2
+        assertEquals(expectedTotal, tree.prefixSum(n - 1))
+        assertEquals(arr[50], tree.pointQuery(50))
+    }
+
+    @Test
+    fun testAllZeros() {
+        val tree = FenwickTree(5)
+        tree.build(longArrayOf(0, 0, 0, 0, 0))
+        assertEquals(0L, tree.prefixSum(4))
+        assertEquals(0L, tree.rangeSum(1, 3))
+    }
 }

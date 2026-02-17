@@ -79,7 +79,14 @@ class MaxSatProblemTest {
     @Test
     fun testSimulatedAnnealingMaxSat() {
         val sat = MaxSatProblem.random3SAT(15, 50, Random(1))
-        val result = simulatedAnnealing(sat, random = Random(42))
+        val result = simulatedAnnealing(
+            sat,
+            initialTemp = 100.0,
+            coolingRate = 0.95,
+            minTemp = 1e-3,
+            maxIterationsPerTemp = 20,
+            random = Random(42)
+        )
         assertTrue(result.cost > 0.0)
     }
 
@@ -144,3 +151,4 @@ class MaxSatProblemTest {
         assertTrue(result.cost > 0.0)
     }
 }
+

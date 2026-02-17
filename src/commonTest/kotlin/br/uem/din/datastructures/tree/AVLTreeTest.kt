@@ -151,7 +151,61 @@ class AVLTreeTest {
         assertEquals(listOf(5, 10, 15), tree.inOrder())
     }
 
-    private fun height(node: AVLNode<Int>?): Int {
+    @Test
+    fun testRemoveRoot() {
+        val avl = AVLTree<Int>()
+        avl.insert(5)
+        avl.insert(3)
+        avl.insert(7)
+        assertTrue(avl.remove(5))
+        assertFalse(avl.contains(5))
+        assertEquals(2, avl.size)
+        val sorted = avl.inOrder()
+        assertEquals(sorted, sorted.sorted())
+    }
+
+    @Test
+    fun testRemoveSingleElement() {
+        val avl = AVLTree<Int>()
+        avl.insert(42)
+        assertTrue(avl.remove(42))
+        assertTrue(avl.isEmpty())
+        assertEquals(emptyList(), avl.inOrder())
+    }
+
+    @Test
+    fun testBalanceAfterRemovals() {
+        val avl = AVLTree<Int>()
+        for (i in 1..20) avl.insert(i)
+        for (i in 1..10) avl.remove(i)
+        assertEquals((11..20).toList(), avl.inOrder())
+        val root = avl.root
+        assertNotNull(root)
+        val bf = height(root.leftChild) - height(root.rightChild)
+        assertTrue(bf in -1..1, "Balance factor after removals: $bf")
+    }
+
+    @Test
+    fun testDegenerate() {
+        val avl = AVLTree<Int>()
+        for (i in 1..50) avl.insert(i)
+        assertEquals((1..50).toList(), avl.inOrder())
+        val root = avl.root
+        assertNotNull(root)
+        val bf = height(root.leftChild) - height(root.rightChild)
+        assertTrue(bf in -1..1)
+    }
+
+    @Test
+    fun testStringType() {
+        val avl = AVLTree<String>()
+        avl.insert("banana")
+        avl.insert("apple")
+        avl.insert("cherry")
+        assertEquals(listOf("apple", "banana", "cherry"), avl.inOrder())
+    }
+
+    private fun <T : Comparable<T>> height(node: AVLNode<T>?): Int {
         if (node == null) return 0
         return node.height
     }

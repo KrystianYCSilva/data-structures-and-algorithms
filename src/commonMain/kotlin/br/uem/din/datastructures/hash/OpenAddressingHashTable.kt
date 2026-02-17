@@ -72,33 +72,32 @@ public class OpenAddressingHashTable<K : Any, V>(
      * @param value o valor associado à chave.
      */
     public override fun put(key: K, value: V) {
-        if ((size + 1).toDouble() / capacity > maxLoadFactor) {
-            resize(capacity * 2)
-        }
-        var firstTombstone = -1
-        for (i in 0 until capacity) {
-            val index = probe(key, i)
-            when (val entry = table[index]) {
-                null -> {
-                    val insertIndex = if (firstTombstone != -1) firstTombstone else index
-                    table[insertIndex] = Entry.Occupied(key, value)
-                    size++
-                    return
-                }
-                is Entry.Tombstone -> {
-                    if (firstTombstone == -1) firstTombstone = index
-                }
-                is Entry.Occupied -> {
-                    if (entry.key == key) {
-                        entry.value = value
+        while (true) {
+            if ((size + 1).toDouble() / capacity > maxLoadFactor) {
+                resize(capacity * 2)
+            }
+            var firstTombstone = -1
+            for (i in 0 until capacity) {
+                val index = probe(key, i)
+                when (val entry = table[index]) {
+                    null -> {
+                        val insertIndex = if (firstTombstone != -1) firstTombstone else index
+                        table[insertIndex] = Entry.Occupied(key, value)
+                        size++
                         return
+                    }
+                    is Entry.Tombstone -> {
+                        if (firstTombstone == -1) firstTombstone = index
+                    }
+                    is Entry.Occupied -> {
+                        if (entry.key == key) {
+                            entry.value = value
+                            return
+                        }
                     }
                 }
             }
-        }
-        if (firstTombstone != -1) {
-            table[firstTombstone] = Entry.Occupied(key, value)
-            size++
+            resize(capacity * 2)
         }
     }
 
@@ -111,17 +110,9 @@ public class OpenAddressingHashTable<K : Any, V>(
      * @return o valor associado à chave, ou `null` se a chave não existir.
      */
     public override fun get(key: K): V? {
-        for (i in 0 until capacity) {
-            val index = probe(key, i)
-            when (val entry = table[index]) {
-                null -> return null
-                is Entry.Tombstone -> continue
-                is Entry.Occupied -> {
-                    if (entry.key == key) return entry.value
-                }
-            }
-        }
-        return null
+        val index = findIndex(key) ?: return null
+        val entry = table[index] as? Entry.Occupied<K, V> ?: return null
+        return entry.value
     }
 
     /**
@@ -136,21 +127,11 @@ public class OpenAddressingHashTable<K : Any, V>(
      * @return o valor removido, ou `null` se a chave não existir.
      */
     public override fun remove(key: K): V? {
-        for (i in 0 until capacity) {
-            val index = probe(key, i)
-            when (val entry = table[index]) {
-                null -> return null
-                is Entry.Tombstone -> continue
-                is Entry.Occupied -> {
-                    if (entry.key == key) {
-                        table[index] = Entry.Tombstone()
-                        size--
-                        return entry.value
-                    }
-                }
-            }
-        }
-        return null
+        val index = findIndex(key) ?: return null
+        val entry = table[index] as? Entry.Occupied<K, V> ?: return null
+        table[index] = Entry.Tombstone()
+        size--
+        return entry.value
     }
 
     /**
@@ -161,7 +142,19 @@ public class OpenAddressingHashTable<K : Any, V>(
      * @param key a chave a ser verificada.
      * @return `true` se a chave existir na tabela, `false` caso contrário.
      */
-    public override fun contains(key: K): Boolean = get(key) != null
+    public override fun contains(key: K): Boolean = findIndex(key) != null
+
+    private fun findIndex(key: K): Int? {
+        for (i in 0 until capacity) {
+            val index = probe(key, i)
+            when (val entry = table[index]) {
+                null -> return null
+                is Entry.Tombstone -> continue
+                is Entry.Occupied -> if (entry.key == key) return index
+            }
+        }
+        return null
+    }
 
     /**
      * Calcula o índice de sondagem para a iteração `i` da chave `key`,
@@ -217,3 +210,4 @@ public class OpenAddressingHashTable<K : Any, V>(
         return entries.joinToString(prefix = "{", postfix = "}") { "${it.key}=${it.value}" }
     }
 }
+

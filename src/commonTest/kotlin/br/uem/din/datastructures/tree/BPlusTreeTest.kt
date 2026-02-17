@@ -91,4 +91,34 @@ class BPlusTreeTest {
         for (i in 1..50) tree.insert(i)
         assertEquals((1..50).toList(), tree.inOrder())
     }
+
+    @Test
+    fun testRemoveAllElements() {
+        val tree = BPlusTree<Int>()
+        for (i in 1..5) tree.insert(i)
+        for (i in 1..5) tree.remove(i)
+        assertEquals(0, tree.size)
+        assertEquals(emptyList(), tree.inOrder())
+    }
+
+    @Test
+    fun testRangeSearchSingleMatch() {
+        val tree = BPlusTree<Int>()
+        for (i in 1..10) tree.insert(i)
+        assertEquals(listOf(5), tree.rangeSearch(5, 5))
+    }
+
+    @Test
+    fun testContainsOnEmpty() {
+        val tree = BPlusTree<Int>()
+        assertFalse(tree.contains(1))
+    }
+
+    @Test
+    fun testIsEmpty() {
+        val tree = BPlusTree<Int>()
+        assertTrue(tree.isEmpty())
+        tree.insert(1)
+        assertFalse(tree.isEmpty())
+    }
 }

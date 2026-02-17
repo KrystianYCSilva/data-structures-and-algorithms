@@ -1,5 +1,6 @@
 package br.uem.din.datastructures.graph
 
+import br.uem.din.datastructures.asReadOnly
 import kotlin.test.*
 
 class AdjacencyListTest {
@@ -155,5 +156,51 @@ class AdjacencyListTest {
         val readOnly: Graph<String> = mutable
         assertEquals(1, readOnly.edges(a).size)
         assertEquals(3.0, readOnly.weight(a, b))
+    }
+
+    @Test
+    fun testSelfLoop() {
+        val graph = AdjacencyList<String>()
+        val a = graph.createVertex("A")
+        graph.addDirectedEdge(a, a, 1.0)
+        val edges = graph.edges(a)
+        assertEquals(1, edges.size)
+        assertEquals(a, edges[0].destination)
+        assertEquals(1.0, graph.weight(a, a))
+    }
+
+    @Test
+    fun testParallelEdges() {
+        val graph = AdjacencyList<String>()
+        val a = graph.createVertex("A")
+        val b = graph.createVertex("B")
+        graph.addDirectedEdge(a, b, 1.0)
+        graph.addDirectedEdge(a, b, 2.0)
+        assertEquals(2, graph.edges(a).size)
+    }
+
+    @Test
+    fun testAsReadOnlyView() {
+        val mutable: MutableGraph<String> = AdjacencyList()
+        val a = mutable.createVertex("A")
+        val b = mutable.createVertex("B")
+        mutable.addDirectedEdge(a, b, 5.0)
+        val readOnly: Graph<String> = mutable.asReadOnly()
+        assertEquals(1, readOnly.edges(a).size)
+        assertEquals(5.0, readOnly.weight(a, b))
+
+        mutable.addDirectedEdge(b, a, 3.0)
+        assertEquals(1, readOnly.edges(b).size)
+    }
+
+    @Test
+    fun testIsolatedVertexInPopulatedGraph() {
+        val graph = AdjacencyList<String>()
+        val a = graph.createVertex("A")
+        val b = graph.createVertex("B")
+        val c = graph.createVertex("C")
+        graph.addDirectedEdge(a, b, 1.0)
+        assertTrue(graph.edges(c).isEmpty())
+        assertNull(graph.weight(a, c))
     }
 }

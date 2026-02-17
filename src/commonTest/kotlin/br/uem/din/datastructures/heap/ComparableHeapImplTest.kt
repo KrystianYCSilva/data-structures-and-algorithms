@@ -118,4 +118,40 @@ class ComparableHeapImplTest {
         assertTrue(elements.contains(2))
         assertTrue(elements.contains(3))
     }
+
+    @Test
+    fun testInsertManyExtractAll() {
+        val heap = ComparableHeapImpl<Int>()
+        val values = listOf(10, 5, 20, 1, 15, 8, 3)
+        values.forEach { heap.insert(it) }
+        val extracted = mutableListOf<Int>()
+        while (!heap.isEmpty()) {
+            extracted.add(heap.remove()!!)
+        }
+        assertEquals(values.sorted(), extracted)
+    }
+
+    @Test
+    fun testDuplicateElements() {
+        val heap = ComparableHeapImpl<Int>()
+        heap.insert(5)
+        heap.insert(5)
+        heap.insert(5)
+        assertEquals(3, heap.size)
+        assertEquals(5, heap.remove())
+        assertEquals(5, heap.remove())
+        assertEquals(5, heap.remove())
+        assertTrue(heap.isEmpty())
+    }
+
+    @Test
+    fun testStringType() {
+        val heap = ComparableHeapImpl<String>()
+        heap.insert("cherry")
+        heap.insert("apple")
+        heap.insert("banana")
+        assertEquals("apple", heap.remove())
+        assertEquals("banana", heap.remove())
+        assertEquals("cherry", heap.remove())
+    }
 }

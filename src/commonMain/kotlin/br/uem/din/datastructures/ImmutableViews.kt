@@ -29,6 +29,11 @@ import br.uem.din.datastructures.tree.MutableTrie
 import br.uem.din.datastructures.tree.ImmutableRadixTree
 import br.uem.din.datastructures.tree.ImmutableTrie
 import br.uem.din.datastructures.tree.SearchTree
+import br.uem.din.datastructures.spatial.ImmutableKDTree
+import br.uem.din.datastructures.spatial.ImmutableQuadTree
+import br.uem.din.datastructures.spatial.MutableKDTree
+import br.uem.din.datastructures.spatial.MutableQuadTree
+import br.uem.din.datastructures.spatial.QuadTree
 import br.uem.din.datastructures.unionfind.MutableUnionFind
 import br.uem.din.datastructures.unionfind.ImmutableUnionFind
 import kotlin.jvm.JvmInline
@@ -221,6 +226,38 @@ private value class ImmutableBloomFilterView(private val delegate: MutableBloomF
     override fun contains(element: String): Boolean = delegate.contains(element)
     override fun size(): Int = delegate.size()
     override fun countHashFunctions(): Int = delegate.countHashFunctions()
+    override fun toString(): String = delegate.toString()
+}
+
+/**
+ * Cria uma vista somente-leitura desta KDTree mutável.
+ * Complexidade: O(1) e Zero Alocação.
+ */
+public fun MutableKDTree.asReadOnly(): ImmutableKDTree = ImmutableKDTreeView(this)
+
+@JvmInline
+private value class ImmutableKDTreeView(private val delegate: MutableKDTree) : ImmutableKDTree {
+    override val size: Int get() = delegate.size
+    override fun isEmpty(): Boolean = delegate.isEmpty()
+    override fun contains(point: DoubleArray): Boolean = delegate.contains(point)
+    override fun nearestNeighbor(target: DoubleArray): DoubleArray? = delegate.nearestNeighbor(target)
+    override fun rangeSearch(lowerBound: DoubleArray, upperBound: DoubleArray): List<DoubleArray> =
+        delegate.rangeSearch(lowerBound, upperBound)
+    override fun toString(): String = delegate.toString()
+}
+
+/**
+ * Cria uma vista somente-leitura desta QuadTree mutável.
+ * Complexidade: O(1) e Zero Alocação.
+ */
+public fun MutableQuadTree.asReadOnly(): ImmutableQuadTree = ImmutableQuadTreeView(this)
+
+@JvmInline
+private value class ImmutableQuadTreeView(private val delegate: MutableQuadTree) : ImmutableQuadTree {
+    override val size: Int get() = delegate.size
+    override fun contains(point: QuadTree.Point): Boolean = delegate.contains(point)
+    override fun query(range: QuadTree.Rectangle): List<QuadTree.Point> = delegate.query(range)
+    override fun allPoints(): List<QuadTree.Point> = delegate.allPoints()
     override fun toString(): String = delegate.toString()
 }
 
