@@ -492,3 +492,46 @@ Observacao: durante a execucao, os testes comuns de `ArrayQueue`, `CircularQueue
   - `./gradlew.bat nativeTest` -> PASS
 - Status de iteracao:
   - **Iteracao 7 (Graph data structures): RESOLVIDA**
+
+## Atualizacao - 2026-02-18 (iteracao 8 / graph algorithms hardening v2)
+
+- Escopo executado: `BreadthFirstSearch`, `DepthFirstSearch`, `Dijkstra`, `AStar`, `BellmanFord`, `FloydWarshall`, `Kruskal`, `Prim`.
+- Entrega:
+  - `src/commonTest/kotlin/br/uem/din/algorithms/graph/GraphAlgorithmsHardeningTest.kt`
+- Cobertura adicionada (8 testes):
+  - BFS/DFS randomizados com oracle de alcançabilidade + verificação de não-duplicação e níveis BFS monotônicos.
+  - Dijkstra randomizado contra oracle Bellman-Ford em grafos não-negativos (`AdjacencyList` e `AdjacencyMatrix`).
+  - Regressão de estado: `Dijkstra` e `AStar` validados em chamadas consecutivas no mesmo objeto (sem vazamento de estado).
+  - A* validado contra Dijkstra em família de grafos direcionados monotônicos (heurística admissível por construção).
+  - Floyd-Warshall validado contra Dijkstra por fonte em grafos não-negativos.
+  - Paridade de MST (`Kruskal` vs `Prim`) em grafos não-direcionados conectados randomizados.
+  - Guarda de complexidade operacional: expansão de arestas do Dijkstra limitada ao número de vértices visitados.
+- Bugs de produção encontrados e corrigidos:
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/Dijkstra.kt`
+    - fila de prioridade dependia de comparador com estado mutável; ajustado para `QueueEntry(vertex, priority)` com prioridade snapshot.
+    - removeu estado compartilhado entre invocações (`costs`/`visited` agora locais por chamada).
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/AStar.kt`
+    - fila de prioridade ajustada para `QueueEntry(vertex, priority)` com descarte de entradas obsoletas.
+    - removeu estado compartilhado entre invocações (`costs`/`visited` deixaram de vazar entre chamadas).
+- Validacao executada:
+  - `./gradlew.bat jvmTest --tests "br.uem.din.algorithms.graph.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- Status de iteracao:
+  - **Iteracao 8 (Graph algorithms): RESOLVIDA (hardening v2 aplicado)**
+
+## Atualizacao - 2026-02-18 (iteracao 12 / interop sweep parcial)
+
+- Escopo executado: cobertura interop faltante para `redBlackTreeOf()` em plataformas não-JVM.
+- Entregas:
+  - `src/jsTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeNativeInteropTest.kt`
+- Cobertura adicionada:
+  - Paridade randomizada contra oracle `MutableSet` ordenado (insert/remove/contains/size/isEmpty/inOrder/iterator).
+  - Semântica de `asReadOnly()` (snapshot estável + view live) no wrapper `redBlackTreeOf()`.
+- Validacao executada:
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- Status de iteracao:
+  - **Iteracao 12 (Interop sweep): EM PROGRESSO**
+  - `RedBlackTree` agora coberto em `jvmTest` + `jsTest` + `nativeTest`.

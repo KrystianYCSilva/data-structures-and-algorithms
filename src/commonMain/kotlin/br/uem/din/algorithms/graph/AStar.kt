@@ -29,14 +29,16 @@ import kotlin.math.abs
  */
 public class AStar<T>(private val graph: Graph<T>) {
 
-    private val costs = mutableMapOf<Vertex<T>, Double?>()
-    private val visited = mutableSetOf<Vertex<T>>()
+    private data class QueueEntry<T>(
+        val vertex: Vertex<T>,
+        val priority: Double
+    )
 
     /**
      * Calcula os caminhos mínimos de [start] até [destination] utilizando A*.
      *
-     * A busca é encerrada quando o destino é alcançado. Retorna um mapa de cada
-     * vértice explorado para o custo mínimo do caminho desde [start].
+     * Retorna um mapa de cada vértice explorado para o custo mínimo do caminho
+     * desde [start].
      *
      * Complexidade: O((|V| + |E|) log |V|) no pior caso.
      *
@@ -45,24 +47,34 @@ public class AStar<T>(private val graph: Graph<T>) {
      * @return mapa de vértices para seus custos mínimos.
      */
     public fun shortestPath(start: Vertex<T>, destination: Vertex<T>): Map<Vertex<T>, Double?> {
-        val priorityQueue = priorityQueueOf(compareBy<Vertex<T>> { costs[it]!! + heuristic(it, destination) })
-        priorityQueue.enqueue(start)
+        val costs = mutableMapOf<Vertex<T>, Double>()
+        val priorityQueue = priorityQueueOf<QueueEntry<T>>(compareBy { it.priority })
+
         costs[start] = 0.0
+        priorityQueue.enqueue(QueueEntry(start, heuristic(start, destination)))
 
         while (true) {
-            val vertex = priorityQueue.dequeue() ?: break
-            if (visited.contains(vertex) || vertex == destination) continue
-            visited.add(vertex)
+            val entry = priorityQueue.dequeue() ?: break
+            val vertex = entry.vertex
+            val currentCost = costs[vertex] ?: continue
+            val expectedPriority = currentCost + heuristic(vertex, destination)
 
-            val edges = graph.edges(vertex)
-            edges.forEach { edge ->
+            if (entry.priority > expectedPriority) continue
+
+            graph.edges(vertex).forEach { edge ->
                 val weight = edge.weight ?: return@forEach
-                if (costs[edge.destination] == null || costs[vertex]!! + weight < costs[edge.destination]!!) {
-                    costs[edge.destination] = costs[vertex]!! + weight
-                    priorityQueue.enqueue(edge.destination)
+                val newCost = currentCost + weight
+                val oldCost = costs[edge.destination]
+
+                if (oldCost == null || newCost < oldCost) {
+                    costs[edge.destination] = newCost
+                    priorityQueue.enqueue(
+                        QueueEntry(edge.destination, newCost + heuristic(edge.destination, destination))
+                    )
                 }
             }
         }
+
         return costs
     }
 

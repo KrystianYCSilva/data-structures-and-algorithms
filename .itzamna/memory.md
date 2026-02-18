@@ -480,3 +480,37 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
   - `./gradlew.bat jsTest` -> **PASS**
   - `./gradlew.bat nativeTest` -> **PASS**
 - **Status:** Iteracao 7 marcada como **RESOLVIDA** no plano QA.
+
+---
+
+## Sessao 17
+
+- **Data:** 2026-02-18
+- **Nivel:** Deliberado+
+- **Resumo:** Fechamento da Iteracao 8 com hardening orientado a propriedade/oracle e inicio da Iteracao 12 (interop sweep) com cobertura faltante de `RedBlackTree` em JS/Native.
+- **Verificacao solicitada (Trie):** sem ajuste funcional pendente; cobertura robusta ja presente em `TreeCoreHardeningTest` para invariantes, randomizacao seedada, prefix closure e `asReadOnly`.
+- **Arquivos de producao ajustados:**
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/Dijkstra.kt`
+  - `src/commonMain/kotlin/br/uem/din/algorithms/graph/AStar.kt`
+- **Arquivos de teste criados:**
+  - `src/commonTest/kotlin/br/uem/din/algorithms/graph/GraphAlgorithmsHardeningTest.kt`
+  - `src/jsTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeJsInteropTest.kt`
+  - `src/nativeTest/kotlin/br/uem/din/datastructures/tree/RedBlackTreeNativeInteropTest.kt`
+- **Cobertura adicionada (highlights):**
+  - BFS/DFS randomizados com oracle de alcançabilidade.
+  - Dijkstra vs Bellman-Ford randomizado (grafos nao-negativos) em `AdjacencyList` e `AdjacencyMatrix`.
+  - A* vs Dijkstra em familia monotônica de grafos direcionados.
+  - Floyd-Warshall vs Dijkstra por fonte.
+  - Kruskal vs Prim (paridade de peso de MST) em grafos conectados randomizados.
+  - Regressao de estado entre invocacoes para Dijkstra/A* (mesma instancia).
+  - Interop RedBlackTree JS/Native com oracle ordenado + `asReadOnly` snapshot/live.
+- **Bugs de producao identificados/corrigidos:**
+  - Dijkstra/A* usavam comparador de PQ acoplado a estado mutavel e mantinham estado entre invocacoes.
+  - Correcao: prioridade snapshot via `QueueEntry(vertex, priority)` + estado local por chamada.
+- **Validacao executada:**
+  - `./gradlew.bat jvmTest --tests "br.uem.din.algorithms.graph.*"` -> **PASS**
+  - `./gradlew.bat jsTest` -> **PASS**
+  - `./gradlew.bat nativeTest` -> **PASS**
+- **Status de iteracoes:**
+  - Iteracao 8: **RESOLVIDA (hardening v2)**
+  - Iteracao 12: **EM PROGRESSO** (RedBlackTree agora coberto em JVM/JS/Native)

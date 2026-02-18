@@ -35,8 +35,10 @@ public enum class VisitType {
  */
 public class Dijkstra<T>(private val graph: Graph<T>) {
 
-    private val costs = mutableMapOf<Vertex<T>, Double?>()
-    private val visited = mutableSetOf<Vertex<T>>()
+    private data class QueueEntry<T>(
+        val vertex: Vertex<T>,
+        val priority: Double
+    )
 
     /**
      * Calcula os caminhos mínimos a partir do vértice de origem [start].
@@ -50,24 +52,31 @@ public class Dijkstra<T>(private val graph: Graph<T>) {
      * @return mapa de vértices para seus custos mínimos.
      */
     public fun shortestPath(start: Vertex<T>): Map<Vertex<T>, Double?> {
-        val priorityQueue = priorityQueueOf(compareBy<Vertex<T>> { costs[it] })
-        priorityQueue.enqueue(start)
+        val costs = mutableMapOf<Vertex<T>, Double>()
+        val settled = mutableSetOf<Vertex<T>>()
+
+        val priorityQueue = priorityQueueOf<QueueEntry<T>>(compareBy { it.priority })
         costs[start] = 0.0
+        priorityQueue.enqueue(QueueEntry(start, 0.0))
 
         while (true) {
-            val vertex = priorityQueue.dequeue() ?: break
-            if (visited.contains(vertex)) continue
-            visited.add(vertex)
+            val entry = priorityQueue.dequeue() ?: break
+            val vertex = entry.vertex
+            if (!settled.add(vertex)) continue
 
-            val edges = graph.edges(vertex)
-            edges.forEach { edge ->
+            val currentCost = costs[vertex] ?: continue
+            graph.edges(vertex).forEach { edge ->
                 val weight = edge.weight ?: return@forEach
-                if (costs[edge.destination] == null || costs[vertex]!! + weight < costs[edge.destination]!!) {
-                    costs[edge.destination] = costs[vertex]!! + weight
-                    priorityQueue.enqueue(edge.destination)
+                val newCost = currentCost + weight
+                val oldCost = costs[edge.destination]
+
+                if (oldCost == null || newCost < oldCost) {
+                    costs[edge.destination] = newCost
+                    priorityQueue.enqueue(QueueEntry(edge.destination, newCost))
                 }
             }
         }
+
         return costs
     }
 }
