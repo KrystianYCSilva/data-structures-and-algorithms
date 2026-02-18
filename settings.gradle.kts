@@ -10,4 +10,10 @@ pluginManagement {
     }
 }
 
-rootProject.name = "algoritmos_otimizacao"
+rootProject.name = "algoritmos-otimizacao"
+
+include(":datastructures")
+include(":algorithms")
+include(":extensions")
+include(":optimization")
+include(":bom")
