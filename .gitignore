@@ -1,5 +1,21 @@
-.idea
-build
-.gradle
-.kotlin
+# IDE / editor
+.idea/
+.vscode/
+.run/
+*.iml
+
+# Gradle / Kotlin
+.gradle/
+.kotlin/
+build/
+**/build/
+out/
+
+# Kotlin/JS / Node
+node_modules/
+kotlin-js-store/
+
+# OS / misc
+.DS_Store
+Thumbs.db
 NUL
