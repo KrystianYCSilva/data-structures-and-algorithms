@@ -1,119 +1,97 @@
 ---
-description: "Plano detalhado de implementação: estruturas de dados (3 fases), algoritmos fundamentais (3 waves), heurísticas (3 phases). Status completo."
+description: "Plano de consolidacao para release v0.1.0: modularizacao, QA final, publicacao e backlog tecnico."
 ---
 
-# Plano de Implementação
+# Implementation Plan (Release Track v0.1.0)
 
-## Overview
+## 1. Estado atual (baseline)
 
-Plano detalhado para implementação da biblioteca acadêmica em Kotlin Multiplatform (JVM/JS/Native). Organizado em 3 macro-fases:
-1. **Fase 1**: Estruturas de Dados (14 estruturas) - ✅ COMPLETA
-2. **Fase 2**: Algoritmos Fundamentais (~45 algoritmos) - ✅ COMPLETA
-3. **Fase 3**: Heurísticas e Meta-Heurísticas (12+ algoritmos) - 🔄 EM PROGRESSO (3A ✅, 3B ✅)
+- Estruturas de dados: 36 implementadas
+- Algoritmos classicos: 46 implementados
+- Heuristicas/meta-heuristicas: 12 implementadas
+- Modelagens de problema: 7
+- Multi-modulo Gradle: concluido (`:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`)
+- Qualidade: `gradlew check` verde em JVM + JS + Native
 
----
+## 2. Objetivo do plano
 
-## Fase 1: Estruturas de Dados ✅ COMPLETA
+Preparar e publicar a versao `0.1.0` com:
 
-### 1A - Estruturas Lineares ✅
+1. API estabilizada por modulo
+2. Documentacao consistente com o codigo real
+3. Metadados de publicacao prontos para repositorio Maven
+4. Trilhas de validacao reproduziveis (build/test/release)
 
-- [x] Configurar projeto Kotlin Multiplatform (`build.gradle.kts`, targets JVM/JS/Native)
-- [x] Configurar framework de testes (`kotlin.test`)
-- [x] Implementar Queue (array circular + linked)
-- [x] Implementar Stack (array dinâmico + linked)
-- [x] Implementar LinkedList (singly, doubly, circular)
-- [x] Implementar ArrayList (growth strategies: double, 1.5x, fixed)
-- [x] Testes unitários completos (132 testes)
+## 3. Escopo da release
 
-### 1B - Associativas e Árvores ✅
+### Incluido em `0.1.0`
 
-- [x] Implementar HashTable (chaining, linear/quadratic probing, double hashing)
-- [x] Implementar BinaryTree (travessias, propriedades, LCA, diameter)
-- [x] Implementar BST (insert, search, remove, range operations)
-- [x] Implementar Heap (min/max, Floyd's build-heap, heapsort)
-- [x] Implementar Graph (adjacency list + matrix, BFS, DFS, topological sort, SCC)
-- [x] Testes unitários completos (117 testes)
+- Todos os 5 modulos publicados
+- BOM para alinhamento de versao
+- Suites de teste atuais e QA iterativo (iteracoes 11->3 resolvidas)
+- Documentacao de uso, arquitetura e roadmap atualizada
 
-### 1C - Balanceadas e Especializadas ✅
+### Fora do escopo de `0.1.0`
 
-- [x] Implementar AVL Tree (rotações LL/RR/LR/RL, auto-balanceamento)
-- [x] Implementar Priority Queue (wrapper sobre Heap)
-- [x] Implementar Trie (insert, search, autocomplete, longest prefix)
-- [x] Implementar Union-Find (path compression + union by rank)
-- [x] Testes unitários completos (59 testes)
+- Completar backlog de algoritmos remanescentes (2 DP, 1 backtracking, 5 divide-and-conquer)
+- Cobertura de benchmark/performance automatizada em CI
+- Pipeline de release totalmente automatizado
 
----
+## 4. Plano por etapas
 
-## Fase 2: Algoritmos Fundamentais ✅ COMPLETA
+### Etapa A - Documentacao e contexto (concluida nesta sessao)
 
-### Wave 1 - Core ✅
+- [x] Atualizar `docs/` para API real
+- [x] Atualizar `.context/` com arquitetura modular
+- [x] Revisar comandos Gradle por modulo
 
-- [x] Sorting: Bubble, Selection, Insertion, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
-- [x] Searching: Linear, Binary, Interpolation, Ternary, Jump, Exponential
-- [x] Graph Algorithms: Dijkstra, Bellman-Ford, Floyd-Warshall, Kruskal, Prim
-- [x] Testes (47 testes)
+### Etapa B - Hardening de release
 
-### Wave 2 - Classical ✅
+- [ ] Revisar coordenadas finais de artefato por modulo
+- [ ] Validar POM/SCM/licenca/developers em todos os modulos
+- [ ] Gerar checklist de publicacao com preflight local
 
-- [x] String Matching: Naive, KMP, Rabin-Karp, Boyer-Moore
-- [x] Dynamic Programming: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Rod Cutting, Matrix Chain, Coin Change
-- [x] Greedy: Activity Selection, Huffman Coding, Fractional Knapsack
-- [x] Numerical: GCD, Extended GCD, Fast Exponentiation, Sieve, is_prime
-- [x] Testes (110 testes)
+### Etapa C - Publicacao
 
-### Wave 3 - Advanced ✅
+- [ ] Executar build limpo (`clean check`)
+- [ ] Publicar snapshots internos para validacao de consumo
+- [ ] Publicar release `0.1.0`
 
-- [x] Divide & Conquer: Strassen, Closest Pair, Karatsuba, Max Subarray (Kadane), Quick Select
-- [x] Backtracking: N-Queens, Subset Sum, Permutations, Graph Coloring
-- [x] Testes (42 testes)
+## 5. Matriz de modulos
 
----
+| Modulo | Dependencias | Publica |
+|---|---|---|
+| `:datastructures` | — | `br.uem.din:datastructures:0.1.0` |
+| `:algorithms` | `:datastructures` | `br.uem.din:algorithms:0.1.0` |
+| `:extensions` | `:datastructures`, `:algorithms` | `br.uem.din:extensions:0.1.0` |
+| `:optimization` | — | `br.uem.din:optimization:0.1.0` |
+| `:bom` | (constraints) | `br.uem.din:bom:0.1.0` |
 
-## Fase 3: Heurísticas e Meta-Heurísticas 🔄 EM PROGRESSO
+## 6. Comandos de validacao
 
-### Phase 3A - Classical ✅ COMPLETA (91 testes)
+```bash
+./gradlew :datastructures:check
+./gradlew :algorithms:check
+./gradlew :extensions:check
+./gradlew :optimization:check
+./gradlew check
+```
 
-- [x] Hill Climbing (steepest ascent, first improvement, random restart, stochastic) — 16 testes
-- [x] Simulated Annealing (geometric/linear/log/adaptive cooling, reheating, auto-calibrate T0) — 15 testes
-- [x] Tabu Search (tabu list, aspiration, diversification, intensification, reactive tenure) — 15 testes
-- [x] Genetic Algorithm (tournament/roulette/rank, OX/PMX/BLX, swap/inversion/gaussian, adaptive) — 13 testes
-- [x] Benchmarks: TSP (5/10/20 cities), Continuous (Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel) — 32 testes
+## 7. Riscos e mitigacoes
 
-### Phase 3B - Advanced ✅ COMPLETA (41 testes)
+- Risco: inconsistencias de API entre docs e codigo
+  - Mitigacao: exemplos compilaveis com funcoes/fabricas reais
+- Risco: regressao em targets JS/Native
+  - Mitigacao: manter `check` cross-platform como gate obrigatorio
+- Risco: dependencia circular entre modulos
+  - Mitigacao: manter `extensions` como camada superior; `optimization` isolado
 
-- [x] ILS (better/always/SA-like/restart acceptance, optional perturbation) — 11 testes
-- [x] GRASP (RCL construction, reactive GRASP, builtin TSP/continuous constructors) — 10 testes
-- [x] PSO (constant/linear decreasing/constriction inertia, velocity clamping) — 10 testes
-- [x] ACO (Ant System/Elitist/MAX-MIN, pheromone evaporation, builtin TSP heuristic) — 10 testes
+## 8. Backlog tecnico apos release
 
-### Phase 3C - Specialized ⏳
-
-- [ ] Differential Evolution
-- [ ] VNS (Variable Neighborhood Search)
-- [ ] Memetic Algorithm (GA + Local Search)
-- [ ] LNS (Large Neighborhood Search)
-- [ ] Continuous benchmarks: Rastrigin, Rosenbrock, Ackley
-
----
-
-## Critérios de Validação
-
-Para cada componente implementado:
-
-### Correção
-- [x] Todos os testes unitários passam (JVM + JS)
-- [x] Sem erros de compilação em todos os targets
-
-### Qualidade de Código
-- [x] Compilação sem erros (warnings de expect/actual são esperados e benignos)
-- [x] Documentação KDoc completa com análise de complexidade
-- [x] Pseudocódigo acadêmico seguido
-
-### Validação Acadêmica
-- [x] Referências bibliográficas citadas
-- [x] Análise de complexidade documentada
-- [x] Algoritmos clássicos implementados corretamente
+1. Completar backlog da Fase 2 (algoritmos faltantes)
+2. Ampliar Iteracao 12 (interop sweep) para mais pacotes
+3. Introduzir CI com matriz JVM/JS/Native e publicacao assistida
 
 ---
 
-**Última atualização**: 2026-02-13
+Ultima atualizacao: 2026-02-19

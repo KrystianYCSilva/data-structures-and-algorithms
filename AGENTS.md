@@ -12,29 +12,32 @@ Group: `br.uem.din` | Kotlin 2.1.0 | Targets: JVM, JS (IR + Karma/ChromeHeadless
 Use Gradle wrapper. On Windows use `gradlew.bat`, on POSIX use `./gradlew`.
 
 ```sh
-# Build all targets
+# Build all targets (all modules)
 gradlew.bat build
 
-# Run all tests (JVM + JS + native)
+# Run all tests (JVM + JS + native, all modules)
 gradlew.bat check
 
-# JVM tests only
-gradlew.bat jvmTest
+# Single module tests
+gradlew.bat :datastructures:check
+gradlew.bat :algorithms:check
+gradlew.bat :extensions:check
+gradlew.bat :optimization:check
+
+# JVM tests only (single module)
+gradlew.bat :datastructures:jvmTest
 
 # JS tests only (requires ChromeHeadless)
-gradlew.bat jsTest
+gradlew.bat :datastructures:jsTest
 
 # Single test class (JVM)
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.StackTest"
+gradlew.bat :datastructures:jvmTest --tests "br.uem.din.datastructures.stack.StackTest"
 
 # Single test method (JVM)
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.StackTest.testArrayStackPushPop"
+gradlew.bat :datastructures:jvmTest --tests "br.uem.din.datastructures.stack.StackTest.testArrayStackPushPop"
 
 # Wildcard pattern
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.heap.*"
-
-# Single test (JS — same pattern syntax)
-gradlew.bat jsTest --tests "br.uem.din.datastructures.stack.StackTest"
+gradlew.bat :datastructures:jvmTest --tests "br.uem.din.datastructures.heap.*"
 
 # Publish artifacts
 gradlew.bat publish
@@ -43,20 +46,45 @@ gradlew.bat publish
 **Lint/Format:** No repository-wide linter task. `kotlin.code.style=official` is set in
 `gradle.properties`. Follow Kotlin official style. If linting is needed, add ktlint/detekt plugins.
 
+## Module Structure
+
+Multi-module Gradle project with 5 modules:
+
+| Module | Artifact | Dependencies | Description |
+|--------|----------|-------------|-------------|
+| `:datastructures` | `br.uem.din:datastructures` | — | 36 data structures (stack, queue, tree, graph, heap, hash, etc.) |
+| `:algorithms` | `br.uem.din:algorithms` | `datastructures` | 46 algorithms (sorting, searching, graph, string, DP, greedy, etc.) |
+| `:extensions` | `br.uem.din:extensions` | `datastructures`, `algorithms` | Kotlin extension functions bridging DS and algorithms |
+| `:optimization` | `br.uem.din:optimization` | — | 12 optimization heuristics + 7 problem modelings |
+| `:bom` | `br.uem.din:bom` | (platform) | Bill of Materials for version alignment |
+
 ## Source Layout
 
 ```
-src/
-  commonMain/kotlin/br/uem/din/   # Platform-independent code (primary)
-    algorithms/                    # Algorithm implementations (sorting/, graph/)
-    datastructures/                # DS implementations (tree/, graph/, heap/, stack/, queue/, ...)
-    extensions/                    # Kotlin extension functions
-  commonTest/kotlin/br/uem/din/   # Platform-independent tests (kotlin.test)
-  jvmMain/kotlin/                  # JVM-specific actual declarations
-  jvmTest/kotlin/                  # JVM-specific tests
-  jsMain/kotlin/                   # JS-specific actual declarations
-  jsTest/kotlin/                   # JS-specific tests
-  nativeMain/kotlin/               # mingwX64-specific actual declarations
+datastructures/
+  src/commonMain/kotlin/br/uem/din/
+    datastructures/                # 36 DS (tree/, graph/, heap/, stack/, queue/, hash/, ...)
+    extensions/                    # MutableList.swap(), GraphExtensions (DS-only deps)
+  src/commonTest/                  # Platform-independent tests
+  src/{jvm,js,native}Main/        # expect/actual: ArrayStack, ArrayQueue, PriorityQueue, DoublyLinkedList, RedBlackTree, BitSet
+  src/{jvm,js,native}Test/        # Platform-specific interop tests
+
+algorithms/
+  src/commonMain/kotlin/br/uem/din/
+    algorithms/                    # sorting/, searching/, graph/, string/, dp/, greedy/, numerical/, backtracking/, divideconquer/, geometry/, network/, combinatorics/
+  src/commonTest/                  # Tests
+
+extensions/
+  src/commonMain/kotlin/br/uem/din/
+    extensions/                    # CollectionExtensions, MathExtensions, StringExtensions
+  src/commonTest/                  # Tests
+
+optimization/
+  src/commonMain/kotlin/br/uem/din/
+    optimization/                  # 12 heuristics + 7 problem types + benchmarks
+  src/commonTest/                  # Tests
+
+bom/                               # BOM (java-platform)
 docs/                              # ALGORITHM_CATALOG.md, USAGE_EXAMPLES.md, PROJECT_ROADMAP.md
 ```
 
@@ -113,10 +141,12 @@ docs/                              # ALGORITHM_CATALOG.md, USAGE_EXAMPLES.md, PR
 - Each test method tests one behavior; keep tests independent
 
 ### Adding New Code
-- New algorithms/data structures go in `src/commonMain/kotlin/br/uem/din/`
-- Accompany with tests in `src/commonTest/kotlin/br/uem/din/`
+- New data structures go in `datastructures/src/commonMain/kotlin/br/uem/din/datastructures/`
+- New algorithms go in `algorithms/src/commonMain/kotlin/br/uem/din/algorithms/`
+- New extensions go in `extensions/src/commonMain/kotlin/br/uem/din/extensions/`
+- New heuristics go in `optimization/src/commonMain/kotlin/br/uem/din/optimization/`
+- Accompany with tests in the corresponding `src/commonTest/` directory
 - Update `docs/ALGORITHM_CATALOG.md` and `docs/USAGE_EXAMPLES.md` for new features
-- Prefer extension functions in `extensions/` for cross-cutting utilities
 
 ## Agents Catalogue
 

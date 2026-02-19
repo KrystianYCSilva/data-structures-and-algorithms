@@ -4,57 +4,42 @@ description: Domain glossary and core concepts specific to this algorithms libra
 
 # Domain Concepts
 
-## Estruturas de Dados (36 implementadas)
+## Estruturas de Dados (36)
 
-- **Lineares**: Stack, Queue, Deque, CircularQueue, LinkedList, DoublyLinkedList, CircularLinkedList, UnrolledLinkedList, DynamicArray
-- **Arvores**: BinarySearchTree, AVLTree, RedBlackTree, SplayTree, Treap, CartesianTree, BTree, BPlusTree, RadixTree, SuffixTree, Trie
-- **Range Query**: SegmentTree, FenwickTree (Binary Indexed Tree)
-- **Heaps**: AbstractHeap, ComparableHeapImpl, ComparatorHeapImpl, BinomialHeap, FibonacciHeap, PriorityQueue
-- **Grafos**: Graph (interface), AdjacencyList, AdjacencyMatrix, DirectedAcyclicGraph, Vertex, Edge
-- **Hash**: HashTable, OpenAddressingHashTable, CuckooHashTable
-- **Spatial**: KDTree, QuadTree
-- **Probabilisticas**: BloomFilter, SkipList
-- **Outros**: BitSet, UnionFind, Multiset, ParallelArray, Matrix
+- Lineares: stack, queue, deque, linked lists, dynamic array
+- Arvores: BST, AVL, RedBlack, Splay, Treap, BTree, BPlusTree, Trie, Radix, Suffix
+- Range query: SegmentTree, FenwickTree
+- Heaps: Comparable/Comparator heap, BinomialHeap, FibonacciHeap, PriorityQueue
+- Grafos: AdjacencyList, AdjacencyMatrix, DirectedAcyclicGraph
+- Associativas: OpenAddressing, Cuckoo, SeparateChaining, Multiset
+- Espaciais/probabilisticas: KDTree, QuadTree, BloomFilter, SkipList, BitSet, UnionFind
 
-## Algoritmos (Implementados)
+## Algoritmos classicos (46)
 
-- **Sorting**: Bubble, Selection, Insertion, Shell, Merge, Quick, Heap, Counting, Radix, Bucket
-- **Searching**: Linear, Binary, Interpolation, Ternary, Jump, Exponential
-- **Graph**: BFS, DFS, Dijkstra, A*, Bellman-Ford, Floyd-Warshall, Kruskal, Prim
-- **String Matching**: Naive, KMP, Rabin-Karp, Boyer-Moore
-- **Dynamic Programming**: Fibonacci, LCS, Knapsack 0/1, Edit Distance, LIS, Coin Change
-- **Greedy**: Activity Selection, Huffman Coding, Fractional Knapsack
-- **Numerical**: GCD, LCM, Extended GCD, Fast Exponentiation, Sieve of Eratosthenes, Primality Test
-- **Divide & Conquer**: Karatsuba, Maximum Subarray (Kadane), Quick Select
-- **Backtracking**: N-Queens, Subset Sum, Permutations
+- Sorting (10)
+- Searching (6)
+- Graph (8)
+- String matching (4)
+- Dynamic programming (6 de 8 planejados)
+- Greedy (3)
+- Numerical (6)
+- Backtracking (3 de 4 planejados)
 
-## Heuristicas e Meta-Heuristicas (Planejadas)
+## Heuristicas/meta-heuristicas (12)
 
-- **Single-Solution**: Hill Climbing, Simulated Annealing, Tabu Search, ILS (Iterated Local Search)
-- **Population-Based**: Genetic Algorithm, PSO (Particle Swarm Optimization), ACO (Ant Colony Optimization)
-- **Hybrid**: GRASP (Greedy Randomized Adaptive Search Procedure)
-- **Planejadas (3C)**: Differential Evolution, VNS, Memetic Algorithm, LNS
+- Classical local search: Hill Climbing, Simulated Annealing, Tabu Search
+- Population-based: Genetic Algorithm, PSO, ACO, Differential Evolution
+- Hybrid/advanced: ILS, GRASP, VNS, Memetic Algorithm, LNS
 
-## Tipos de Infraestrutura de Otimizacao (Planejados)
+## Framework de otimizacao
 
-- **OptSolution**: Representacao de uma solucao candidata
-- **OptResult**: Resultado de execucao de uma heurisitca (solucao + metricas)
-- **Benchmarks TSP**: Instancias com 5, 10, 20 cidades
-- **Benchmarks Continuos**: Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel
+- Base: `OptimizationProblem<T>` + `OptResult<T>`
+- Especializacoes: `BoundedVectorProblem` (PSO/DE), `CostMatrixProblem` (ACO)
+- Modelagens: `ContinuousProblem`, `BinaryProblem`, `PermutationProblem`, `IntegerProblem`
+- Problemas concretos: `KnapsackProblem`, `JobSchedulingProblem`, `MaxSatProblem`, `TSPProblem`
 
-## Complexidade (Big-O)
+## Convenios de API
 
-Todas as implementacoes documentam complexidade temporal e espacial no KDoc de classe, usando notacao Big-O. Tabelas Markdown no formato:
-
-```
-| Operacao | Complexidade |
-|----------|-------------|
-| push     | O(1) amort. |
-| pop      | O(1)        |
-```
-
-## Referencias Academicas
-
-- Cormen, T. H. et al. "Introduction to Algorithms" (CLRS) — referencia primaria
-- Knuth, D. E. "The Art of Computer Programming" (TAOCP) — estruturas e sorting
-- Papers originais: Dijkstra (1959), Kirkpatrick et al. (1983), Holland (1975), Kennedy & Eberhart (1995), Dorigo (1992), etc.
+- Leitura/escrita separadas (`Immutable*`/`Mutable*` ou noun/`Mutable*`)
+- Operacoes em colecao vazia retornam `null` quando aplicavel
+- Views imutaveis via `asReadOnly()`

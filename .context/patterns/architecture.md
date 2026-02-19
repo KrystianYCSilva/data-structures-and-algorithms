@@ -1,48 +1,52 @@
 ---
-description: Architecture patterns actually used in this project.
+description: Architecture patterns currently used in the repository.
 ---
 
 # Architecture Patterns
 
-## Modular Library (Single Gradle Module)
-
-Projeto organizado como um unico modulo Gradle com source sets KMP. Nao ha submodulos.
+## 1) Layered Multi-module
 
 ```
-commonMain  ->  jvmMain / jsMain / nativeMain
-commonTest  ->  jvmTest / jsTest
+:datastructures   (foundation)
+      ^
+      |
+:algorithms       (classical algorithms)
+      ^
+      |
+:extensions       (ergonomic API over DS + algorithms)
+
+:optimization     (independent lane)
+
+:bom              (version alignment)
 ```
 
-## expect/actual Pattern
+## 2) Common-first KMP
 
-Para tipos que precisam de implementacao platform-specific:
-- `expect class ArrayStack<T>() : MutableStack<T>` em commonMain
-- `actual class ArrayStack<T>` em jvmMain (delega a `java.util.ArrayDeque`), jsMain e nativeMain (usa `ArrayList`)
+- Implementacao primaria em `commonMain`
+- Adaptacoes por plataforma em `:datastructures/src/{jvm,js,native}Main`
 
-Tipos atuais com expect/actual: `ArrayStack`, `BitSet`.
+## 3) Factory expect/actual API
 
-## Read-Only / Mutable Interface Pair
+- API publica para estruturas adaptadas por plataforma via funcoes de fabrica:
+  - `arrayStackOf()`
+  - `arrayQueueOf()`
+  - `priorityQueueOf()`
+  - `bitSetOf()`
+  - `redBlackTreeOf()`
 
-Seguindo Kotlin stdlib (`List`/`MutableList`):
-- `Stack<T> : Iterable<T>` (read-only: `peek`, `size`, `isEmpty`, `contains`)
-- `MutableStack<T> : Stack<T>` (mutavel: `push`, `pop`, `clear`)
+## 4) Read-only / Mutable split
 
-Aplicado a: Stack, Queue, e derivados.
+- Separacao consistente de interfaces de leitura e escrita
+- `asReadOnly()` para views sem copia (live views)
 
-## Abstract Base + Concrete Implementations
+## 5) Algorithm as top-level function or service class
 
-Para heaps e estruturas com logica compartilhada:
-- `AbstractHeap<T> : MutableQueue<T>` (indices, siftUp/siftDown abstratos)
-- `ComparableHeapImpl<T>` e `ComparatorHeapImpl<T>` como implementacoes concretas
+- Sorting/searching majoritariamente top-level functions
+- Algoritmos de grafo com classes de servico quando mantem contexto (`Dijkstra`, `AStar`, `BreadthFirstSearch`)
 
-## Extension Functions
+## 6) Optimization problem abstraction
 
-Cross-cutting utilities em `extensions/` como funcoes de extensao:
-- `MutableList<T>.swap(index1, index2)` em `extensions/MutableList.kt`
-- `Stack<T>.toList()` em `StackInterfaces.kt`
-
-## Top-Level Functions para Algoritmos
-
-Algoritmos de sorting/searching como funcoes top-level genericas:
-- `fun <T : Comparable<T>> bubbleSort(list: MutableList<T>)`
-- Sem classes wrapper desnecessarias; funcoes puras quando possivel
+- Heuristicas operam sobre `OptimizationProblem<T>`
+- Interfaces especializadas para familias de heuristicas:
+  - `BoundedVectorProblem` (PSO/DE)
+  - `CostMatrixProblem` (ACO)

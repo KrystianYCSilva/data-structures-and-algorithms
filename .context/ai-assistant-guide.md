@@ -17,12 +17,24 @@ description: System prompt and navigation hints for AI agents operating on this 
 - **Testes**: `kotlin.test` apenas (sem Kotest, sem JUnit)
 - **Linter**: Nenhum configurado; seguir `kotlin.code.style=official`
 - **Build**: `gradlew.bat build` / `gradlew.bat check`
+- **Modulos**: `:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`
 
 ## Where to Put New Code
 
-- Algoritmos/DS: `src/commonMain/kotlin/br/uem/din/`
-- Testes: `src/commonTest/kotlin/br/uem/din/`
-- Platform-specific: `src/{jvm,js,native}Main/kotlin/` (apenas para expect/actual)
+- Data structures: `datastructures/src/commonMain/kotlin/br/uem/din/datastructures/`
+- Algorithms: `algorithms/src/commonMain/kotlin/br/uem/din/algorithms/`
+- Extensions: `extensions/src/commonMain/kotlin/br/uem/din/extensions/`
+- Optimization: `optimization/src/commonMain/kotlin/br/uem/din/optimization/`
+- Testes comuns: `<modulo>/src/commonTest/kotlin/br/uem/din/`
+- Platform-specific: `datastructures/src/{jvm,js,native}Main/kotlin/` (apenas expect/actual)
+
+## Build commands by module
+
+- `gradlew.bat :datastructures:check`
+- `gradlew.bat :algorithms:check`
+- `gradlew.bat :extensions:check`
+- `gradlew.bat :optimization:check`
+- `gradlew.bat check` (todos)
 
 ## Kotlin Skills & Agents
 

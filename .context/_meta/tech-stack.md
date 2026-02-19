@@ -1,57 +1,66 @@
 ---
-description: Tech stack and architecture decisions based on actual build.gradle.kts and gradle.properties.
+description: Tech stack, build metadata, modules and architecture.
 ---
 
-# Tech Stack & Architecture
+# Tech Stack
 
 ## Stack
 
-| Camada | Tecnologia | Versao |
-|--------|------------|--------|
+| Camada | Tecnologia | Versao/Config |
+|---|---|---|
 | Linguagem | Kotlin | 2.1.0 |
-| Framework | Kotlin Multiplatform (KMP) | kotlin-multiplatform plugin |
-| Build | Gradle Wrapper | 8.7 |
-| Testes | kotlin.test (commonTest, jvmTest, jsTest) | stdlib |
-| JS Test Runner | Karma + ChromeHeadless | via useKarma { useChromeHeadless() } |
-| Publicacao | maven-publish plugin | Gradle built-in |
+| Build | Gradle Wrapper | multi-modulo |
+| Plugin | Kotlin Multiplatform | `kotlin("multiplatform")` |
+| Testes | kotlin.test | unico framework |
+| Publicacao | maven-publish | por modulo |
+| BOM | java-platform | `:bom` |
+
+- Kotlin `2.1.0` (from `gradle.properties`)
+- Kotlin Multiplatform plugin `kotlin("multiplatform")`
+- Gradle Wrapper (multi-module build)
+- kotlin.test (single testing framework)
+- maven-publish + java-platform (BOM)
+
+## Build metadata
+
+- Group: `br.uem.din`
+- Version: `0.1.0`
+- Root project name: `algoritmos-otimizacao`
+- Repositories: `mavenCentral()`, `google()`, `gradlePluginPortal()`
 
 ## Targets
 
-| Target | Config | Notas |
-|--------|--------|-------|
-| JVM | `jvm { withJava() }` | Target principal |
-| JS (IR) | `js(IR) { browser { ... }; nodejs() }` | Browser + Node, Karma para testes |
-| Native | `mingwX64("native")` | Windows 64-bit, sem C-interop |
+- JVM: `withJava()` + `jvmToolchain(8)`
+- JS IR: browser + nodejs; tests with Karma + ChromeHeadless
+- Native: `mingwX64("native")`
+
+## Modulos
+
+- `:datastructures`
+- `:algorithms` -> depende de `:datastructures` (`api(project(":datastructures"))`)
+- `:extensions` -> depende de `:datastructures` e `:algorithms`
+- `:optimization` -> independente (sem dependencia interna)
+- `:bom`
 
 ## Arquitetura
 
-Biblioteca KMP com codigo compartilhado em `commonMain` e adaptadores por plataforma via `expect`/`actual`.
-Nao ha modulos Gradle separados — tudo em um unico modulo raiz com source sets por target.
+- Base de dominio em `:datastructures`
+- Camada de algoritmos classicos em `:algorithms` reaproveitando DS
+- Camada ergonomica em `:extensions` com funcoes de extensao
+- Trilha paralela independente para heuristicas em `:optimization`
+- Alinhamento de versao para consumidores via `:bom`
 
-- Group: `br.uem.din`
-- Version: `1.0-SNAPSHOT`
-- Code style: `kotlin.code.style=official` (gradle.properties)
+## Comandos principais
 
-## Estrutura de diretorios
-
-```
-src/
-  commonMain/kotlin/br/uem/din/    # Codigo principal (DS, algoritmos, heuristicas)
-    datastructures/                  # 36 estruturas (stack, queue, heap, tree, graph, ...)
-    algorithms/                      # ~45 algoritmos (sorting, searching, graph, dp, ...)
-    extensions/                      # Extension functions utilitarias
-  commonTest/kotlin/br/uem/din/    # Testes platform-independent (kotlin.test)
-  jvmMain/kotlin/                   # actual declarations (ArrayStack, BitSet)
-  jsMain/kotlin/                    # actual declarations JS
-  nativeMain/kotlin/                # actual declarations mingwX64
-  jvmTest/kotlin/                   # Testes JVM-specific
-  jsTest/kotlin/                    # Testes JS-specific (Karma)
-docs/                               # ALGORITHM_CATALOG, USAGE_EXAMPLES, PROJECT_ROADMAP
+```sh
+gradlew.bat check
+gradlew.bat :datastructures:check
+gradlew.bat :algorithms:check
+gradlew.bat :extensions:check
+gradlew.bat :optimization:check
 ```
 
-## Dependencias
+## Links internos
 
-**Unica dependencia**: `kotlin("test")` para commonTest, jvmTest, jsTest.
-
-Nao ha dependencias externas (sem kotlinx.coroutines, sem kotlinx.serialization, sem Kotest, sem Dokka configurado).
-Toda implementacao usa apenas Kotlin stdlib.
+- Workflow de publicacao: `../workflows/deployment.md`
+- Navegacao do contexto: `../README.md`

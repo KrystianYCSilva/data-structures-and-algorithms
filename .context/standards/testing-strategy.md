@@ -1,43 +1,43 @@
 ---
-description: Testing strategy based on actual project test infrastructure.
+description: Testing strategy for the multi-module Kotlin Multiplatform project.
 ---
 
 # Testing Strategy
 
 ## Framework
 
-- **Unico framework**: `kotlin.test` (commonTest, jvmTest, jsTest)
-- **Sem Kotest**, sem JUnit direto, sem property-based testing configurado
-- Assertions: `assertTrue`, `assertFalse`, `assertEquals`, `assertNull` de `kotlin.test`
+- Unico framework: `kotlin.test`
+- Sem Kotest e sem JUnit direto na API de testes
+- Assertions padrao: `assertEquals`, `assertTrue`, `assertFalse`, `assertNull`, `assertFailsWith`
 
-## Organizacao
+## Source Set Strategy
 
-| Source Set | Proposito | Runner |
-|------------|-----------|--------|
-| commonTest | Testes platform-independent (maioria) | kotlin.test |
-| jvmTest | Testes JVM-specific | kotlin.test (JUnit runner) |
-| jsTest | Testes JS-specific | Karma + ChromeHeadless |
+| Source set | Uso |
+|---|---|
+| `commonTest` | comportamento compartilhado e invariantes |
+| `jvmTest` | interop JVM e paridade com estruturas Java quando aplicavel |
+| `jsTest` | paridade comportamental JS + constraints de runtime (Karma timeout) |
+| `nativeTest` | paridade comportamental Native |
 
-## Convencoes
+## Module Gates
 
-- Test class: `{ClassUnderTest}Test` no mesmo pacote (e.g., `StackTest`)
-- Test method: `test{Implementation}{Operation}` (e.g., `testArrayStackPushPop`)
-- Um comportamento por metodo de teste; testes independentes entre si
-- Preferir testes em commonTest; usar jvmTest/jsTest apenas para comportamento platform-specific
+- `:datastructures:check`
+- `:algorithms:check`
+- `:extensions:check`
+- `:optimization:check`
+- `check` no root como gate final
 
-## Comandos
+## Quality Protocol (aplicado no QA iterativo)
 
-```sh
-gradlew.bat check                 # Todos os testes
-gradlew.bat jvmTest               # Apenas JVM
-gradlew.bat jsTest                # Apenas JS (Karma/ChromeHeadless requerido)
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.StackTest"  # Classe
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.stack.StackTest.testArrayStackPushPop"  # Metodo
-gradlew.bat jvmTest --tests "br.uem.din.datastructures.heap.*"  # Wildcard
-```
+1. Invariantes de estado e fronteira
+2. Imutabilidade vs mutabilidade (`asReadOnly`)
+3. Randomizado com `Random(seed)` e oracle
+4. Interop por plataforma quando houver `expect/actual`
+5. Error handling com `assertFailsWith`
+6. Guardas de complexidade (quando viavel)
 
-## Metricas Atuais
+## Current Status
 
-- **Total Testes:** Concentrados em Estruturas de Dados (`datastructures/`). Quantidade exata pendente de execucao completa.
-- **Cobertura:** Nao medida formalmente (sem plugin de coverage configurado).
-- **Status:** Algoritmos (Fase 2) e Heuristicas (Fase 3) ainda nao possuem cobertura de testes significativa implementada.
+- QA iteracoes 11->3 resolvidas
+- Suite global passando em JVM + JS + Native
+- Cobertura formal (percentual) nao configurada

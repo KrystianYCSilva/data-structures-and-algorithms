@@ -27,6 +27,8 @@ Fase 1 (36 DS) e Fase 2 (~46 algoritmos) completas. Fase 3 (heuristicas): 3A, 3B
 Framework de otimizacao com 7 modelagens de problema, 3 interfaces de abstracao e 4 crossover operators.
 Todas as 12 heuristicas testadas cruzadamente em Knapsack, Scheduling, MAX-SAT, TSP e benchmarks continuos.
 
+**Modularizacao Gradle completa (5 modulos):** `:datastructures`, `:algorithms` (dep: DS), `:extensions` (dep: DS+Algo), `:optimization` (independente), `:bom` (java-platform). Build verde em 3 plataformas.
+
 **QA Iterative Plan (Iteracoes 11→3): TODAS RESOLVIDAS.**
 - 950+ testes total across JVM/JS/Native.
 - Production bug fixed: `OpenAddressingHashTable.put()` tombstone-accumulation duplicate key bug.
@@ -123,6 +125,8 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 - [x] Auditoria release-ready B1-B12 completa (sessao 8): Iterable wiring, Mutable/Immutable split para 17 estruturas, BTree/BPlusTree -> MutableSearchTree, hash table iteration, full 3-platform build+test pass
 - [x] Naming convention migration completa (sessao 9): ReadOnly* -> Immutable* (14 pares), ReadOnlyHeap -> Heap (bare noun), BitSet split -> ImmutableBitSet/MutableBitSet, ImmutableViews.kt + test files atualizados, full 3-platform check pass
 - [x] QA Iterative Plan Iteracoes 11→3 todas RESOLVIDAS (sessoes 13-14): 950+ testes, production bug fix OpenAddressingHashTable, platform interop BitSet JVM/JS/Native
+- [x] Modularizacao Gradle completa (sessao 15): 5 modulos (:datastructures, :algorithms, :extensions, :optimization, :bom), build verde JVM+JS+Native
+- [x] Refresh completo de documentacao (sessao 19): docs/ e .context/ alinhados ao layout multi-modulo + criacao de `project.md`, `tech.md`, `rules.md`
 
 ---
 
@@ -141,7 +145,7 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 
 ---
 
-*Ultima atualizacao: 2026-02-17 (sessao 14 — QA Iterations 11→3 complete).*
+*Ultima atualizacao: 2026-02-19 (sessao 23 — Absorcao Lean->Enterprise e limpeza de duplicados).*
 
 ---
 
@@ -514,3 +518,129 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 - **Status de iteracoes:**
   - Iteracao 8: **RESOLVIDA (hardening v2)**
   - Iteracao 12: **EM PROGRESSO** (RedBlackTree agora coberto em JVM/JS/Native)
+
+---
+
+## Sessao 18
+
+- **Data:** 2026-02-18
+- **Nivel:** Deliberado+
+- **Resumo:** Modularizacao Gradle completa — projeto monolitico separado em 5 modulos independentes.
+- **Modulos criados:**
+  - `:datastructures` — 36 DS + ImmutableViews + CollectionsExtensions + swap() + GraphExtensions (sem dependencias externas)
+  - `:algorithms` — 46 algoritmos (depende de `:datastructures` via `api()`)
+  - `:extensions` — CollectionExtensions, MathExtensions, StringExtensions (depende de `:datastructures` + `:algorithms` via `api()`)
+  - `:optimization` — 12 heuristicas + 7 modelagens (100% independente, zero dependencias)
+  - `:bom` — Bill of Materials (`java-platform`) para alinhamento de versoes
+- **Decisoes de alocacao de arquivos:**
+  - `MutableList.kt` (swap) → `:datastructures` (usado por heap + sorting, evita dependencia circular)
+  - `GraphExtensions.kt` → `:datastructures` (so depende de `datastructures.graph`)
+  - `TreeTraversalExtensions.kt` → `:datastructures` (ja era `package datastructures.tree`, movido de `extensions/` para `datastructures/tree/`)
+  - `CollectionExtensions.kt`, `MathExtensions.kt`, `StringExtensions.kt` → `:extensions` (dependem de algorithms)
+- **Arquivos criados/alterados:**
+  - `settings.gradle.kts` — reescrito com 5 `include()`
+  - `build.gradle.kts` (raiz) — reescrito como `subprojects` config
+  - `datastructures/build.gradle.kts`, `algorithms/build.gradle.kts`, `extensions/build.gradle.kts`, `optimization/build.gradle.kts`, `bom/build.gradle.kts` — NOVOS
+  - `AGENTS.md` — atualizado com estrutura multi-modulo
+  - `README.md` — atualizado com instalacao por modulo e BOM
+  - `.itzamna/memory.md` — esta entrada
+- **Validacao:** `gradlew.bat check` → **BUILD SUCCESSFUL** (91 tasks, 5 modulos × 3 plataformas, 950+ testes, 0 falhas)
+
+
+---
+
+## Sessao 19
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Atualizacao completa da documentacao para refletir o estado real implementado apos modularizacao.
+- **Escopo principal:**
+  - Refresh de `docs/` com API e exemplos validos
+  - Refresh de `.context/` com arquitetura multi-modulo
+  - Criacao dos entrypoints canonicos exigidos pelo Itzamna: `.context/project.md`, `.context/tech.md`, `.context/rules.md`
+- **Arquivos atualizados em `docs/`:**
+  - `USAGE_EXAMPLES.md` (reescrito)
+  - `KOTLIN_USAGE.md` (reescrito)
+  - `DATA_STRUCTURE_GUIDE.md` (reescrito)
+  - `IMPLEMENTATION_PLAN.md` (reescrito para release track v0.1.0)
+  - `PROJECT_ROADMAP.md` (status + arquitetura multi-modulo)
+  - `ALGORITHM_CATALOG.md` (secao de modulos/artefatos)
+  - `QA-ITERATIVE-PLAN.md` (nota de caminhos historicos pre-modularizacao)
+- **Arquivos atualizados em `.context/`:**
+  - `README.md`, `ai-assistant-guide.md`
+  - `_meta/project-overview.md`, `_meta/tech-stack.md`, `_meta/key-decisions.md`
+  - `standards/architectural-rules.md`, `standards/testing-strategy.md`, `standards/code-quality.md`
+  - `patterns/architecture.md`, `workflows/deployment.md`, `knowledge/domain-concepts.md`
+  - novos: `project.md`, `tech.md`, `rules.md`
+- **Consistencia verificada:** caminhos de codigo e comandos Gradle por modulo alinhados ao layout atual.
+
+---
+
+## Sessao 20
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao do comando `/itzamna.context update` com deteccao automatica do estado real do projeto e sincronizacao dos entrypoints canonicos.
+- **Deteccao aplicada:**
+  - `gradle.properties`: Kotlin `2.1.0`
+  - `settings.gradle.kts`: root project `algoritmos-otimizacao` + 5 modulos
+  - `build.gradle.kts` (raiz): `group=br.uem.din`, `version=0.1.0`
+  - builds por modulo: KMP targets JVM/JS IR/Native, `jvmToolchain(8)`, `kotlin.test`, Karma + ChromeHeadless para JS
+- **Arquivos atualizados:**
+  - `.context/project.md`
+  - `.context/tech.md`
+- **Criterio:** update nao-destrutivo (preservando conteudo customizado existente e apenas enriquecendo metadados detectados).
+
+---
+
+## Sessao 21
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Execucao de upgrade/check completo do `.context/` em modo Enterprise, com hardening dos entrypoints Lean e recuperacao de arquivo removido na task anterior.
+- **Acoes executadas:**
+  - Validacao de estrutura: `.context/` confirmado como **Enterprise**
+  - Hardening de criterios de check:
+    - `project.md` atualizado com secoes obrigatorias (`What`, `Why`, `Scope`, `Status`)
+    - `tech.md` atualizado com tabela de stack e secao de arquitetura
+    - `rules.md` atualizado com secoes de ADR (>=1 ADR)
+  - Recuperacao de arquivo deletado na task anterior: `modularize.ps1` restaurado
+- **Validacao final do contexto:**
+  - 14 arquivos `.md` em `.context/`
+  - 14 preenchidos, 0 templates, 0 vazios
+  - frontmatter + `description` presentes em todos os arquivos
+  - `check` dos entrypoints canonicos: **PASS**
+
+---
+
+## Sessao 22
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Deduplicacao de contexto apos consolidacao Enterprise, preservando compatibilidade com comandos Itzamna.
+- **Decisao aplicada:**
+  - Manter `project.md`, `tech.md`, `rules.md` como **fontes canonicas** (exigidas por init/update/check).
+  - Converter `_meta/project-overview.md`, `_meta/tech-stack.md`, `_meta/key-decisions.md` em **mirrors leves** apontando para os canonicos.
+- **Arquivos ajustados:**
+  - `.context/README.md` (links principais para canonicos + secao Legacy Mirrors)
+  - `.context/project.md` (links internos sem dependencia de `_meta`)
+  - `.context/tech.md` (links internos sem dependencia de `_meta`)
+  - `.context/_meta/project-overview.md` (mirror)
+  - `.context/_meta/tech-stack.md` (mirror)
+  - `.context/_meta/key-decisions.md` (mirror)
+- **Resultado:** duplicacao de conteudo removida sem quebrar estrutura Enterprise nem os fluxos `itzamna.context`.
+
+---
+
+## Sessao 23
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Alinhamento estrito ao agente `itzamna.context`: absorcao dos arquivos Lean (`project.md`, `tech.md`, `rules.md`) para o layout Enterprise e remocao dos duplicados.
+- **Acao executada:**
+  - Conteudo de `project.md` migrado para `.context/_meta/project-overview.md`
+  - Conteudo de `tech.md` migrado para `.context/_meta/tech-stack.md`
+  - Conteudo de `rules.md` migrado para `.context/_meta/key-decisions.md`
+  - Remocao dos arquivos Lean: `.context/project.md`, `.context/tech.md`, `.context/rules.md`
+  - Ajuste da navegacao em `.context/README.md` para apontar para `_meta/*`
+- **Resultado:** `.context/` permanece Enterprise, sem duplicacao entre layout Lean e Enterprise.

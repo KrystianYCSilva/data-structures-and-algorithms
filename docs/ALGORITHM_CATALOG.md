@@ -2,6 +2,16 @@
 
 This catalog lists all implemented algorithms and data structures in the library, along with their complexity characteristics and status.
 
+## Modules and Artifacts
+
+| Module | Artifact |
+|---|---|
+| `:datastructures` | `br.uem.din:datastructures:0.1.0` |
+| `:algorithms` | `br.uem.din:algorithms:0.1.0` |
+| `:extensions` | `br.uem.din:extensions:0.1.0` |
+| `:optimization` | `br.uem.din:optimization:0.1.0` |
+| `:bom` | `br.uem.din:bom:0.1.0` |
+
 ## Data Structures (36/36 Implemented)
 
 ### Linear

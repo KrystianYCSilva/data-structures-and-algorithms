@@ -1,36 +1,62 @@
 ---
-description: Project overview, goals, scope, and current state.
+description: Project overview, goals, scope, and current status.
 ---
 
 # Project Overview
 
+Resumo do projeto para tarefas Deliberado+.
+
 ## What
 
-Biblioteca academica em Kotlin Multiplatform (JVM/JS/Native) de estruturas de dados (36), algoritmos fundamentais (~45) e heuristicas de otimizacao (8+ planejadas), com rigor cientifico e referencias a Cormen (CLRS), Knuth (TAOCP) e papers originais.
+Biblioteca academica Kotlin Multiplatform para estruturas de dados, algoritmos classicos e heuristicas de otimizacao, com foco em API didatica, portabilidade e qualidade de testes.
 
 ## Why
 
-Fornecer implementacoes portaveis, testadas e bem-documentadas de algoritmos classicos e meta-heuristicas para estudo, benchmarks e reuso em projetos academicos. O formato KMP permite execucao em JVM, browser (JS) e desktop nativo (mingwX64).
+Concentrar em um unico projeto KMP implementacoes de referencia para estudo, ensino e experimentacao, evitando dependencia de bibliotecas externas e mantendo comportamento consistente entre JVM, JS e Native.
 
 ## Scope
 
-**Dentro do escopo:**
-- Estruturas de dados classicas e avancadas (lineares, arvores, grafos, heaps, spatial, probabilisticas)
-- Algoritmos fundamentais (sorting, searching, graph, string matching, DP, greedy, numerical, D&C, backtracking)
-- Heuristicas e meta-heuristicas de otimizacao (local search, population-based, hybrid)
-- Benchmarks padronizados (TSP, funcoes continuas: Sphere, Rastrigin, Rosenbrock, Ackley, Schwefel)
-- Documentacao academica com complexidades e referencias
+### In scope
 
-**Fora do escopo:**
-- Servicos de aplicacao ou APIs REST
-- Scripts de deploy em producao
-- UI/frontend
+- Estruturas de dados (36)
+- Algoritmos classicos (46)
+- Heuristicas/meta-heuristicas (12)
+- Framework de modelagem de problemas de otimizacao (7 modelagens)
+- Publicacao modular em Maven (`datastructures`, `algorithms`, `extensions`, `optimization`, `bom`)
+
+### Out of scope
+
+- Aplicacoes web/API REST
+- Interface grafica
+- Infra de deploy de aplicacao final
+
+## Identidade
+
+- Nome: `algoritmos_otimizacao`
+- Root project name (Gradle): `algoritmos-otimizacao`
+- Tipo: biblioteca academica Kotlin Multiplatform
+- Dominios: estruturas de dados, algoritmos classicos, heuristicas de otimizacao
+
+## Escopo implementado
+
+- 36 estruturas de dados
+- 46 algoritmos classicos
+- 12 heuristicas/meta-heuristicas
+- 7 modelagens de problema
 
 ## Status
 
-Desenvolvimento ativo — **~65% completo**.
+- Fase 1: completa
+- Fase 2: parcial (faltam 7 algoritmos planejados)
+- Fase 3: completa
+- Build: verde em JVM + JS + Native
+- Publicacao: `group=br.uem.din`, `version=0.1.0`
 
-- **Fase 1 (Estruturas de Dados):** 100% (36/36 completas). Implementacao robusta de estruturas lineares, arvores, grafos, heaps, etc.
-- **Fase 2 (Algoritmos Fundamentais):** 100% (Completo). Implementados algoritmos de Sorting, Searching, Graph, String Matching, DP, Greedy, Numerical, D&C e Backtracking.
-- **Fase 3 (Heuristicas):** 0% (Planejado). Nenhuma implementacao presente no momento.
-- **Metricas:** ~15.000+ LOC (estimado), testes abrangentes para estruturas de dados e algoritmos fundamentais.
+## Arquitetura
+
+- Multi-modulo Gradle: `:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`
+
+## Links internos
+
+- Roadmap: `docs/PROJECT_ROADMAP.md`
+- Navegacao do contexto: `../README.md`

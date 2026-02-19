@@ -6,6 +6,13 @@ Skill aplicado: `testing-expert`
 
 ## Baseline atual
 
+> Nota de caminho (apos modularizacao): os caminhos historicos `src/...` nesta timeline referem-se ao layout anterior.
+> Layout atual por modulo:
+> - `datastructures/src/...`
+> - `algorithms/src/...`
+> - `extensions/src/...`
+> - `optimization/src/...`
+
 - Producao (`commonMain`): 80 arquivos Kotlin (excluindo `*Interfaces.kt`).
 - Testes existentes (`commonTest` + plataformas): 50 arquivos `*Test.kt`.
 - Interop por plataforma: apenas `datastructures/queue` possui cobertura dedicada em `jvmTest`, `jsTest`, `nativeTest`.

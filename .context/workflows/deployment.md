@@ -1,39 +1,49 @@
 ---
-description: Build, test, and publication workflow based on actual project configuration.
+description: Build, validation and publication workflow for release artifacts.
 ---
 
 # Build & Publication Workflow
 
-## Build
+## 1) Preflight
 
 ```sh
-gradlew.bat build        # Compila todos os targets (JVM, JS, Native)
+gradlew.bat clean
+gradlew.bat check
 ```
 
-Produz artefatos para JVM (JAR), JS (IR) e mingwX64 (klib).
+Gate obrigatorio: build e testes verdes em JVM + JS + Native.
 
-## Test
+## 2) Module validation
 
 ```sh
-gradlew.bat check        # Todos os testes
-gradlew.bat jvmTest      # Apenas JVM
-gradlew.bat jsTest       # Apenas JS (Karma/ChromeHeadless requerido)
+gradlew.bat :datastructures:check
+gradlew.bat :algorithms:check
+gradlew.bat :extensions:check
+gradlew.bat :optimization:check
 ```
 
-## Publication
+## 3) Publication artifacts
 
-O plugin `maven-publish` esta configurado. Publicacao via:
+- `br.uem.din:datastructures:0.1.0`
+- `br.uem.din:algorithms:0.1.0`
+- `br.uem.din:extensions:0.1.0`
+- `br.uem.din:optimization:0.1.0`
+- `br.uem.din:bom:0.1.0`
+
+## 4) Publish command
 
 ```sh
 gradlew.bat publish
 ```
 
-Publica artefatos para repositorios Maven configurados. Atualmente `1.0-SNAPSHOT`.
+## 5) Release checklist (manual)
 
-## CI/CD
+1. Versao coerente em todos os modulos
+2. POM completo (name, description, SCM, license, developers)
+3. CHANGELOG/roadmap/documentacao atualizada
+4. Consumidor de teste resolvendo BOM e modulos
 
-Nao ha pipeline CI/CD configurado no repositorio (sem GitHub Actions, sem Jenkinsfile). Build e testes sao executados localmente.
+## 6) Rollback policy
 
-## Rollback
-
-Sem mecanismo formal. Usar versionamento de artefatos e nao sobrescrever versoes publicadas.
+- Nao sobrescrever versao publicada
+- Corrigir em nova versao (`0.1.x`)

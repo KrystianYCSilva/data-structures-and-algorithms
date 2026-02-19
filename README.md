@@ -26,7 +26,7 @@ Biblioteca acadêmica em **Kotlin Multiplatform** (JVM / JS / Native) de estrutu
 
 ## Instalação
 
-### Gradle (Kotlin DSL)
+### Gradle (Kotlin DSL) — módulos individuais
 
 ```kotlin
 repositories {
@@ -34,7 +34,29 @@ repositories {
 }
 
 dependencies {
-    implementation("br.uem.din:algoritmos_otimizacao:0.1.0")
+    // Apenas estruturas de dados
+    implementation("br.uem.din:datastructures:0.1.0")
+
+    // Algoritmos (inclui datastructures via api())
+    implementation("br.uem.din:algorithms:0.1.0")
+
+    // Extensions Kotlin idiomáticas (inclui algorithms + datastructures)
+    implementation("br.uem.din:extensions:0.1.0")
+
+    // Heurísticas de otimização (independente)
+    implementation("br.uem.din:optimization:0.1.0")
+}
+```
+
+### BOM (Bill of Materials) — alinhar versões
+
+```kotlin
+dependencies {
+    implementation(platform("br.uem.din:bom:0.1.0"))
+
+    implementation("br.uem.din:datastructures")
+    implementation("br.uem.din:algorithms")
+    implementation("br.uem.din:optimization")
 }
 ```
 
@@ -45,7 +67,8 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("br.uem.din:algoritmos_otimizacao:0.1.0")
+                implementation("br.uem.din:algorithms:0.1.0")
+                implementation("br.uem.din:optimization:0.1.0")
             }
         }
     }
@@ -55,13 +78,13 @@ kotlin {
 ## Uso Rápido
 
 ```kotlin
-import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.stack.arrayStackOf
 import br.uem.din.datastructures.graph.AdjacencyList
 import br.uem.din.algorithms.graph.Dijkstra
 import br.uem.din.algorithms.sorting.bubbleSort
 
 // Stack
-val stack = ArrayStack<Int>()
+val stack = arrayStackOf<Int>()
 stack.push(1)
 stack.push(2)
 println(stack.peek()) // 2
@@ -75,8 +98,8 @@ val dijkstra = Dijkstra(graph)
 val distances = dijkstra.shortestPath(a)
 
 // Ordenação
-val array = intArrayOf(5, 3, 8, 1, 2)
-bubbleSort(array)
+val list = mutableListOf(5, 3, 8, 1, 2)
+bubbleSort(list)
 ```
 
 ### Otimização — Qualquer heurística × qualquer problema
@@ -114,16 +137,20 @@ Para mais exemplos, veja [`docs/USAGE_EXAMPLES.md`](docs/USAGE_EXAMPLES.md).
 ## Arquitetura
 
 ```
-src/
-├── commonMain/kotlin/br/uem/din/
-│   ├── algorithms/          # Sorting, Searching, Graph
-│   ├── datastructures/      # 36 estruturas de dados
-│   ├── optimization/        # 12 heurísticas de otimização
-│   └── extensions/          # Funções de extensão
-├── commonTest/              # Testes multiplataforma (kotlin.test)
-├── jvmMain/                 # Implementações JVM-specific
-├── jsMain/                  # Implementações JS-specific
-└── nativeMain/              # Implementações Native-specific (mingwX64)
+datastructures/              # :datastructures — 36 estruturas de dados
+  src/commonMain/kotlin/br/uem/din/datastructures/
+  src/{jvm,js,native}Main/   # expect/actual (ArrayStack, PriorityQueue, BitSet, ...)
+
+algorithms/                  # :algorithms — 46 algoritmos clássicos (depende de :datastructures)
+  src/commonMain/kotlin/br/uem/din/algorithms/
+
+extensions/                  # :extensions — extensões Kotlin (depende de :datastructures + :algorithms)
+  src/commonMain/kotlin/br/uem/din/extensions/
+
+optimization/                # :optimization — 12 heurísticas + 7 modelagens (independente)
+  src/commonMain/kotlin/br/uem/din/optimization/
+
+bom/                         # :bom — Bill of Materials (java-platform)
 ```
 
 ### Padrão de Interfaces
@@ -136,14 +163,16 @@ Todas as estruturas seguem o padrão Kotlin stdlib de separação leitura/escrit
 ## Build
 
 ```bash
-# Build completo (JVM + JS + Native)
+# Build completo (todos os módulos, JVM + JS + Native)
 ./gradlew build
 
 # Testes em todas as plataformas
 ./gradlew check
 
-# Apenas JVM
-./gradlew jvmTest
+# Testes de um módulo específico
+./gradlew :datastructures:check
+./gradlew :algorithms:check
+./gradlew :optimization:check
 ```
 
 ## Documentação

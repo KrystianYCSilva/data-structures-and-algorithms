@@ -5,9 +5,9 @@ description: Navigation hub for .context/ files and key links.
 # .context/ Navigation Hub
 
 ## T2: Project Identity
-- [Project Overview](_meta/project-overview.md)
-- [Tech Stack](_meta/tech-stack.md)
-- [Key Decisions](_meta/key-decisions.md) (ADRs)
+- [_meta/project-overview.md](_meta/project-overview.md)
+- [_meta/tech-stack.md](_meta/tech-stack.md)
+- [_meta/key-decisions.md](_meta/key-decisions.md)
 
 ## T1: Standards
 - [Architectural Rules](standards/architectural-rules.md)

@@ -1,33 +1,47 @@
 ---
-description: Architectural rules based on actual project patterns and conventions.
+description: Architectural rules based on current multi-module project structure.
 ---
 
 # Architectural Rules
 
-## R1: Common-First Development
+## R1: Module Ownership
 
-Todo codigo de algoritmos e estruturas de dados vai em `src/commonMain/kotlin/br/uem/din/`. Codigo platform-specific (jvmMain, jsMain, nativeMain) e usado apenas para `actual` declarations quando a implementacao depende de APIs da plataforma.
+- Estruturas de dados: `datastructures/src/commonMain/kotlin/br/uem/din/datastructures/`
+- Algoritmos classicos: `algorithms/src/commonMain/kotlin/br/uem/din/algorithms/`
+- Extensoes: `extensions/src/commonMain/kotlin/br/uem/din/extensions/`
+- Heuristicas/modelagens: `optimization/src/commonMain/kotlin/br/uem/din/optimization/`
 
-## R2: expect/actual para Adaptacao de Plataforma
+## R2: Dependency Direction
 
-Quando uma estrutura precisa de implementacao platform-specific, usar `expect class` em commonMain e `actual class` em cada target. Exemplos atuais: `ArrayStack<T>` (JVM usa `java.util.ArrayDeque`), `BitSet`.
+- `:datastructures` nao depende de modulos internos
+- `:algorithms` depende de `:datastructures`
+- `:extensions` depende de `:datastructures` e `:algorithms`
+- `:optimization` e independente
+- Nao introduzir dependencia circular
 
-## R3: Separacao Read-Only / Mutable
+## R3: Common-first + expect/actual minimo
 
-Seguir o padrao Kotlin stdlib: interfaces read-only (`Stack<T>`, `Queue<T>`) separadas de interfaces mutaveis (`MutableStack<T>`, `MutableQueue<T>`). Ambas no mesmo arquivo `*Interfaces.kt`.
+- Priorizar implementacao em `commonMain`
+- Usar `expect`/`actual` apenas quando houver necessidade de API especifica de plataforma
+- Elementos atuais com adaptacao de plataforma residem em `:datastructures`
 
-## R4: Null sobre Excecoes
+## R4: API Imutavel/Mutavel
 
-Operacoes em colecoes vazias (`pop()`, `peek()`, `dequeue()`) retornam `T?` em vez de lancar excecoes. Sem hierarquia de excecoes customizadas.
+- Seguir padrao Kotlin stdlib
+- Onde houver conflito com classe concreta: `Immutable*` / `Mutable*`
+- Onde nao houver conflito: substantivo puro / `Mutable*`
 
-## R5: Zero Dependencias Externas
+## R5: Semantica de erro
 
-O projeto usa apenas Kotlin stdlib e `kotlin("test")`. Nenhuma dependencia externa (sem kotlinx.*, sem Arrow, sem Kotest).
+- Operacoes em estrutura vazia retornam `null` quando aplicavel (`pop`, `peek`, `dequeue`)
+- `assertFailsWith` nos testes para precondicoes invalidas
 
-## R6: Documentacao Academica
+## R6: Documentacao academica
 
-KDoc em portugues com tabela de complexidade Big-O, `@param`/`@return`/`@see`, e referencias a Cormen (CLRS), Knuth (TAOCP) ou papers originais.
+- KDoc em portugues para API publica
+- Tabela de complexidade + referencias classicas (CLRS/TAOCP/papers)
 
-## R7: Um Tipo Principal por Arquivo
+## R7: Publicacao por modulo
 
-Cada arquivo contem um tipo principal. Nome do arquivo corresponde ao tipo (e.g., `ArrayStack.kt`, `BubbleSort.kt`). Interfaces agrupadas em `*Interfaces.kt`.
+- Cada modulo possui `maven-publish` e POM completo
+- `:bom` concentra alinhamento de versao

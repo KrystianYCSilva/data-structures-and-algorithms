@@ -1,41 +1,52 @@
 # Usage Examples
 
-Examples of how to use the data structures and algorithms in this library.
+Exemplos atualizados com a API real da biblioteca modularizada.
+
+## Dependencias por modulo
+
+```kotlin
+dependencies {
+    implementation("br.uem.din:datastructures:0.1.0")
+    implementation("br.uem.din:algorithms:0.1.0")
+    implementation("br.uem.din:extensions:0.1.0")
+    implementation("br.uem.din:optimization:0.1.0")
+}
+```
 
 ## Data Structures
 
-### Stack (ArrayStack)
+### Stack (arrayStackOf)
 
 ```kotlin
-import br.uem.din.datastructures.stack.ArrayStack
+import br.uem.din.datastructures.stack.arrayStackOf
 
 fun main() {
-    val stack = ArrayStack<Int>()
+    val stack = arrayStackOf<Int>()
     stack.push(10)
     stack.push(20)
-    
+
     println(stack.peek()) // 20
     println(stack.pop())  // 20
-    println(stack.size()) // 1
+    println(stack.size)   // 1
 }
 ```
 
-### Queue (LinkedQueue)
+### Queue (arrayQueueOf)
 
 ```kotlin
-import br.uem.din.datastructures.queue.LinkedQueue
+import br.uem.din.datastructures.queue.arrayQueueOf
 
 fun main() {
-    val queue = LinkedQueue<String>()
+    val queue = arrayQueueOf<String>()
     queue.enqueue("First")
     queue.enqueue("Second")
-    
-    println(queue.dequeue()) // "First"
-    println(queue.isEmpty()) // false
+
+    println(queue.dequeue()) // First
+    println(queue.peek())    // Second
 }
 ```
 
-### Binary Search Tree (BST)
+### Binary Search Tree
 
 ```kotlin
 import br.uem.din.datastructures.tree.BinarySearchTree
@@ -45,12 +56,10 @@ fun main() {
     bst.insert(50)
     bst.insert(30)
     bst.insert(70)
-    
-    println(bst.search(30)) // true
-    println(bst.search(99)) // false
-    
-    bst.delete(30)
-    println(bst.search(30)) // false
+
+    println(bst.contains(30)) // true
+    println(bst.remove(30))   // true
+    println(bst.contains(30)) // false
 }
 ```
 
@@ -58,26 +67,20 @@ fun main() {
 
 ```kotlin
 import br.uem.din.datastructures.graph.AdjacencyList
-import br.uem.din.datastructures.graph.Vertex
 
 fun main() {
     val graph = AdjacencyList<String>()
-    val vA = Vertex("A")
-    val vB = Vertex("B")
-    
-    graph.addVertex(vA)
-    graph.addVertex(vB)
-    graph.addEdge(vA, vB, weight = 1.0)
-    
-    println(graph.getNeighbors(vA).size) // 1
+    val a = graph.createVertex("A")
+    val b = graph.createVertex("B")
+
+    graph.addDirectedEdge(a, b, 1.0)
+    println(graph.weight(a, b)) // 1.0
 }
 ```
 
----
-
 ## Algorithms
 
-### Sorting (Bubble Sort)
+### Sorting (bubbleSort)
 
 ```kotlin
 import br.uem.din.algorithms.sorting.bubbleSort
@@ -89,43 +92,63 @@ fun main() {
 }
 ```
 
-### Graph Search (Dijkstra)
+### Searching (binarySearch)
 
 ```kotlin
-import br.uem.din.algorithms.graph.dijkstra
-import br.uem.din.datastructures.graph.AdjacencyList
-import br.uem.din.datastructures.graph.Vertex
+import br.uem.din.algorithms.searching.binarySearch
 
 fun main() {
-    val graph = AdjacencyList<String>()
-    val vA = Vertex("A")
-    val vB = Vertex("B")
-    val vC = Vertex("C")
-
-    graph.addVertex(vA); graph.addVertex(vB); graph.addVertex(vC)
-    graph.addEdge(vA, vB, 1.0)
-    graph.addEdge(vB, vC, 2.0)
-    graph.addEdge(vA, vC, 10.0)
-
-    val distances = dijkstra(graph, vA)
-    println(distances[vC]) // 3.0 (A->B->C)
+    val sorted = listOf(1, 3, 4, 7, 9)
+    println(binarySearch(sorted, 7)) // 3
 }
 ```
 
-### Graph Search (BFS)
+### Shortest Path (Dijkstra)
 
 ```kotlin
-import br.uem.din.algorithms.graph.breadthFirstSearch
+import br.uem.din.algorithms.graph.Dijkstra
 import br.uem.din.datastructures.graph.AdjacencyList
-import br.uem.din.datastructures.graph.Vertex
 
 fun main() {
     val graph = AdjacencyList<String>()
-    // ... setup graph ...
-    val visitedOrder = breadthFirstSearch(graph, startNode)
+    val a = graph.createVertex("A")
+    val b = graph.createVertex("B")
+    val c = graph.createVertex("C")
+
+    graph.addDirectedEdge(a, b, 1.0)
+    graph.addDirectedEdge(b, c, 2.0)
+    graph.addDirectedEdge(a, c, 10.0)
+
+    val distances = Dijkstra(graph).shortestPath(a)
+    println(distances[c]) // 3.0
 }
 ```
 
----
+## Extensions
 
-> **Note:** Algorithms for Searching, String Matching, DP, Greedy, etc., are currently planned and not yet implemented.
+```kotlin
+import br.uem.din.extensions.combinations
+import br.uem.din.extensions.powerSet
+
+fun main() {
+    val items = listOf(1, 2, 3)
+    println(items.combinations(2))
+    println(items.powerSet().size) // 8
+}
+```
+
+## Optimization
+
+```kotlin
+import br.uem.din.optimization.BinaryProblem
+import br.uem.din.optimization.simulatedAnnealing
+
+fun main() {
+    val problem = BinaryProblem(size = 30) { bits ->
+        bits.count { it }.toDouble()
+    }
+
+    val result = simulatedAnnealing(problem)
+    println(result.cost)
+}
+```

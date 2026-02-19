@@ -12,6 +12,7 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 - Fase 1 (Estruturas de Dados): ✅ COMPLETA (36/36)
 - Fase 2 (Algoritmos Fundamentais): 🔄 87% (46/53 implementados, 9 categorias)
 - Fase 3 (Heurísticas e Meta-Heurísticas): ✅ COMPLETA (12/12)
+- Arquitetura de build: ✅ Multi-modulo Gradle completo (`:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`)
 
 ---
 
@@ -187,8 +188,9 @@ Plataformas:              JVM, JS (IR), mingwX64 (Native)
 | `ALGORITHM_CATALOG.md` | Catálogo completo com status de implementação |
 | `USAGE_EXAMPLES.md` | Exemplos de uso da API |
 | `QA-ITERATIVE-PLAN.md` | Plano de QA iterativo (13 iterações) |
+| `IMPLEMENTATION_PLAN.md` | Plano de consolidação para release v0.1.0 |
 
 ---
 
-**Última Atualização**: 2026-02-17
+**Última Atualização**: 2026-02-19
 **Próximo Marco**: Completar Fase 2 (D&C + DP/Backtracking restantes — em desenvolvimento pelo Gemini)

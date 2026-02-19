@@ -25,6 +25,7 @@ description: Code quality standards based on actual project conventions.
 
 - Root package: `br.uem.din`
 - Sub-packages mirror domain: `datastructures.stack`, `algorithms.graph`, `extensions`
+- Each package must live in its owning module (`datastructures/`, `algorithms/`, `extensions/`, `optimization/`)
 - One primary class/interface per file; filename matches type name
 - Interfaces in `*Interfaces.kt` (e.g., `StackInterfaces.kt`)
 - Node types in separate files (e.g., `BinaryNode.kt`, `AVLNode.kt`)

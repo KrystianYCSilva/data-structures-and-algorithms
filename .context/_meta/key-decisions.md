@@ -1,17 +1,33 @@
 ---
-description: Project-specific architectural decisions (ADRs) with dates and rationale.
+description: Architectural rules and ADR summary for this repository.
 ---
 
-# Key Decisions & ADRs
+# Key Decisions (ADRs)
 
-| # | Data | Decisao | Status |
-|---|------|---------|--------|
-| 1 | 2025-02 | Adotar Kotlin Multiplatform com targets JVM, JS(IR), mingwX64 para maximizar portabilidade | Aceita |
-| 2 | 2025-02 | Codigo principal em commonMain; adaptadores via expect/actual apenas quando necessario (ArrayStack, BitSet) | Aceita |
-| 3 | 2025-02 | Separar interfaces read-only e mutable (Stack/MutableStack, Queue/MutableQueue) seguindo padrao Kotlin stdlib | Aceita |
-| 4 | 2025-02 | Retornar null em operacoes sobre colecoes vazias (pop, peek, dequeue) em vez de lancar excecoes | Aceita |
-| 5 | 2025-02 | KDoc em portugues com tabelas de complexidade e referencias academicas (CLRS, Knuth, papers originais) | Aceita |
-| 6 | 2025-02 | Usar apenas kotlin.test como framework de testes — sem Kotest, sem JUnit direto | Aceita |
-| 7 | 2025-02 | Zero dependencias externas — toda implementacao usa apenas Kotlin stdlib | Aceita |
-| 8 | 2026-02 | Heuristicas com tipos compartilhados OptSolution/OptResult e benchmarks padronizados (TSP, funcoes continuas) | Aceita |
-| 9 | 2026-02-16 | Itzamna Protocol adicionado a AGENTS.md e GEMINI.md para orquestracao cognitiva | Aceita |
+## ADRs (resumo)
+
+| Data | ADR | Decisao |
+|---|---|---|
+| 2026-02 | ADR-001 | Adotar arquitetura multi-modulo (`datastructures`, `algorithms`, `extensions`, `optimization`, `bom`) |
+| 2026-02 | ADR-002 | Manter `:optimization` desacoplado de DS/algorithms |
+| 2026-02 | ADR-003 | Padrao API imutavel/mutavel + `explicitApi()` em todos os modulos |
+
+## Regras essenciais
+
+1. Codigo novo deve respeitar ownership de modulo
+2. Evitar dependencia circular entre modulos
+3. Usar `kotlin.test` apenas para testes
+4. Manter API publica explicita (`explicitApi`)
+5. Seguir padrao de interfaces imutavel/mutavel
+6. Operacoes em vazio retornam `null` quando aplicavel
+7. KDoc em portugues para API publica
+
+## Verificacao obrigatoria
+
+- Rodar `gradlew.bat check` antes de afirmar que alteracao esta valida
+
+## Links internos
+
+- Regras arquiteturais: `../standards/architectural-rules.md`
+- Padrao de testes: `../standards/testing-strategy.md`
+- Qualidade de codigo: `../standards/code-quality.md`
