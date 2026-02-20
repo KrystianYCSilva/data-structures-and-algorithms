@@ -142,6 +142,39 @@ description: "Roadmap do projeto: estruturas de dados (36), algoritmos (46), heu
 
 ---
 
+## Fase 4 - Oportunidades Acadêmicas Futuras (Backlog)
+
+Com base em lacunas identificadas perante a literatura consolidada (CLRS, Knuth, Sedgewick), as seguintes categorias representam extensões de alto valor acadêmico para evolução futura:
+
+### 4A - Algoritmos de Grafos (Fluxo e Conectividade)
+- **Network Flow (Max Flow)**: Edmonds-Karp (O(V E²)), Dinic’s Algorithm (O(V² E))
+- **Bipartite Matching**: Hopcroft-Karp (O(E √V))
+- **Componentes Fortemente Conexos (SCC)**: Tarjan, Kosaraju
+- **Conectividade**: Articulation Points, Bridges (Tarjan), Eulerian Tour (Hierholzer)
+- **Árvores em Grafos**: Lowest Common Ancestor (LCA via Binary Lifting / RMQ)
+
+### 4B - Algoritmos de Strings Avançados
+- **Múltiplos Padrões (DFA)**: Aho-Corasick Automaton
+- **Estruturas de Sufixo (Memória Eficiente)**: Suffix Array (O(n) via SA-IS ou DC3), Kasai’s Algorithm (LCP Array)
+- **Palíndromos e Substrings**: Manacher's Algorithm, Z-Algorithm
+
+### 4C - Estruturas de Dados Clássicas Avançadas
+- **Heaps Teóricos vs Práticos**: Pairing Heaps, Leftist Trees / Skew Heaps
+- **Universos Inteiros Limitados**: van Emde Boas (vEB) Tree (O(log log U))
+- **Augmented Trees**: Interval Tree (CLRS Cap 14)
+- **Aceleração de Backtracking**: Dancing Links (DLX / Knuth's Algorithm X)
+
+### 4D - Geometria Computacional e Numéricos (CLRS Cap 30-33)
+- **Geometria**: Convex Hull (Graham Scan, Jarvis March), Line Segment Intersection (Sweep-line)
+- **Álgebra / Numéricos**: Fast Fourier Transform (FFT), Pollard's rho algorithm (Fatoração), Miller-Rabin Primality Test (Probabilístico forte)
+
+### 4E - Meta-heurísticas Suplementares
+- **Swarm Intelligence**: Artificial Bee Colony (ABC)
+- **Estimation of Distribution (EDAs)**: Cross-Entropy Method (CEM) ou UMDA
+- **Local Search Extensions**: Guided Local Search (GLS)
+
+---
+
 ## Progresso Geral
 
 ```
