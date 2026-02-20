@@ -145,7 +145,7 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
 
 ---
 
-*Ultima atualizacao: 2026-02-19 (sessao 24 — Higiene de repo e .gitignore para release).*
+*Ultima atualizacao: 2026-02-19 (sessao 25 — Preflight de publicacao e hardening final).*
 
 ---
 
@@ -660,3 +660,29 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
     - `kotlin-js-store/yarn.lock`
   - Limpeza local de diretorios gerados (`.gradle`, `.kotlin`, `build/`, `*/build`, `.run`, `.idea`).
 - **Resultado:** repositorio mais limpo e preparado para empacotamento/release sem lixo de ambiente local.
+
+---
+
+## Sessao 25
+
+- **Data:** 2026-02-19
+- **Nivel:** Deliberado+
+- **Resumo:** Pente-fino de release readiness com foco em publicacao, documentacao e governanca do repositorio.
+- **Acoes executadas:**
+  - Hardening de build para publicacao:
+    - `build.gradle.kts` atualizado com:
+      - repositorio Sonatype (`releases`/`snapshots`)
+      - signing opcional por env/properties (`SIGNING_*`, `signing*`)
+      - task `releasePreflight` para validar credenciais obrigatorias
+  - `gradle.properties` atualizado com placeholders documentados de credenciais/assinatura.
+  - Documentacao de release e colaboracao adicionada:
+    - `docs/PUBLISHING.md`
+    - `CONTRIBUTING.md`
+    - `CHANGELOG.md`
+    - `SECURITY.md`
+  - `README.md`, `AGENTS.md` e `.context/workflows/deployment.md` atualizados com fluxo real de publicacao.
+- **Validacoes executadas:**
+  - `gradlew.bat check` -> **PASS** (JVM+JS+Native)
+  - `gradlew.bat publishToMavenLocal` -> **PASS** (todos os modulos)
+  - `gradlew.bat releasePreflight` -> **FAIL esperado** sem secrets (mensagem clara de variaveis faltantes)
+- **Resultado:** projeto tecnicamente pronto para publicacao; pendencia final e apenas provisionamento de credenciais/assinatura no ambiente de release.

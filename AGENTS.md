@@ -40,7 +40,11 @@ gradlew.bat :datastructures:jvmTest --tests "br.uem.din.datastructures.stack.Sta
 gradlew.bat :datastructures:jvmTest --tests "br.uem.din.datastructures.heap.*"
 
 # Publish artifacts
+gradlew.bat releasePreflight
 gradlew.bat publish
+
+# Publish to local Maven cache (smoke test)
+gradlew.bat publishToMavenLocal
 ```
 
 **Lint/Format:** No repository-wide linter task. `kotlin.code.style=official` is set in

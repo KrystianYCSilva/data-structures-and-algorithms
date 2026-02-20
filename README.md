@@ -175,6 +175,34 @@ Todas as estruturas seguem o padrão Kotlin stdlib de separação leitura/escrit
 ./gradlew :optimization:check
 ```
 
+## Publicacao
+
+Pre-flight de release:
+
+```bash
+./gradlew releasePreflight
+./gradlew check
+```
+
+Publicacao local para validacao de consumo:
+
+```bash
+./gradlew publishToMavenLocal
+```
+
+Publicacao remota (Sonatype):
+
+```bash
+./gradlew publish
+```
+
+Credenciais e assinatura podem ser fornecidas por `gradle.properties` local ou variaveis de ambiente:
+
+- `OSSRH_USERNAME` / `ossrhUsername`
+- `OSSRH_PASSWORD` / `ossrhPassword`
+- `SIGNING_KEY` / `signingKey`
+- `SIGNING_PASSWORD` / `signingPassword`
+
 ## Documentação
 
 | Documento | Descrição |
@@ -182,6 +210,16 @@ Todas as estruturas seguem o padrão Kotlin stdlib de separação leitura/escrit
 | [`ALGORITHM_CATALOG.md`](docs/ALGORITHM_CATALOG.md) | Catálogo com complexidades |
 | [`USAGE_EXAMPLES.md`](docs/USAGE_EXAMPLES.md) | Exemplos de uso da API |
 | [`PROJECT_ROADMAP.md`](docs/PROJECT_ROADMAP.md) | Roadmap do projeto |
+| [`PUBLISHING.md`](docs/PUBLISHING.md) | Guia de publicacao da release |
+| [`CHANGELOG.md`](CHANGELOG.md) | Historico de mudancas |
+
+## Como contribuir
+
+Veja [`CONTRIBUTING.md`](CONTRIBUTING.md) para fluxo de contribuicao, padroes tecnicos e validacoes.
+
+## Seguranca
+
+Veja [`SECURITY.md`](SECURITY.md) para reporte responsavel de vulnerabilidades.
 
 ## Licença
 

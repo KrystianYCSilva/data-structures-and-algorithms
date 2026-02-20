@@ -7,6 +7,7 @@ description: Build, validation and publication workflow for release artifacts.
 ## 1) Preflight
 
 ```sh
+gradlew.bat releasePreflight
 gradlew.bat clean
 gradlew.bat check
 ```
@@ -35,6 +36,13 @@ gradlew.bat :optimization:check
 ```sh
 gradlew.bat publish
 ```
+
+Credenciais esperadas (property ou env var):
+
+- `ossrhUsername` / `OSSRH_USERNAME`
+- `ossrhPassword` / `OSSRH_PASSWORD`
+- `signingKey` / `SIGNING_KEY`
+- `signingPassword` / `SIGNING_PASSWORD`
 
 ## 5) Release checklist (manual)
 
