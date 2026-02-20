@@ -1,6 +1,8 @@
 package br.uem.din.extensions
 
 import br.uem.din.algorithms.string.kmpSearch
+import br.uem.din.algorithms.string.boyerMooreSearch
+import br.uem.din.algorithms.string.rabinKarpSearch
 import br.uem.din.algorithms.dp.editDistance
 import br.uem.din.algorithms.dp.longestCommonSubsequence
 
@@ -37,3 +39,28 @@ public fun String.findKMP(pattern: String): Int {
 public infix fun String.lcsLength(other: String): Int {
     return longestCommonSubsequence(this, other)
 }
+
+/**
+ * Busca a primeira ocorrência do padrão usando o algoritmo Boyer-Moore.
+ *
+ * @param pattern o padrão a ser buscado.
+ * @return o índice inicial ou -1 se não encontrado.
+ *
+ * Complexidade Temporal (Média/Melhor Caso): O(n / m)
+ */
+public fun String.findBoyerMoore(pattern: String): Int {
+    return boyerMooreSearch(this, pattern)
+}
+
+/**
+ * Busca a primeira ocorrência do padrão usando o algoritmo Rabin-Karp.
+ *
+ * @param pattern o padrão a ser buscado.
+ * @return o índice inicial ou -1 se não encontrado.
+ *
+ * Complexidade Temporal (Média): O(n + m)
+ */
+public fun String.findRabinKarp(pattern: String): Int {
+    return rabinKarpSearch(this, pattern)
+}
+

@@ -323,10 +323,10 @@ internal class RedBlackTreeImpl<T : Comparable<T>> {
                     x = p
                     xParent = x.parent
                 } else {
-                    if (w?.right == null || w.right!!.color == Color.BLACK) {
-                        w?.left?.color = Color.BLACK
-                        w?.color = Color.RED
-                        w?.let { rotateRight(it) }
+                    if (w.right == null || w.right!!.color == Color.BLACK) {
+                        w.left?.color = Color.BLACK
+                        w.color = Color.RED
+                        rotateRight(w)
                         w = p.right
                     }
                     w?.color = p.color
@@ -350,10 +350,10 @@ internal class RedBlackTreeImpl<T : Comparable<T>> {
                     x = p
                     xParent = x.parent
                 } else {
-                    if (w?.left == null || w.left!!.color == Color.BLACK) {
-                        w?.right?.color = Color.BLACK
-                        w?.color = Color.RED
-                        w?.let { rotateLeft(it) }
+                    if (w.left == null || w.left!!.color == Color.BLACK) {
+                        w.right?.color = Color.BLACK
+                        w.color = Color.RED
+                        rotateLeft(w)
                         w = p.left
                     }
                     w?.color = p.color
