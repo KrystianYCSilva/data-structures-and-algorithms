@@ -215,3 +215,14 @@ public operator fun <T> MutableQueue<T>.plus(element: T): MutableQueue<T> {
     copy.enqueue(element)
     return copy
 }
+
+/**
+ * Converte um [br.uem.din.datastructures.set.ImmutableMultiset] para um [Map] Kotlin padrão.
+ * 
+ * As chaves do mapa são os elementos distintos do multiset, e os valores são as suas respectivas contagens (multiplicidades).
+ *
+ * @return um mapa associando cada elemento à sua contagem.
+ */
+public fun <T> br.uem.din.datastructures.set.ImmutableMultiset<T>.toMap(): Map<T, Int> {
+    return this.distinctElements().associateWith { this.count(it) }
+}
