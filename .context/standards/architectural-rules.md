@@ -10,6 +10,7 @@ description: Architectural rules based on current multi-module project structure
 - Algoritmos classicos: `algorithms/src/commonMain/kotlin/br/uem/din/algorithms/`
 - Extensoes: `extensions/src/commonMain/kotlin/br/uem/din/extensions/`
 - Heuristicas/modelagens: `optimization/src/commonMain/kotlin/br/uem/din/optimization/`
+- Exemplos de uso: `sample/src/commonMain/kotlin/br/uem/din/sample/`
 
 ## R2: Dependency Direction
 
@@ -17,6 +18,7 @@ description: Architectural rules based on current multi-module project structure
 - `:algorithms` depende de `:datastructures`
 - `:extensions` depende de `:datastructures` e `:algorithms`
 - `:optimization` e independente
+- `:sample` depende de `:datastructures`, `:algorithms` e `:optimization` (nao expoe dependencias transitivas, usado apenas para demonstracao)
 - Nao introduzir dependencia circular
 
 ## R3: Common-first + expect/actual minimo

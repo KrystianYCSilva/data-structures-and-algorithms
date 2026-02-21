@@ -686,3 +686,23 @@ Naming convention: Immutable*/Mutable* (14 pares), Heap (bare noun), ImmutableBi
   - `gradlew.bat publishToMavenLocal` -> **PASS** (todos os modulos)
   - `gradlew.bat releasePreflight` -> **FAIL esperado** sem secrets (mensagem clara de variaveis faltantes)
 - **Resultado:** projeto tecnicamente pronto para publicacao; pendencia final e apenas provisionamento de credenciais/assinatura no ambiente de release.
+
+## Update: 2026-02-20
+- **Nivel:** Deliberado
+- **Resumo:** Adequação do protocolo `.context/` e criação do módulo `:sample`.
+- **Acoes executadas:**
+  - Renomeados arquivos em `.context/` para seguir o Itzamna Protocol estritamente (`project.md`, `tech.md`, `rules.md`).
+  - Criação do módulo `:sample` para demonstração didática das capacidades da biblioteca (`ArrayStack`, `AdjacencyList`, `quickSort`, `simulatedAnnealing`).
+  - Módulo `:sample` integrado ao build multiprojeto e adicionado ao POM (maven-publish).
+  - Documentação da arquitetura e domínios no `.context/` atualizada para refletir o novo módulo.
+- **Validacoes executadas:**
+  - `gradlew.bat :sample:build` -> **PASS**
+  - `gradlew.bat check` -> **PASS**
+- **Resultado:** A biblioteca possui agora exemplos práticos testáveis em código e a documentação interna atende rigorosamente as regras de roteamento dos agentes (Itzamna). Pronta para deploy.
+
+- **Resumo:** Reversão e adequação do formato da `.context/` para o padrão Enterprise.
+- **Acoes executadas:**
+  - O ajuste anterior da `.context/` para "Lean" foi revertido, adotando o modelo `Enterprise` definido por `itzamna.context` em `.opencode/command/itzamna.context.md`.
+  - Re-migração dos arquivos para seus devidos diretórios: `project.md` -> `_meta/project-overview.md`, `tech.md` -> `_meta/tech-stack.md`, e `rules.md` -> `standards/architectural-rules.md`.
+  - Restaurado o sumário de navegação original em `.context/README.md`.
+- **Resultado:** A governança e organização das diretrizes de desenvolvimento estão alinhadas ao protocolo de maturidade Enterprise definido no Itzamna.

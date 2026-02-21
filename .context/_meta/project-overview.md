@@ -23,6 +23,7 @@ Concentrar em um unico projeto KMP implementacoes de referencia para estudo, ens
 - Heuristicas/meta-heuristicas (12)
 - Framework de modelagem de problemas de otimizacao (7 modelagens)
 - Publicacao modular em Maven (`datastructures`, `algorithms`, `extensions`, `optimization`, `bom`)
+- Modulo de exemplos e casos de uso para rapida experimentacao (`sample`)
 
 ### Out of scope
 
@@ -54,7 +55,7 @@ Concentrar em um unico projeto KMP implementacoes de referencia para estudo, ens
 
 ## Arquitetura
 
-- Multi-modulo Gradle: `:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`
+- Multi-modulo Gradle: `:datastructures`, `:algorithms`, `:extensions`, `:optimization`, `:bom`, `:sample`
 
 ## Links internos
 

@@ -41,6 +41,7 @@ description: Tech stack, build metadata, modules and architecture.
 - `:extensions` -> depende de `:datastructures` e `:algorithms`
 - `:optimization` -> independente (sem dependencia interna)
 - `:bom`
+- `:sample` -> consome os demais modulos (`:datastructures`, `:algorithms`, `:optimization`) para exemplos praticos
 
 ## Arquitetura
 
@@ -49,6 +50,7 @@ description: Tech stack, build metadata, modules and architecture.
 - Camada ergonomica em `:extensions` com funcoes de extensao
 - Trilha paralela independente para heuristicas em `:optimization`
 - Alinhamento de versao para consumidores via `:bom`
+- Modulo prático e didático `:sample` demonstrando casos de uso e capacidades
 
 ## Comandos principais
 

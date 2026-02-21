@@ -101,3 +101,26 @@ Protocolo:
 ---
 
 *Ultima atualizacao: 2026-02-17.*
+
+## [2026-02-20] - Atualização de Estrutura e Módulo Didático
+
+### Contexto
+- A estrutura de arquivos dentro da pasta `.context/` estava fora do padrão definido pelo Itzamna Protocol.
+- O projeto não possuía um módulo de código para uso de exemplo, limitando a didática.
+
+### Ações Executadas
+- Renomeados `_meta/project-overview.md` para `project.md`, `_meta/tech-stack.md` para `tech.md` e `standards/architectural-rules.md` para `rules.md` em `.context/`.
+- Criado o novo módulo Gradle `:sample` dependendo de `:datastructures`, `:algorithms` e `:optimization`.
+- Adicionado um arquivo `Main.kt` (`br.uem.din.sample.Main`) exemplificando o uso de Pilhas, Grafos, Algoritmos de Ordenação e Otimização Heurística (`SimulatedAnnealing`).
+
+### Resultado
+- Arquitetura de informação alinhada com as necessidades do agente Itzamna.
+- Módulo `sample` serve de ponto de entrada imediato para experimentação pelo usuário final e validação de ponta-a-ponta, tornando o repositório inteiramente "pronto para deploy".
+
+### Atualização (Correção de Formato Enterprise)
+- Após a estruturação inicial, foi necessário readequar a pasta `.context/` para o formato de maturidade **Enterprise** definido no Itzamna (`/itzamna.context`). 
+- **Movimentações Corrigidas:** 
+  - `project.md` -> `_meta/project-overview.md`
+  - `tech.md` -> `_meta/tech-stack.md`
+  - `rules.md` -> `standards/architectural-rules.md`
+- **Motivação:** Seguir rigorosamente o padrão estabelecido pelo comando de governança de contexto do framework Itzamna.
